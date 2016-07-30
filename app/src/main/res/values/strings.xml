@@ -6,4 +6,13 @@
     <string name="fill_tv">Приступить</string>
     <string name="vkontakte">Vkontakte</string>
     <string name="odnoklassniki">Odnoklassniki</string>
+
+    <string name="vk_app_id">5568724</string>
+
+    <string name="ok_app_id">1247744256</string>
+    <string name="ok_public_key">CBACBQFLEBABABABA</string>
+    <string name="ok_secret_key">4F54456B1A710F5B1FA53D20</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

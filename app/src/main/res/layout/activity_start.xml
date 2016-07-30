@@ -1,73 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/main_coordinator_container"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:fitsSystemWindows="true"
-    tools:ignore="contentDescription">
-
-    <LinearLayout
-        style="@style/auth_parent_linear">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/logo"
-            android:layout_gravity="center_horizontal"
-            />
-        <LinearLayout
-            style="@style/auth_child_linear">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/size_small_24"
-                android:orientation="horizontal">
-                <View
-                    android:layout_width="@dimen/line_size"
-                    android:layout_height="wrap_content"
-                    android:background="@color/colorPrimaryDark"/>
-                <TextView
-                    android:text="@string/auth_enter_tv"
-                    style="@style/start_screen_headers" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingLeft="@dimen/spacing_normal_16"
-                android:paddingRight="@dimen/spacing_normal_16">
-                <Button
-                android:id="@+id/vk_btn"
-                style="@style/start_screen_buttons"
-                android:drawableLeft="@drawable/vk"
-                android:text="@string/vkontakte" />
-                <Button
-                    android:id="@+id/ok_btn"
-                    android:drawableLeft="@drawable/odnoklassniki"
-                    android:text="@string/odnoklassniki"
-                    style="@style/start_screen_buttons" />
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="4dp"
-                android:background="@color/hr24_blue"
-                android:layout_margin="@dimen/spacing_small_8"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/size_small_24"
-                android:orientation="horizontal">
-                <View
-                    android:layout_width="@dimen/line_size"
-                    android:layout_height="wrap_content"
-                    android:background="@color/colorPrimaryDark"/>
-                <TextView
-                    android:text="@string/auth_fill_tv"
-                    style="@style/start_screen_headers" />
-            </LinearLayout>
-            <Button
-                android:id="@+id/fill_btn"
-                android:text="@string/fill_tv"
-                style="@style/button_fill" />
-        </LinearLayout>
-
-    </LinearLayout>
-</android.support.design.widget.CoordinatorLayout>
+    android:id="@+id/container"
+    tools:context=".ui.StartActivity">
+</RelativeLayout>
