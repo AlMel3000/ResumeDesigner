@@ -13,6 +13,47 @@
     <string name="ok_public_key">CBACBQFLEBABABABA</string>
     <string name="ok_secret_key">4F54456B1A710F5B1FA53D20</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string name="username_hint">Имя и фамилия</string>
+    <string name="nick_hint">Ник (Подпись под именем)</string>
+    <string name="tel_hint">Телефон</string>
+    <string name="example_number">+7 980 888 88 88</string>
+    <string name="e_mail_hint">E-mail</string>
+    <string name="email_default">vasia@pupkin.ru</string>
+    <string name="nick">Рекрутер</string>
+    <string name="bio_hint">О себе (До 200 символов)</string>
+    <string name="bio">Форма есть пустота, а пустота есть форма</string>
+    <string name="skills_hint">Навыки  "\n" Запись: Уборка&amp;3 @ Другой навык \"Уборка\" - название навыка "\n" Цифра поcле \"@\" - оценка от 1 до 5, \"//\" - разделитель навыков></string>
+    <string name="skills">Уборка@3//Photoshop@4</string>
+    <string name="skills_header">Навыки</string>
+    <string name="languages_hint">Языки "\n" Русский: Средний//Киргизкий: Высокий</string>
+    <string name="lang_hint">\"//\" - разделитель языков</string>
+    <string name="languages">Русский: Средний//Киргизкий: Высокий</string>
+    <string name="hobby_hint">Хобби "\n" Футбол//Хоккей</string>
+    <string name="hob_hint">\"//\" - разделитель хобби</string>
+    <string name="hobby">Футбол//Хоккей</string>
+    <string name="job_period_hint">Период</string>
+    <string name="job_period">09/2015-12/2015</string>
+    <string name="company_title_hint">Название компании</string>
+    <string name="company_title">HP</string>
+    <string name="job_title_hint">Занимаемая позиция</string>
+    <string name="job_title">Поедатель бубликов</string>
+    <string name="jb_duty_hint">Обязанности</string>
+    <string name="job_duty_hint">\"//\" - разделитель обязанностей</string>
+    <string name="job_duty">Поедал бублики// "\n""Оптимизировал расходы</string>
+    <string name="first_work">Первая работа?</string>
+    <string name="current_work">Текущая работа?</string>
+    <string name="job_add">+ место работы</string>
+    <string name="study_title_hint">Название заведения</string>
+    <string name="study_title">МНУ(2011-2015)</string>
+    <string name="study_description_hint">Описание</string>
+    <string name="study_description">Бакалавр. Социология</string>
+    <string name="rating_hint">Средний балл</string>
+    <string name="rating_period">GPA: 5 из 5</string>
+    <string name="achievements_hint">Достижения</string>
+    <string name="achievements">Лауреат//Победитель</string>
+    <string name="share">Пост в социальную сеть</string>
+    <string name="create_pdf">Создать pdf</string>
+    <string name="study_add">+ место учебы</string>
 </resources>

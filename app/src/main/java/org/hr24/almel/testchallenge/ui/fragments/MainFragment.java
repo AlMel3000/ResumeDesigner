@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.github.gorbin.asne.core.SocialNetwork;
@@ -36,16 +37,19 @@ import ru.ok.android.sdk.util.OkScope;
  * create an instance of this fragment.
  */
 public class MainFragment extends Fragment implements SocialNetworkManager.OnInitializationCompleteListener, OnLoginCompleteListener, View.OnClickListener {
-    // TODO: Rename parameter arguments, choose names that match
+
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     Button vkButton, okButton, fillButton;
     CoordinatorLayout mCoordinatorLayout;
+    LinearLayout authLinLayout;
+    View fillView;
     public static SocialNetworkManager mSocialNetworkManager;
+    int networkId = 0;
 
-    // TODO: Rename and change types of parameters
+
     private String mParam1;
     private String mParam2;
 
@@ -63,7 +67,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
      * @param param2 Parameter 2.
      * @return A new instance of fragment MainFragment.
      */
-    // TODO: Rename and change types and number of parameters
+
     public static MainFragment newInstance(String param1, String param2) {
         MainFragment fragment = new MainFragment();
         Bundle args = new Bundle();
@@ -93,6 +97,8 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
         okButton = (Button) rootView.findViewById(R.id.ok_btn);
         fillButton = (Button) rootView.findViewById(R.id.fill_btn);
         mCoordinatorLayout = (CoordinatorLayout) rootView.findViewById(R.id.main_coordinator_container);
+        authLinLayout = (LinearLayout) rootView.findViewById(R.id.auth_ll);
+        fillView = (View) rootView.findViewById(R.id.fill_v);
 
         vkButton.setOnClickListener(this);
         okButton.setOnClickListener(this);
@@ -154,10 +160,15 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
         if(socialNetwork.isConnected()){
             switch (socialNetwork.getID()){
                 case VkSocialNetwork.ID:
-                    vkButton.setVisibility(View.GONE);
+                    authLinLayout.setVisibility(View.GONE);
+                    fillView.setVisibility(View.GONE);
+                    networkId = VkSocialNetwork.ID;
+
                     break;
                 case OkSocialNetwork.ID:
-                    okButton.setVisibility(View.GONE);
+                    authLinLayout.setVisibility(View.GONE);
+                    fillView.setVisibility(View.GONE);
+                    networkId = OkSocialNetwork.ID;
                     break;
             }
         }
@@ -184,12 +195,20 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
 
     @Override
     public void onClick(View v) {
-        int networkId = 0;
+
         switch (v.getId()){
             case R.id.vk_btn:
                 if(NetworkStatusChecker.isNetworkAvailable(getContext())){
 
                     networkId = VkSocialNetwork.ID;
+                    SocialNetwork socialNetwork = mSocialNetworkManager.getSocialNetwork(networkId);
+
+                    if(networkId != 0) {
+                        socialNetwork.requestLogin();
+                        StartActivity.showProgress("Loading social person");
+                    } else {
+                        showSnackbar("Wrong networkId");
+                    }
 
                 } else {
                     showSnackbar("Сеть недоступна, попробуйте позже");
@@ -199,26 +218,28 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
             case R.id.ok_btn:
                 if(NetworkStatusChecker.isNetworkAvailable(getContext())){
                 networkId = OkSocialNetwork.ID;
+                    SocialNetwork socialNetwork = mSocialNetworkManager.getSocialNetwork(networkId);
+
+                    if(networkId != 0) {
+                        socialNetwork.requestLogin();
+                        StartActivity.showProgress("Loading social person");
+                    } else {
+                        showSnackbar("Wrong networkId");
+                    }
                 } else {
                     showSnackbar("Сеть недоступна, попробуйте позже");
                 }
                 break;
             case R.id.fill_btn:
-                //// TODO: 30.07.16 реализовать переход на 2ю активити
-                startProfile(OkSocialNetwork.ID);
+                
+                startProfile(networkId);
+                //// TODO: 30.07.16  проверить как себя будет вести приложение с неавторизованным пользователем 
 
                 break;
 
         }
 
-        SocialNetwork socialNetwork = mSocialNetworkManager.getSocialNetwork(networkId);
 
-        if(networkId != 0) {
-            socialNetwork.requestLogin();
-            StartActivity.showProgress("Loading social person");
-        } else {
-            showSnackbar("Wrong networkId");
-        }
 
 
 
@@ -269,7 +290,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
+
         void onFragmentInteraction(Uri uri);
     }
 

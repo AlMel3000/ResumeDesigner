@@ -1,41 +1,26 @@
 package org.hr24.almel.testchallenge.ui.fragments;
 
-import android.content.Context;
 import android.content.DialogInterface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.gorbin.asne.core.SocialNetwork;
 import com.github.gorbin.asne.core.listener.OnPostingCompleteListener;
 import com.github.gorbin.asne.core.listener.OnRequestSocialPersonCompleteListener;
 import com.github.gorbin.asne.core.persons.SocialPerson;
-import com.github.gorbin.asne.odnoklassniki.OkSocialNetwork;
-import com.github.gorbin.asne.vk.VkSocialNetwork;
 
 import org.hr24.almel.testchallenge.R;
 import org.hr24.almel.testchallenge.ui.StartActivity;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ProfileFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class ProfileFragment extends Fragment implements OnRequestSocialPersonCompleteListener{
     private String message = "Need simple social networks integration? Check this lbrary:";
     private String link = "https://github.com/gorbin/ASNE";
@@ -44,12 +29,10 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     private SocialNetwork socialNetwork;
     private int networkId;
     private ImageView photo;
-    private TextView name;
-    private TextView id;
-    private TextView info;
-    private Button friends;
+    private EditText name;
+    private Button savePdfButton;
     private Button share;
-    private RelativeLayout frame;
+
 
     public static ProfileFragment newInstannce(int id) {
         ProfileFragment fragment = new ProfileFragment();
@@ -71,16 +54,13 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
         View rootView = inflater.inflate(R.layout.profile_fragment, container, false);
 
-        frame = (RelativeLayout) rootView.findViewById(R.id.frame);
         photo = (ImageView) rootView.findViewById(R.id.imageView);
-        name = (TextView) rootView.findViewById(R.id.name);
-        id = (TextView) rootView.findViewById(R.id.id);
-        info = (TextView) rootView.findViewById(R.id.info);
-        friends = (Button) rootView.findViewById(R.id.friends);
+        savePdfButton = (Button) rootView.findViewById(R.id.create_pdf_button);
+        name = (EditText) rootView.findViewById(R.id.name);
 
         share = (Button) rootView.findViewById(R.id.share);
         share.setOnClickListener(shareClick);
-        colorProfile(networkId);
+
 
         socialNetwork = MainFragment.mSocialNetworkManager.getSocialNetwork(networkId);
         socialNetwork.setOnRequestCurrentPersonCompleteListener(this);
@@ -98,10 +78,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     public void onRequestSocialPersonSuccess(int i, SocialPerson socialPerson) {
         StartActivity.hideProgress();
         name.setText(socialPerson.name);
-        id.setText(socialPerson.id);
-        String socialPersonString = socialPerson.toString();
-        String infoString = socialPersonString.substring(socialPersonString.indexOf("{")+1, socialPersonString.lastIndexOf("}"));
-        info.setText(infoString.replace(", ", "\n"));
+
 
     }
 
@@ -151,26 +128,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         }
     };
 
-    private void colorProfile(int networkId){
-        int color = getResources().getColor(R.color.colorPrimaryDark);
-        int image = R.drawable.logo;
-        switch (networkId) {
-            case VkSocialNetwork.ID:
-                color = getResources().getColor(R.color.gray);
-                image = R.drawable.logo;
-                break;
-            case OkSocialNetwork.ID:
-                color = getResources().getColor(R.color.gray);
-                image = R.drawable.logo;
-                break;
-        }
-        frame.setBackgroundColor(color);
-        name.setTextColor(color);
-        friends.setBackgroundColor(color);
-        share.setBackgroundColor(color);
-        photo.setBackgroundColor(color);
-        photo.setImageResource(image);
-    }
+
 
     private AlertDialog.Builder alertDialogInit(String title, String message){
         AlertDialog.Builder ad = new AlertDialog.Builder(getActivity());

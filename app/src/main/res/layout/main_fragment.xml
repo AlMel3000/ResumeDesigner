@@ -18,6 +18,11 @@
         <LinearLayout
             style="@style/auth_child_linear">
             <LinearLayout
+                android:id="@+id/auth_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/size_small_24"
                 android:orientation="horizontal">
@@ -47,7 +52,9 @@
                     android:text="@string/odnoklassniki"
                     style="@style/start_screen_buttons" />
             </LinearLayout>
+            </LinearLayout>
             <View
+                android:id="@+id/fill_v"
                 android:layout_width="match_parent"
                 android:layout_height="4dp"
                 android:background="@color/hr24_blue"

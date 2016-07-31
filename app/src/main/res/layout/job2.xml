@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_normal_16">
+
+        <EditText
+            android:id="@+id/job_period2"
+            style="@style/profile_edittext"
+            android:hint="@string/job_period_hint"
+            android:text="@string/job_period"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="@color/gray_light"
+            android:textColorHint="@color/gray" />
+
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_normal_16">
+
+        <EditText
+            android:id="@+id/company_title2"
+            style="@style/profile_edittext"
+            android:hint="@string/company_title_hint"
+            android:text="@string/company_title"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="@color/gray_light"
+            android:textColorHint="@color/gray" />
+
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_normal_16">
+
+        <EditText
+            android:id="@+id/job_title2"
+            style="@style/profile_edittext"
+            android:hint="@string/job_title_hint"
+            android:text="@string/job_title"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="@color/gray_light"
+            android:textColorHint="@color/gray" />
+
+    </android.support.design.widget.TextInputLayout>
+    <TextView
+        style="@style/profile_edittext"
+        android:text="@string/jb_duty_hint"/>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_normal_16">
+
+        <EditText
+            android:id="@+id/hobby2"
+            style="@style/profile_edittext"
+            android:hint="@string/job_duty_hint"
+            android:text="@string/job_duty"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="@color/gray_light"
+            android:textColorHint="@color/gray"
+            android:maxLines="2"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <CheckBox
+        android:id="@+id/first_work_chb2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_small_8"
+        android:text="@string/first_work"/>
+    <CheckBox
+        android:id="@+id/current_work_chb2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_small_8"
+        android:text="@string/current_work"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/hr24_blue"
+        android:layout_marginTop="@dimen/spacing_small_8"
+        android:layout_marginBottom="@dimen/spacing_small_8"/>
+
+</LinearLayout>

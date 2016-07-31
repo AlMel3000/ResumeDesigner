@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_normal_16">
+
+        <EditText
+            android:id="@+id/study_title"
+            style="@style/profile_edittext"
+            android:hint="@string/study_title_hint"
+            android:text="@string/study_title"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="@color/gray_light"
+            android:textColorHint="@color/gray" />
+
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_normal_16">
+
+        <EditText
+            android:id="@+id/study_decription"
+            style="@style/profile_edittext"
+            android:hint="@string/study_description_hint"
+            android:text="@string/study_description"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="@color/gray_light"
+            android:textColorHint="@color/gray" />
+
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_normal_16">
+
+        <EditText
+            android:id="@+id/rating"
+            style="@style/profile_edittext"
+            android:hint="@string/rating_hint"
+            android:text="@string/rating_period"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="@color/gray_light"
+            android:textColorHint="@color/gray" />
+
+    </android.support.design.widget.TextInputLayout>
+
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/hr24_blue"
+        android:layout_marginTop="@dimen/spacing_small_8"
+        android:layout_marginBottom="@dimen/spacing_small_8"/>
+
+</LinearLayout>
