@@ -1,7 +1,9 @@
 package org.hr24.almel.testchallenge.ui.fragments;
 
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -16,12 +18,16 @@ import com.github.gorbin.asne.core.SocialNetwork;
 import com.github.gorbin.asne.core.listener.OnPostingCompleteListener;
 import com.github.gorbin.asne.core.listener.OnRequestSocialPersonCompleteListener;
 import com.github.gorbin.asne.core.persons.SocialPerson;
+import com.squareup.picasso.Picasso;
 
 import org.hr24.almel.testchallenge.R;
 import org.hr24.almel.testchallenge.ui.StartActivity;
 
+import java.util.ArrayList;
+import java.util.List;
 
-public class ProfileFragment extends Fragment implements OnRequestSocialPersonCompleteListener{
+
+public class ProfileFragment extends Fragment implements OnRequestSocialPersonCompleteListener, View.OnClickListener{
     private String message = "Need simple social networks integration? Check this lbrary:";
     private String link = "https://github.com/gorbin/ASNE";
 
@@ -29,9 +35,12 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     private SocialNetwork socialNetwork;
     private int networkId;
     private ImageView photo;
-    private EditText name;
+    private EditText name, nick,tel, email, bio, skills, languages, hobby, jobPeriod, jobTitle, companyTitle, jobDuty, studyTitle, studyDescription, rating, achievements;
     private Button savePdfButton;
     private Button share;
+    private FloatingActionButton mFab;
+    private int mCurrentEditMode = 1;
+    private List<EditText> mUserInfoViews;
 
 
     public static ProfileFragment newInstannce(int id) {
@@ -57,9 +66,46 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         photo = (ImageView) rootView.findViewById(R.id.imageView);
         savePdfButton = (Button) rootView.findViewById(R.id.create_pdf_button);
         name = (EditText) rootView.findViewById(R.id.name);
+        nick = (EditText) rootView.findViewById(R.id.nick);
+        tel = (EditText) rootView.findViewById(R.id.tel);
+        email = (EditText) rootView.findViewById(R.id.email);
+        bio = (EditText) rootView.findViewById(R.id.bio);
+        skills = (EditText) rootView.findViewById(R.id.skills);
+        languages = (EditText) rootView.findViewById(R.id.languages);
+        hobby = (EditText) rootView.findViewById(R.id.hobby);
+        jobPeriod = (EditText) rootView.findViewById(R.id.job_period);
+        companyTitle = (EditText) rootView.findViewById(R.id.company_title);
+        jobTitle = (EditText) rootView.findViewById(R.id.job_title);
+        studyTitle =(EditText) rootView.findViewById(R.id.study_title);
+        studyDescription =(EditText) rootView.findViewById(R.id.study_decription);
+        rating =(EditText) rootView.findViewById(R.id.rating);
+        achievements=(EditText) rootView.findViewById(R.id.achievements);
+        jobDuty=(EditText) rootView.findViewById(R.id.job_duty);
 
+        mFab = (FloatingActionButton) rootView.findViewById(R.id.fab);
         share = (Button) rootView.findViewById(R.id.share);
+
         share.setOnClickListener(shareClick);
+
+        mFab.setOnClickListener(this);
+
+        mUserInfoViews = new ArrayList<>();
+        mUserInfoViews.add(name);
+        mUserInfoViews.add(nick);
+        mUserInfoViews.add(tel);
+        mUserInfoViews.add(email);
+        mUserInfoViews.add(bio);
+        mUserInfoViews.add(skills);
+        mUserInfoViews.add(languages);
+        mUserInfoViews.add(hobby);
+        mUserInfoViews.add(jobPeriod);
+        mUserInfoViews.add(companyTitle);
+        mUserInfoViews.add(jobTitle);
+        mUserInfoViews.add(studyTitle);
+        mUserInfoViews.add(studyDescription);
+        mUserInfoViews.add(rating);
+        mUserInfoViews.add(achievements);
+        mUserInfoViews.add(jobDuty);
 
 
         socialNetwork = MainFragment.mSocialNetworkManager.getSocialNetwork(networkId);
@@ -78,6 +124,12 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     public void onRequestSocialPersonSuccess(int i, SocialPerson socialPerson) {
         StartActivity.hideProgress();
         name.setText(socialPerson.name);
+
+        Picasso.with(getContext())
+                .load(socialPerson.avatarURL)
+                .resize(100, 100)
+                .centerCrop()
+                .into(photo);
 
 
     }
@@ -136,5 +188,51 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         ad.setMessage(message);
         ad.setCancelable(true);
         return ad;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.fab:
+                if (mCurrentEditMode == 0) {
+                    changeEditMode(1);
+                    mCurrentEditMode = 1;
+                } else {
+                    changeEditMode(0);
+                    mCurrentEditMode = 0;
+                }
+                break;
+
+        }
+    }
+
+    private void changeEditMode(int mode) {
+        if (mode == 1) {
+            mFab.setImageResource(R.drawable.ic_done_black_24dp);
+            for (EditText userValue : mUserInfoViews) {
+                userValue.setEnabled(true);
+                userValue.setFocusable(true);
+                userValue.setFocusableInTouchMode(true);
+                userValue.setTextColor(Color.DKGRAY);
+
+            }
+            name.requestFocus();
+            savePdfButton.setVisibility(View.GONE);
+            share.setVisibility(View.GONE);
+            //// TODO: 01.08.16 реализовать возможность выбора фото из галереи/съёмки 
+        } else {
+            mFab.setImageResource(R.drawable.ic_create_black_24dp);
+            for (EditText userValue : mUserInfoViews) {
+                userValue.setEnabled(false);
+                userValue.setFocusable(false);
+                userValue.setFocusableInTouchMode(false);
+                userValue.setTextColor(Color.BLACK);
+
+
+            }
+            savePdfButton.setVisibility(View.VISIBLE);
+            share.setVisibility(View.VISIBLE);
+
+        }
     }
 }
