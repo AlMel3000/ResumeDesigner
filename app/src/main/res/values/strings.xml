@@ -53,8 +53,9 @@
     <string name="rating_period">GPA: 5 из 5</string>
     <string name="achievements_hint">Достижения</string>
     <string name="achievements">Лауреат//Победитель</string>
-    <string name="share">Пост в социальную сеть</string>
+    <string name="share">Пост</string>
     <string name="create_pdf">Создать pdf</string>
     <string name="study_add">+ место учебы</string>
     <string name="user_profile_placeholder_image">Выберите фото</string>
+    <string name="view">Просмотр</string>
 </resources>

@@ -58,11 +58,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="4dp"
                 android:background="@color/hr24_blue"
-                android:layout_margin="@dimen/spacing_small_8"/>
+                android:layout_margin="@dimen/spacing_small_8" />
             <LinearLayout
+                android:id="@+id/fill_ll"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/size_small_24"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
                 <View
                     android:layout_width="@dimen/line_size"
                     android:layout_height="wrap_content"
@@ -74,7 +76,8 @@
             <Button
                 android:id="@+id/fill_btn"
                 android:text="@string/fill_tv"
-                style="@style/button_fill" />
+                style="@style/button_fill"
+                android:visibility="gone"/>
         </LinearLayout>
 
     </LinearLayout>

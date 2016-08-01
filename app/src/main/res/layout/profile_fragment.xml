@@ -408,6 +408,12 @@
                 style="@style/profile_button"
                 android:visibility="gone"/>
             <Button
+                android:text="@string/view"
+                android:id="@+id/view"
+                style="@style/profile_button"
+                android:layout_marginEnd="1dp"
+                android:visibility="gone"/>
+            <Button
                 android:text="@string/share"
                 android:id="@+id/share"
                 style="@style/profile_button"

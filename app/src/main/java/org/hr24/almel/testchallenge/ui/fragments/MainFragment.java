@@ -44,7 +44,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
 
     Button vkButton, okButton, fillButton;
     CoordinatorLayout mCoordinatorLayout;
-    LinearLayout authLinLayout;
+    LinearLayout authLinLayout, fillLinLayout;
     View fillView;
     public static SocialNetworkManager mSocialNetworkManager;
     int networkId = 0;
@@ -99,6 +99,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
         mCoordinatorLayout = (CoordinatorLayout) rootView.findViewById(R.id.main_coordinator_container);
         authLinLayout = (LinearLayout) rootView.findViewById(R.id.auth_ll);
         fillView = (View) rootView.findViewById(R.id.fill_v);
+        fillLinLayout = (LinearLayout) rootView.findViewById(R.id.fill_ll);
 
         vkButton.setOnClickListener(this);
         okButton.setOnClickListener(this);
@@ -160,17 +161,19 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
         if(socialNetwork.isConnected()){
             switch (socialNetwork.getID()){
                 case VkSocialNetwork.ID:
-                    authLinLayout.setVisibility(View.GONE);
-                    fillView.setVisibility(View.GONE);
                     networkId = VkSocialNetwork.ID;
 
                     break;
                 case OkSocialNetwork.ID:
-                    authLinLayout.setVisibility(View.GONE);
-                    fillView.setVisibility(View.GONE);
                     networkId = OkSocialNetwork.ID;
                     break;
             }
+
+            authLinLayout.setVisibility(View.GONE);
+            fillView.setVisibility(View.GONE);
+
+            fillButton.setVisibility(View.VISIBLE);
+            fillLinLayout.setVisibility(View.VISIBLE);
         }
     }
 
@@ -261,6 +264,8 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
     public void onLoginSuccess(int socialNetworkID) {
         StartActivity.hideProgress();
         showSnackbar("Login Success");
+
+
 
     }
 
