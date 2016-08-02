@@ -32,7 +32,7 @@
             android:background="#FFFFFF">
 
             <FrameLayout
-                android:layout_width="102dp"
+                android:layout_width="match_parent"
                 android:layout_height="102dp"
                 android:layout_margin="8dp"
                 android:fitsSystemWindows="true">
@@ -45,14 +45,15 @@
                     android:src="@drawable/ic_add_a_photo_black_24dp"
                     android:adjustViewBounds="true"
                     android:cropToPadding="true"
-                    android:scaleType="centerCrop"/>
+                    android:scaleType="centerCrop"
+                    android:visibility="gone"/>
 
                 <RelativeLayout
                     android:id="@+id/profile_placeholder"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/gray_background"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <ImageView
                         android:id="@+id/photo_placeholder"
@@ -60,9 +61,42 @@
                         android:layout_height="100dp"
                         android:scaleType="centerCrop"
                         android:src="@drawable/ic_add_a_photo_black_24dp"
-                        android:layout_centerHorizontal="true"
+                        android:layout_alignStart="@id/photo_placeholder"
                         android:layout_alignParentBottom="true"
                         android:fitsSystemWindows="true"/>
+                    <TextView
+                        android:id="@+id/add_photo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/add_photo"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:textSize="20sp"
+                        android:textColor="@color/white" />
+                    <LinearLayout
+                        android:id="@+id/add_photo_ll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:visibility="gone">
+                        <Button
+                            android:id="@+id/cam_btn"
+                            android:text="@string/from_cam"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="20sp"
+                            android:textColor="@color/hr24_blue"/>
+                        <Button
+                            android:id="@+id/gal_btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/form_gallery"
+                            android:textSize="20sp"
+                            android:textColor="@color/hr24_blue"
+                            android:visibility="gone"/>
+                    </LinearLayout>
                 </RelativeLayout>
             </FrameLayout>
 
