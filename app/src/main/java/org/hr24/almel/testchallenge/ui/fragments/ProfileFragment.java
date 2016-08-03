@@ -366,7 +366,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             viewPDF.setVisibility(View.GONE);
             share.setVisibility(View.GONE);
             photo.setVisibility(View.GONE);
-            //// TODO: 01.08.16 реализовать возможность выбора фото из галереи/съёмки
+
         } else {
             mFab.setImageResource(R.drawable.ic_create_black_24dp);
             for (EditText userValue : mUserInfoViews) {
