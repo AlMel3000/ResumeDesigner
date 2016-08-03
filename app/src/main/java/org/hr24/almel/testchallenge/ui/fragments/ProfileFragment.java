@@ -33,6 +33,7 @@ import com.github.gorbin.asne.core.listener.OnPostingCompleteListener;
 import com.github.gorbin.asne.core.listener.OnRequestSocialPersonCompleteListener;
 import com.github.gorbin.asne.core.persons.SocialPerson;
 import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
@@ -59,8 +60,8 @@ import java.util.List;
 
 
 public class ProfileFragment extends Fragment implements OnRequestSocialPersonCompleteListener, View.OnClickListener{
-    private String message = "Need simple social networks integration? Check this lbrary:";
-    private String link = "Посмотрите на моё новое резюме";
+    private String message = "Я устраиваюсь на новую работу";
+    private String link = "http://hr24.org";
 
     private static final String NETWORK_ID = "NETWORK_ID";
     private SocialNetwork socialNetwork;
@@ -77,6 +78,11 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     private File mPhotoFile = null;
     private Uri mSelectedImage = null;
     private CoordinatorLayout mCoordinatorFrame;
+    public String skillString;
+    public  String languageString;
+    public String hobbyString;
+    public String dutyString;
+    public String achievementString;
 
 
 
@@ -159,6 +165,12 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         mUserInfoViews.add(rating);
         mUserInfoViews.add(achievements);
         mUserInfoViews.add(jobDuty);
+
+        skillString = skills.getText().toString();
+        languageString = languages.getText().toString();
+        hobbyString = hobby.getText().toString();
+        dutyString = jobDuty.getText().toString();
+        achievementString = achievements.getText().toString();
 
 
         socialNetwork = MainFragment.mSocialNetworkManager.getSocialNetwork(networkId);
@@ -354,7 +366,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             viewPDF.setVisibility(View.GONE);
             share.setVisibility(View.GONE);
             photo.setVisibility(View.GONE);
-            //// TODO: 01.08.16 реализовать возможность выбора фото из галереи/съёмки 
+            //// TODO: 01.08.16 реализовать возможность выбора фото из галереи/съёмки
         } else {
             mFab.setImageResource(R.drawable.ic_create_black_24dp);
             for (EditText userValue : mUserInfoViews) {
@@ -432,8 +444,11 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             Font nameFont= new Font(droidSans, 18.0f,0, CMYKColor.BLACK);
             Font nickFont= new Font(droidSans, 14.0f,0, CMYKColor.WHITE);
             Font contactsFont= new Font(droidSans, 10.0f,1, CMYKColor.WHITE);
+            Font contactsHeaderFont= new Font(droidSans, 10.0f,1, CMYKColor.BLACK);
             Font headersRightFont= new Font(droidSans, 16.0f, 1, BaseColor.BLACK);
             Font skillsFont= new Font(droidSans, 12.0f, 1, BaseColor.WHITE);
+            Font skillsBlankRatingFont= new Font(droidSans, 20.0f, 1, BaseColor.WHITE);
+            Font skillsRatingFont= new Font(droidSans, 20.0f, 1, BaseColor.BLACK);
 
 
             Paragraph header1 = new Paragraph("Опыт работы");
@@ -448,14 +463,10 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             jobPeriod.setFont(textLeftFontGray);
 
 
-
             Paragraph jobTitle = new Paragraph(this.jobTitle.getText().toString());
             jobTitle.setAlignment(Paragraph.ALIGN_LEFT);
             jobTitle.setFont(textLeftFont);
 
-            Paragraph jobDuty = new Paragraph(this.jobDuty.getText().toString());
-            jobDuty.setAlignment(Paragraph.ALIGN_LEFT);
-            jobDuty.setFont(textLeftFont);
 
             Paragraph header2 = new Paragraph("Образование");
             header2.setFont(headersLeftFont);
@@ -475,12 +486,6 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             Paragraph header3 = new Paragraph("Достижения");
             header3.setFont(headersLeftFont);
 
-            Paragraph achievements = new Paragraph(this.achievements.getText().toString());
-            achievements.setAlignment(Paragraph.ALIGN_LEFT);
-            achievements.setFont(textLeftFont);
-
-
-
 
 
 
@@ -494,13 +499,27 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             nick.setFont(nickFont);
 
 
-            Paragraph telephone = new Paragraph("   T   "+ tel.getText().toString());
+            Paragraph telephone = new Paragraph();
+            Chunk tChunk = new Chunk("  T");
+            tChunk.setFont(contactsHeaderFont);
+            String tel1 = tel.getText().toString();
+            Chunk telChunk = new Chunk("    "+ tel1);
+            telChunk.setFont(contactsFont);
+            telephone.add(tChunk);
+            telephone.add(telChunk);
             telephone.setAlignment(Paragraph.ALIGN_LEFT);
-            telephone.setFont(contactsFont);
 
-            Paragraph email = new Paragraph("   E   "+ this.email.getText().toString());
-            email.setAlignment(Paragraph.ALIGN_LEFT);
-            email.setFont(contactsFont);
+
+            Paragraph emailParagraph = new Paragraph();
+            Chunk eChunk = new Chunk("  E");
+            eChunk.setFont(contactsHeaderFont);
+            String email1 = email.getText().toString();
+            Chunk emailChunk = new Chunk("    "+ email1);
+            emailChunk.setFont(contactsFont);
+            emailParagraph.add(eChunk);
+            emailParagraph.add(emailChunk);
+            emailParagraph.setAlignment(Paragraph.ALIGN_LEFT);
+
 
 
             Paragraph header4 = new Paragraph("О себе");
@@ -515,10 +534,6 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             header5.setAlignment(Paragraph.ALIGN_CENTER);
             header5.setFont(headersRightFont);
 
-            Paragraph skills = new Paragraph(this.skills.getText().toString());
-            skills.setAlignment(Paragraph.ALIGN_CENTER);
-            skills.setFont(skillsFont);
-
             Paragraph header6 = new Paragraph("Другая информация");
             header6.setAlignment(Paragraph.ALIGN_CENTER);
             header6.setFont(headersRightFont);
@@ -527,17 +542,11 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             subHeader1.setAlignment(Paragraph.ALIGN_CENTER);
             subHeader1.setFont(skillsFont);
 
-            Paragraph languages = new Paragraph(this.languages.getText().toString());
-            languages.setAlignment(Paragraph.ALIGN_CENTER);
-            languages.setFont(textLeftFont);
 
             Paragraph subHeader2 = new Paragraph("Хобби");
             subHeader2.setAlignment(Paragraph.ALIGN_CENTER);
             subHeader2.setFont(skillsFont);
 
-            Paragraph hobby = new Paragraph(this.hobby.getText().toString());
-            hobby.setAlignment(Paragraph.ALIGN_CENTER);
-            hobby.setFont(textLeftFont);
 
 
 
@@ -594,7 +603,19 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             jobTitle.setSpacingAfter(5f);
             columnLeft.addElement(jobTitle);
 
-            columnLeft.addElement(jobDuty);
+            Paragraph jobDutyParagraph = new Paragraph();
+            String [] jobDutyProcessed = stringProcessor(dutyString);
+            for (String aJobDutyProcessed : jobDutyProcessed) {
+
+                Chunk jobDuty = new Chunk(aJobDutyProcessed.trim());
+                jobDutyParagraph.add(jobDuty+"\n");
+            }
+
+            jobDutyParagraph.setAlignment(Paragraph.ALIGN_LEFT);
+            jobDutyParagraph.setFont(textLeftFont);
+            columnLeft.addElement(jobDutyParagraph);
+
+
             myImgEdu.setSpacingBefore(40f);
             myImgEdu.setSpacingAfter(20f);
             columnLeft.addElement(myImgEdu);
@@ -615,7 +636,17 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             header3.setSpacingAfter(10f);
             columnLeft.addElement(header3);
 
-            columnLeft.addElement(achievements);
+
+            Paragraph achievementsParagraph = new Paragraph();
+            String [] achievementsProcessed = stringProcessor(achievementString);
+            for (String achievement : achievementsProcessed) {
+
+                Chunk achieved = new Chunk(achievement.trim());
+                achievementsParagraph.add(achieved+"\n");
+            }
+            achievementsParagraph.setAlignment(Paragraph.ALIGN_LEFT);
+            achievementsParagraph.setFont(textLeftFont);
+            columnLeft.addElement(achievementsParagraph);
 
 
 
@@ -628,7 +659,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             columnRight.addElement(nick);
 
             columnRight.addElement(telephone);
-            columnRight.addElement(email);
+            columnRight.addElement(emailParagraph);
 
             header4.setSpacingBefore(40f);
             header4.setSpacingAfter(10f);
@@ -638,9 +669,35 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
             header5.setSpacingBefore(40f);
             header5.setSpacingAfter(10f);
-
             columnRight.addElement(header5);
-            columnRight.addElement(skills);
+
+            Paragraph skillsParagraph = new Paragraph();
+            String [] skillsProcessed = stringProcessor(skillString);
+            for (String skill : skillsProcessed) {
+                String [] currentSkill = skillsStringProcessor(skill.trim());
+                Chunk skillChunk = new Chunk(currentSkill[0]);
+                skillChunk.setFont(skillsFont);
+                int skillRating = Integer.parseInt(currentSkill[1]);
+                int skillBlankRating = 5 - skillRating;
+                Chunk skillRatingChunk = new Chunk();
+                skillRatingChunk.setFont(skillsRatingFont);
+                for (int i = 0; i<= skillRating; i++){
+                    skillRatingChunk.append("\u2022");
+                }
+                Chunk skillBlankRatingChunk = new Chunk();
+                skillBlankRatingChunk.setFont(skillsBlankRatingFont);
+                while (skillBlankRating>0){
+                    skillBlankRatingChunk.append("\u2022");
+                    skillBlankRating--;
+                }
+
+                skillsParagraph.add(skillChunk);
+                skillsParagraph.add(skillRatingChunk);
+                skillsParagraph.add(skillBlankRatingChunk);
+                skillsParagraph.add("\n");
+            }
+            skillsParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+            columnRight.addElement(skillsParagraph);
 
             header6.setSpacingBefore(40f);
             header6.setSpacingAfter(10f);
@@ -650,13 +707,30 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             subHeader1.setSpacingAfter(5f);
             columnRight.addElement(subHeader1);
 
+
+            Paragraph languages = new Paragraph();
+            String [] languagesProcessed = stringProcessor(languageString);
+            for (String language : languagesProcessed) {
+                Chunk languageChunk = new Chunk(language.trim());
+                languages.add(languageChunk+"\n");
+            }
+            languages.setAlignment(Paragraph.ALIGN_CENTER);
+            languages.setFont(textLeftFont);
             languages.setSpacingAfter(10f);
             columnRight.addElement(languages);
 
             subHeader2.setSpacingAfter(5f);
             columnRight.addElement(subHeader2);
 
-            columnRight.addElement(hobby);
+            Paragraph hobbyParagraph = new Paragraph();
+            String [] hobbyProcessed = stringProcessor(hobbyString);
+            for (String hobby : hobbyProcessed) {
+                Chunk hobbyChunk = new Chunk(hobby.trim());
+                hobbyParagraph.add(hobbyChunk+"\n");
+            }
+            hobbyParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+            hobbyParagraph.setFont(textLeftFont);
+            columnRight.addElement(hobbyParagraph);
 
 
 
@@ -713,13 +787,27 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         Intent takeGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         takeGalleryIntent.setType("image/*");
         startActivityForResult(Intent.createChooser(takeGalleryIntent, getString(R.string.user_profile_choose_picture)), ConstantManager.REQUEST_GALLERY_PICTURE);
-
-
     }
 
     private void showSnackbar(String message){
         Snackbar.make(mCoordinatorFrame, message,Snackbar.LENGTH_LONG).show();
     }
+
+    private String[] stringProcessor(String string){
+
+        String[] stringArray = string.split("//");
+
+        return stringArray;
+    }
+
+    private String[] skillsStringProcessor(String string){
+
+        String[] stringArray = string.split("@");
+
+        return stringArray;
+    }
+
+
 
 
 
