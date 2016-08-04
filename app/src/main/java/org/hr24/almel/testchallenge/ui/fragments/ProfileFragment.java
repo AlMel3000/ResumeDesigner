@@ -106,6 +106,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     public String achievementString;
     private LinearLayout mStudyLinLay;
     View rootView;
+    Bitmap bitmapAva;
 
 
     public static ProfileFragment newInstannce(int id) {
@@ -209,6 +210,12 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 if (resultCode == Activity.RESULT_OK && data != null) {
                     mSelectedImage = data.getData();
                     insertProfileImage(mSelectedImage);
+
+                    try {
+                        bitmapAva = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), mSelectedImage);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
                 }
                 break;
@@ -684,17 +691,28 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             myImgEdu.scaleAbsolute(40f, 40f);
 
            if (mPhotoFile != null) {
-               ByteArrayOutputStream streamAva = new ByteArrayOutputStream();
+               ByteArrayOutputStream streamAvatar = new ByteArrayOutputStream();
 
             Bitmap bitmapAvatar;
             bitmapAvatar = BitmapFactory.decodeFile(mPhotoFile.getPath());
-            bitmapAvatar.compress(Bitmap.CompressFormat.JPEG, 100 , streamAva);
-            Image myImgAva = Image.getInstance(streamAva.toByteArray());
-            myImgAva.setAlignment(Image.MIDDLE);
-            myImgAva.scaleAbsolute(100f, 100f);
+            bitmapAvatar.compress(Bitmap.CompressFormat.JPEG, 100 , streamAvatar);
+            Image myImgAvatar = Image.getInstance(streamAvatar.toByteArray());
+            myImgAvatar.setAlignment(Image.MIDDLE);
+            myImgAvatar.scaleAbsolute(100f, 100f);
+               myImgAvatar.setSpacingBefore(30f);
+            columnRight.addElement(myImgAvatar);
+
+           }else if(bitmapAva!=null){
+               ByteArrayOutputStream streamAva = new ByteArrayOutputStream();
+               bitmapAva.compress(Bitmap.CompressFormat.JPEG, 100 , streamAva);
+               Image myImgAva = Image.getInstance(streamAva.toByteArray());
+               myImgAva.setAlignment(Image.MIDDLE);
+               myImgAva.scaleAbsolute(100f, 100f);
                myImgAva.setSpacingBefore(30f);
-            columnRight.addElement(myImgAva);
-           }else {
+               columnRight.addElement(myImgAva);
+
+
+            }else {
                showSnackbar("Резюме без фото, пока Вы не сфотографируетсь");
            }
 

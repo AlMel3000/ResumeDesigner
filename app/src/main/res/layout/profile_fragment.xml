@@ -94,8 +94,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/form_gallery"
                             android:textSize="20sp"
-                            android:textColor="@color/hr24_blue"
-                            android:visibility="gone"/>
+                            android:textColor="@color/hr24_blue" />
                     </LinearLayout>
                 </RelativeLayout>
             </FrameLayout>
