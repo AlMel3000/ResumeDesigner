@@ -70,4 +70,5 @@
     <string name="study_description1">Магистр. Социология</string>
     <string name="job_remove">- место работы</string>
     <string name="study_remove">- место учебы</string>
+    <string name="load_from_camera_permissions_request">Для корректной работы приложения необходимо дать требуемые разрешения</string>
 </resources>

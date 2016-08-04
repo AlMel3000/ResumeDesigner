@@ -5,6 +5,7 @@ import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -12,10 +13,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -70,7 +75,10 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     private int mStudyCount = 1;
 
     private ImageView photo, photoPlaceholder;
-    private EditText name, nick,tel, email, bio, skills, languages, hobby, jobPeriod, jobTitle, companyTitle, jobDuty, studyTitle, studyDescription, rating, achievements, jobPeriod1, jobTitle1, companyTitle1, jobDuty1,  studyTitle1, studyDescription1, rating1, jobPeriod2, jobTitle2, companyTitle2, jobDuty2;
+    private EditText name, nick,tel, email, bio, skills, languages, hobby,
+            jobPeriod, jobTitle, companyTitle, jobDuty, studyTitle, studyDescription, rating, achievements,
+            jobPeriod1, jobTitle1, companyTitle1, jobDuty1,  studyTitle1, studyDescription1, rating1,
+            jobPeriod2, jobTitle2, companyTitle2, jobDuty2;
     private Button savePdfButton;
     private Button share;
     private Button viewPDF;
@@ -509,6 +517,13 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
 
     public void createPdf() {
+
+
+
+        if (ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+
+
 
         skillString = skills.getText().toString();
         languageString = languages.getText().toString();
@@ -1007,6 +1022,21 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             document.close();
         }
 
+        } else {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{
+                    android.Manifest.permission.CAMERA,
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+            }, ConstantManager.CAMERA_REQUEST_PERMISSION_CODE);
+
+            Snackbar.make(mCoordinatorFrame, R.string.load_from_camera_permissions_request, Snackbar.LENGTH_LONG)
+                    .setAction("Разрешить", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            openApplicationSettings();
+                        }
+                    }).show();
+        }
+
     }
 
 
@@ -1024,22 +1054,54 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         return image;
     }
 
-    public void loadPhotoFromCamera() {
-        Intent takeCaptureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+    private void loadPhotoFromCamera() {
 
-        try {
-            mPhotoFile = createImageFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-            Toast.makeText(getContext(), "Ошибка получения фото", Toast.LENGTH_SHORT).show();
+        if (ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            Intent takeCaptureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            try {
+                mPhotoFile = createImageFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+                showSnackbar("Ошибка получения фото" + e);
+            }
+            if (mPhotoFile != null) {
+                takeCaptureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mPhotoFile));
+                startActivityForResult(takeCaptureIntent, ConstantManager.REQUEST_CAMERA_PICTURE);
+            }
+        } else {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{
+                    android.Manifest.permission.CAMERA,
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+            }, ConstantManager.CAMERA_REQUEST_PERMISSION_CODE);
 
-        }
-        if (mPhotoFile != null) {
-            takeCaptureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mPhotoFile));
-            startActivityForResult(takeCaptureIntent, ConstantManager.REQUEST_CAMERA_PICTURE);
+            Snackbar.make(mCoordinatorFrame, R.string.load_from_camera_permissions_request, Snackbar.LENGTH_LONG)
+                    .setAction("Разрешить", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            openApplicationSettings();
+                        }
+                    }).show();
         }
 
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == ConstantManager.CAMERA_REQUEST_PERMISSION_CODE && grantResults.length == 2) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                showSnackbar("Разрешение получено");
+            }
+        }
+        if (grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+            showSnackbar("Разрешение получено");
+        }
+    }
+
+    public void openApplicationSettings() {
+        Intent appSettingsIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + getActivity().getPackageName()));
+        startActivityForResult(appSettingsIntent, ConstantManager.PERMISSION_REQUEST_SETTINGS_CODE);
+    }
+
     private void loadPhotoFromGallery() {
         Intent takeGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         takeGalleryIntent.setType("image/*");
@@ -1052,16 +1114,12 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
     private String[] stringProcessor(String string){
 
-        String[] stringArray = string.split("//");
-
-        return stringArray;
+        return string.split("//");
     }
 
     private String[] skillsStringProcessor(String string){
 
-        String[] stringArray = string.split("@");
-
-        return stringArray;
+        return string.split("@");
     }
 
 
