@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/job2_ll"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -58,7 +59,7 @@
         android:layout_marginTop="@dimen/spacing_normal_16">
 
         <EditText
-            android:id="@+id/hobby2"
+            android:id="@+id/job_duty2"
             style="@style/profile_edittext"
             android:hint="@string/job_duty_hint"
             android:text="@string/job_duty"
@@ -81,6 +82,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_small_8"
         android:text="@string/current_work"/>
+    <Button
+        android:id="@+id/job_remove_button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/job_remove" />
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"

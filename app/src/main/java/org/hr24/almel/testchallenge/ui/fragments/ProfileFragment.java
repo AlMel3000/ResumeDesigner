@@ -66,14 +66,25 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     private static final String NETWORK_ID = "NETWORK_ID";
     private SocialNetwork socialNetwork;
     private int networkId;
+    private int mJobCount = 1;
+    private int mStudyCount = 1;
+
     private ImageView photo, photoPlaceholder;
-    private EditText name, nick,tel, email, bio, skills, languages, hobby, jobPeriod, jobTitle, companyTitle, jobDuty, studyTitle, studyDescription, rating, achievements;
-    private Button savePdfButton, share, viewPDF, camButton, galButton;
+    private EditText name, nick,tel, email, bio, skills, languages, hobby, jobPeriod, jobTitle, companyTitle, jobDuty, studyTitle, studyDescription, rating, achievements, jobPeriod1, jobTitle1, companyTitle1, jobDuty1,  studyTitle1, studyDescription1, rating1, jobPeriod2, jobTitle2, companyTitle2, jobDuty2;
+    private Button savePdfButton;
+    private Button share;
+    private Button viewPDF;
+    private Button jobAddButton;
+    private Button jobAddButton2;
+    private Button studyAddButton;
+    private Button removeJobButton;
+    private Button removeJobButton1;
+    private Button removeStudyButton;
     private FloatingActionButton mFab;
     private int mCurrentEditMode = 1;
     private List<EditText> mUserInfoViews;
     private RelativeLayout mProfilePlaceholder;
-    private LinearLayout mAddPhotoLinLay;
+    private LinearLayout mAddPhotoLinLay, mJobLinLay;
     private TextView mAddPhototv;
     private File mPhotoFile = null;
     private Uri mSelectedImage = null;
@@ -82,9 +93,11 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     public  String languageString;
     public String hobbyString;
     public String dutyString;
+    public String dutyString1;
+    public String dutyString2;
     public String achievementString;
-
-
+    private LinearLayout mStudyLinLay;
+    View rootView;
 
 
     public static ProfileFragment newInstannce(int id) {
@@ -105,12 +118,14 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         networkId = getArguments().containsKey(NETWORK_ID) ? getArguments().getInt(NETWORK_ID) : 0;
 
 
-        View rootView = inflater.inflate(R.layout.profile_fragment, container, false);
+        rootView = inflater.inflate(R.layout.profile_fragment, container, false);
 
         photo = (ImageView) rootView.findViewById(R.id.imageView);
         photoPlaceholder = (ImageView) rootView.findViewById(R.id.photo_placeholder);
         mProfilePlaceholder = (RelativeLayout) rootView.findViewById(R.id.profile_placeholder);
         mAddPhotoLinLay = (LinearLayout) rootView.findViewById(R.id.add_photo_ll);
+        mJobLinLay = (LinearLayout) rootView.findViewById(R.id.job_ll);
+        mStudyLinLay = (LinearLayout) rootView.findViewById(R.id.study_ll);
 
         mAddPhototv  = (TextView) rootView.findViewById(R.id.add_photo);
 
@@ -125,19 +140,21 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         jobPeriod = (EditText) rootView.findViewById(R.id.job_period);
         companyTitle = (EditText) rootView.findViewById(R.id.company_title);
         jobTitle = (EditText) rootView.findViewById(R.id.job_title);
+        jobDuty=(EditText) rootView.findViewById(R.id.job_duty);
         studyTitle =(EditText) rootView.findViewById(R.id.study_title);
         studyDescription =(EditText) rootView.findViewById(R.id.study_decription);
         rating =(EditText) rootView.findViewById(R.id.rating);
         achievements=(EditText) rootView.findViewById(R.id.achievements);
-        jobDuty=(EditText) rootView.findViewById(R.id.job_duty);
         mCoordinatorFrame = (CoordinatorLayout) rootView.findViewById(R.id.frame);
 
         mFab = (FloatingActionButton) rootView.findViewById(R.id.fab);
         share = (Button) rootView.findViewById(R.id.share);
         savePdfButton = (Button) rootView.findViewById(R.id.create_pdf_button);
         viewPDF = (Button) rootView.findViewById(R.id.view);
-        camButton = (Button) rootView.findViewById(R.id.cam_btn);
-        galButton = (Button) rootView.findViewById(R.id.gal_btn);
+        Button camButton = (Button) rootView.findViewById(R.id.cam_btn);
+        Button galButton = (Button) rootView.findViewById(R.id.gal_btn);
+        jobAddButton = (Button) rootView.findViewById(R.id.job_add_btn);
+        studyAddButton = (Button) rootView.findViewById(R.id.study_add_button);
 
         savePdfButton.setOnClickListener(this);
         viewPDF.setOnClickListener(this);
@@ -147,6 +164,8 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         mAddPhotoLinLay.setOnClickListener(this);
         camButton.setOnClickListener(this);
         galButton.setOnClickListener(this);
+        jobAddButton.setOnClickListener(this);
+        studyAddButton.setOnClickListener(this);
 
         mUserInfoViews = new ArrayList<>();
         mUserInfoViews.add(name);
@@ -165,12 +184,6 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         mUserInfoViews.add(rating);
         mUserInfoViews.add(achievements);
         mUserInfoViews.add(jobDuty);
-
-        skillString = skills.getText().toString();
-        languageString = languages.getText().toString();
-        hobbyString = hobby.getText().toString();
-        dutyString = jobDuty.getText().toString();
-        achievementString = achievements.getText().toString();
 
 
         socialNetwork = MainFragment.mSocialNetworkManager.getSocialNetwork(networkId);
@@ -315,13 +328,97 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 break;
             case R.id.profile_placeholder:
                 mAddPhotoLinLay.setVisibility(View.VISIBLE);
-                mAddPhototv.setVisibility(View.GONE);;
+                mAddPhototv.setVisibility(View.GONE);
                 break;
             case R.id.cam_btn:
                 loadPhotoFromCamera();
                 break;
             case R.id.gal_btn:
                 loadPhotoFromGallery();
+                break;
+            case R.id.job_add_btn:
+                mJobCount = 2;
+                jobAddButton.setVisibility(View.GONE);
+
+                LayoutInflater ltInflaterJob2 = getActivity().getLayoutInflater();
+                ltInflaterJob2.inflate(R.layout.job, mJobLinLay, true);
+
+                jobPeriod1 = (EditText) rootView.findViewById(R.id.job_period1);
+                companyTitle1 = (EditText) rootView.findViewById(R.id.company_title1);
+                jobTitle1 = (EditText) rootView.findViewById(R.id.job_title1);
+                jobDuty1 =(EditText) rootView.findViewById(R.id.job_duty1);
+
+                jobAddButton2 = (Button) rootView.findViewById(R.id.job_add_btn2);
+                removeJobButton = (Button) rootView.findViewById(R.id.job_remove_button);
+
+                jobAddButton2.setOnClickListener(this);
+                removeJobButton.setOnClickListener(this);
+
+                dutyString1 = jobDuty1.getText().toString();
+
+                break;
+            case R.id.job_remove_button:
+                mJobCount = 1;
+                jobAddButton.setVisibility(View.VISIBLE);
+
+                View jobView = rootView.findViewById(R.id.job1_ll);
+                ViewGroup parentJobll = (ViewGroup) jobView.getParent();
+                parentJobll.removeView(jobView);
+
+
+                break;
+            case R.id.job_add_btn2:
+                mJobCount = 3;
+                jobAddButton2.setVisibility(View.GONE);
+                removeJobButton.setVisibility(View.GONE);
+                LayoutInflater ltInflaterJob3 = getActivity().getLayoutInflater();
+                ltInflaterJob3.inflate(R.layout.job2, mJobLinLay, true);
+
+                jobPeriod2 = (EditText) rootView.findViewById(R.id.job_period2);
+                companyTitle2 = (EditText) rootView.findViewById(R.id.company_title2);
+                jobTitle2 = (EditText) rootView.findViewById(R.id.job_title2);
+                jobDuty2 =(EditText) rootView.findViewById(R.id.job_duty2);
+                removeJobButton1 = (Button) rootView.findViewById(R.id.job_remove_button1);
+
+                removeJobButton1.setOnClickListener(this);
+
+                dutyString2 = jobDuty2.getText().toString();
+
+
+                break;
+            case R.id.job_remove_button1:
+                mJobCount = 2;
+
+                jobAddButton2.setVisibility(View.VISIBLE);
+                removeJobButton.setVisibility(View.VISIBLE);
+
+                View jobView2 = rootView.findViewById(R.id.job2_ll);
+                ViewGroup parentJobll2 = (ViewGroup) jobView2.getParent();
+                parentJobll2.removeView(jobView2);
+
+
+                break;
+            case R.id.study_add_button:
+                mStudyCount = 2;
+                studyAddButton.setVisibility(View.GONE);
+
+                LayoutInflater ltInflaterStudy2 = getActivity().getLayoutInflater();
+                ltInflaterStudy2.inflate(R.layout.study, mStudyLinLay, true);
+
+                removeStudyButton = (Button) rootView.findViewById(R.id.study_remove_button);
+                removeStudyButton.setOnClickListener(this);
+                studyTitle1 = (EditText) rootView.findViewById(R.id.study_title1);
+                studyDescription1 = (EditText) rootView.findViewById(R.id.study_decription1);
+                rating1 = (EditText) rootView.findViewById(R.id.rating1);
+                break;
+            case R.id.study_remove_button:
+
+                mStudyCount = 1;
+                studyAddButton.setVisibility(View.VISIBLE);
+                View studyView = rootView.findViewById(R.id.study1_ll);
+                ViewGroup parentStudyll = (ViewGroup) studyView.getParent();
+                parentStudyll.removeView(studyView);
+
                 break;
             
 
@@ -367,6 +464,16 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             share.setVisibility(View.GONE);
             photo.setVisibility(View.GONE);
 
+            jobAddButton.setVisibility(View.VISIBLE);
+            if (mJobCount==2){
+                jobAddButton2.setVisibility(View.VISIBLE);
+                removeJobButton.setVisibility(View.VISIBLE);
+            }
+            if (mJobCount == 3){
+                removeJobButton1.setVisibility(View.VISIBLE);
+            }
+            studyAddButton.setVisibility(View.VISIBLE);
+
         } else {
             mFab.setImageResource(R.drawable.ic_create_black_24dp);
             for (EditText userValue : mUserInfoViews) {
@@ -383,6 +490,16 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             viewPDF.setVisibility(View.VISIBLE);
             photo.setVisibility(View.VISIBLE);
 
+            jobAddButton.setVisibility(View.GONE);
+            if (mJobCount==2){
+                jobAddButton2.setVisibility(View.GONE);
+                removeJobButton.setVisibility(View.GONE);
+            }
+            if (mJobCount == 3){
+                removeJobButton1.setVisibility(View.GONE);
+            }
+            studyAddButton.setVisibility(View.GONE);
+
         }
     }
 
@@ -392,6 +509,12 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
 
     public void createPdf() {
+
+        skillString = skills.getText().toString();
+        languageString = languages.getText().toString();
+        hobbyString = hobby.getText().toString();
+        dutyString = jobDuty.getText().toString();
+        achievementString = achievements.getText().toString();
 
         final Rectangle[] COLUMNS = {
                 new Rectangle(36, 36, 290, 806),
@@ -454,34 +577,12 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             Paragraph header1 = new Paragraph("Опыт работы");
             header1.setFont(headersLeftFont);
 
-            Paragraph companyTitle = new Paragraph("\u2022" + this.companyTitle.getText().toString());
-            companyTitle.setAlignment(Paragraph.ALIGN_LEFT);
-            companyTitle.setFont(headersSmallLeftFont);
 
-            Paragraph jobPeriod = new Paragraph(this.jobPeriod.getText().toString());
-            jobPeriod.setAlignment(Paragraph.ALIGN_LEFT);
-            jobPeriod.setFont(textLeftFontGray);
-
-
-            Paragraph jobTitle = new Paragraph(this.jobTitle.getText().toString());
-            jobTitle.setAlignment(Paragraph.ALIGN_LEFT);
-            jobTitle.setFont(textLeftFont);
 
 
             Paragraph header2 = new Paragraph("Образование");
             header2.setFont(headersLeftFont);
 
-            Paragraph studyTitle = new Paragraph("\u2022" + this.studyTitle.getText().toString());
-            studyTitle.setAlignment(Paragraph.ALIGN_LEFT);
-            studyTitle.setFont(headersSmallLeftFont);
-
-            Paragraph studyDescription = new Paragraph(this.studyDescription.getText().toString());
-            studyDescription.setAlignment(Paragraph.ALIGN_LEFT);
-            studyDescription.setFont(textLeftFont);
-
-            Paragraph studyRating = new Paragraph(rating.getText().toString());
-            studyRating.setAlignment(Paragraph.ALIGN_LEFT);
-            studyRating.setFont(textLeftFont);
 
             Paragraph header3 = new Paragraph("Достижения");
             header3.setFont(headersLeftFont);
@@ -549,13 +650,6 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
 
 
-
-
-
-
-
-
-
             ByteArrayOutputStream streamExp = new ByteArrayOutputStream();
             Bitmap bitmapExp;
             bitmapExp = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.exp);
@@ -583,7 +677,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             Image myImgAva = Image.getInstance(streamAva.toByteArray());
             myImgAva.setAlignment(Image.MIDDLE);
             myImgAva.scaleAbsolute(100f, 100f);
-               myImgAva.setSpacingBefore(40f);
+               myImgAva.setSpacingBefore(30f);
             columnRight.addElement(myImgAva);
            }else {
                showSnackbar("Резюме без фото, пока Вы не сфотографируетсь");
@@ -595,13 +689,28 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             header1.setSpacingAfter(10f);
             columnLeft.addElement(header1);
 
-            columnLeft.addElement(companyTitle);
 
-            jobPeriod.setSpacingAfter(5f);
-            columnLeft.addElement(jobPeriod);
+            Paragraph companyTitleParagraph = new Paragraph("\u2022" + this.companyTitle.getText().toString());
+            companyTitleParagraph.setAlignment(Paragraph.ALIGN_LEFT);
+            companyTitleParagraph.setFont(headersSmallLeftFont);
 
-            jobTitle.setSpacingAfter(5f);
-            columnLeft.addElement(jobTitle);
+            Paragraph jobPeriodParagraph = new Paragraph(this.jobPeriod.getText().toString());
+            jobPeriodParagraph.setAlignment(Paragraph.ALIGN_LEFT);
+            jobPeriodParagraph.setFont(textLeftFontGray);
+
+
+            Paragraph jobTitleParagraph = new Paragraph(this.jobTitle.getText().toString());
+            jobTitleParagraph.setAlignment(Paragraph.ALIGN_LEFT);
+            jobTitleParagraph.setFont(textLeftFont);
+
+            columnLeft.addElement(companyTitleParagraph);
+
+            jobPeriodParagraph.setSpacingAfter(5f);
+            columnLeft.addElement(jobPeriodParagraph);
+
+            jobTitleParagraph.setSpacingAfter(5f);
+            columnLeft.addElement(jobTitleParagraph);
+
 
             Paragraph jobDutyParagraph = new Paragraph();
             String [] jobDutyProcessed = stringProcessor(dutyString);
@@ -615,24 +724,170 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             jobDutyParagraph.setFont(textLeftFont);
             columnLeft.addElement(jobDutyParagraph);
 
+            if (mJobCount ==2){
+                Paragraph companyTitleParagraph1 = new Paragraph("\u2022" + companyTitle1.getText().toString());
+                companyTitleParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
+                companyTitleParagraph1.setFont(headersSmallLeftFont);
 
-            myImgEdu.setSpacingBefore(40f);
-            myImgEdu.setSpacingAfter(20f);
+                Paragraph jobPeriodParagraph1 = new Paragraph(jobPeriod1.getText().toString());
+                jobPeriodParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
+                jobPeriodParagraph1.setFont(textLeftFontGray);
+
+
+                Paragraph jobTitleParagraph1 = new Paragraph(jobTitle1.getText().toString());
+                jobTitleParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
+                jobTitleParagraph1.setFont(textLeftFont);
+
+                columnLeft.addElement(companyTitleParagraph1);
+
+                jobPeriodParagraph1.setSpacingAfter(5f);
+                columnLeft.addElement(jobPeriodParagraph1);
+
+                jobTitleParagraph1.setSpacingAfter(5f);
+                columnLeft.addElement(jobTitleParagraph1);
+
+
+                Paragraph jobDutyParagraph1 = new Paragraph();
+                String [] jobDutyProcessed1 = stringProcessor(dutyString1);
+                for (String aJobDutyProcessed1 : jobDutyProcessed1) {
+
+                    Chunk jobDuty1 = new Chunk(aJobDutyProcessed1.trim());
+                    jobDutyParagraph1.add(jobDuty1+"\n");
+                }
+
+                jobDutyParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
+                jobDutyParagraph1.setFont(textLeftFont);
+                columnLeft.addElement(jobDutyParagraph1);
+            }
+
+            if (mJobCount ==3){
+                Paragraph companyTitleParagraph1 = new Paragraph("\u2022" + companyTitle1.getText().toString());
+                companyTitleParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
+                companyTitleParagraph1.setFont(headersSmallLeftFont);
+
+                Paragraph jobPeriodParagraph1 = new Paragraph(jobPeriod1.getText().toString());
+                jobPeriodParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
+                jobPeriodParagraph1.setFont(textLeftFontGray);
+
+
+                Paragraph jobTitleParagraph1 = new Paragraph(jobTitle1.getText().toString());
+                jobTitleParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
+                jobTitleParagraph1.setFont(textLeftFont);
+
+                columnLeft.addElement(companyTitleParagraph1);
+
+                jobPeriodParagraph1.setSpacingAfter(5f);
+                columnLeft.addElement(jobPeriodParagraph1);
+
+                jobTitleParagraph1.setSpacingAfter(5f);
+                columnLeft.addElement(jobTitleParagraph1);
+
+
+                Paragraph jobDutyParagraph1 = new Paragraph();
+                String [] jobDutyProcessed1 = stringProcessor(dutyString1);
+                for (String aJobDutyProcessed1 : jobDutyProcessed1) {
+
+                    Chunk jobDuty1 = new Chunk(aJobDutyProcessed1.trim());
+                    jobDutyParagraph1.add(jobDuty1+"\n");
+                }
+
+                jobDutyParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
+                jobDutyParagraph1.setFont(textLeftFont);
+                columnLeft.addElement(jobDutyParagraph1);
+
+
+
+
+                Paragraph companyTitleParagraph2 = new Paragraph("\u2022" + companyTitle2.getText().toString());
+                companyTitleParagraph2.setAlignment(Paragraph.ALIGN_LEFT);
+                companyTitleParagraph2.setFont(headersSmallLeftFont);
+
+                Paragraph jobPeriodParagraph2 = new Paragraph(jobPeriod2.getText().toString());
+                jobPeriodParagraph2.setAlignment(Paragraph.ALIGN_LEFT);
+                jobPeriodParagraph2.setFont(textLeftFontGray);
+
+
+                Paragraph jobTitleParagraph2 = new Paragraph(jobTitle2.getText().toString());
+                jobTitleParagraph2.setAlignment(Paragraph.ALIGN_LEFT);
+                jobTitleParagraph2.setFont(textLeftFont);
+
+                columnLeft.addElement(companyTitleParagraph2);
+
+                jobPeriodParagraph2.setSpacingAfter(5f);
+                columnLeft.addElement(jobPeriodParagraph2);
+
+                jobTitleParagraph2.setSpacingAfter(5f);
+                columnLeft.addElement(jobTitleParagraph2);
+
+
+                Paragraph jobDutyParagraph2 = new Paragraph();
+                String [] jobDutyProcessed2 = stringProcessor(dutyString2);
+                for (String aJobDutyProcessed2 : jobDutyProcessed2) {
+
+                    Chunk jobDuty2 = new Chunk(aJobDutyProcessed2.trim());
+                    jobDutyParagraph2.add(jobDuty2+"\n");
+                }
+
+                jobDutyParagraph2.setAlignment(Paragraph.ALIGN_LEFT);
+                jobDutyParagraph2.setFont(textLeftFont);
+                columnLeft.addElement(jobDutyParagraph2);
+            }
+
+
+            myImgEdu.setSpacingBefore(30f);
+            myImgEdu.setSpacingAfter(15f);
             columnLeft.addElement(myImgEdu);
 
             header2.setSpacingAfter(10f);
             columnLeft.addElement(header2);
 
-            studyTitle.setSpacingAfter(5f);
-            columnLeft.addElement(studyTitle);
 
-            studyDescription.setSpacingAfter(5f);
-            columnLeft.addElement(studyDescription);
+            Paragraph studyTitleParagraph = new Paragraph("\u2022" + this.studyTitle.getText().toString());
+            studyTitleParagraph.setAlignment(Paragraph.ALIGN_LEFT);
+            studyTitleParagraph.setFont(headersSmallLeftFont);
 
-            studyRating.setSpacingAfter(5f);
-            columnLeft.addElement(studyRating);
+            Paragraph studyDescriptionParagraph = new Paragraph(this.studyDescription.getText().toString());
+            studyDescriptionParagraph.setAlignment(Paragraph.ALIGN_LEFT);
+            studyDescriptionParagraph.setFont(textLeftFont);
 
-            header3.setSpacingBefore(40f);
+            Paragraph studyRatingParagraph = new Paragraph(rating.getText().toString());
+            studyRatingParagraph.setAlignment(Paragraph.ALIGN_LEFT);
+            studyRatingParagraph.setFont(textLeftFont);
+
+            studyTitleParagraph.setSpacingAfter(5f);
+            columnLeft.addElement(studyTitleParagraph);
+
+            studyDescriptionParagraph.setSpacingAfter(5f);
+            columnLeft.addElement(studyDescriptionParagraph);
+
+            studyRatingParagraph.setSpacingAfter(5f);
+            columnLeft.addElement(studyRatingParagraph);
+
+            if (mStudyCount==2){
+                Paragraph studyTitleParagraph1 = new Paragraph("\u2022" + studyTitle1.getText().toString());
+                studyTitleParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
+                studyTitleParagraph1.setFont(headersSmallLeftFont);
+
+                Paragraph studyDescriptionParagraph1 = new Paragraph(studyDescription1.getText().toString());
+                studyDescriptionParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
+                studyDescriptionParagraph1.setFont(textLeftFont);
+
+                Paragraph studyRatingParagraph1 = new Paragraph(rating1.getText().toString());
+                studyRatingParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
+                studyRatingParagraph1.setFont(textLeftFont);
+
+                studyTitleParagraph1.setSpacingAfter(5f);
+                columnLeft.addElement(studyTitleParagraph1);
+
+                studyDescriptionParagraph1.setSpacingAfter(5f);
+                columnLeft.addElement(studyDescriptionParagraph1);
+
+                studyRatingParagraph1.setSpacingAfter(5f);
+                columnLeft.addElement(studyRatingParagraph1);
+
+            }
+
+            header3.setSpacingBefore(30f);
             header3.setSpacingAfter(10f);
             columnLeft.addElement(header3);
 
@@ -667,7 +922,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             columnRight.addElement(header4);
             columnRight.addElement(bio);
 
-            header5.setSpacingBefore(40f);
+            header5.setSpacingBefore(30f);
             header5.setSpacingAfter(10f);
             columnRight.addElement(header5);
 
@@ -699,7 +954,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             skillsParagraph.setAlignment(Paragraph.ALIGN_CENTER);
             columnRight.addElement(skillsParagraph);
 
-            header6.setSpacingBefore(40f);
+            header6.setSpacingBefore(30f);
             header6.setSpacingAfter(10f);
 
             columnRight.addElement(header6);
@@ -737,6 +992,8 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
             columnLeft.go();
             columnRight.go();
+
+            showSnackbar("Документ создан");
 
 
 

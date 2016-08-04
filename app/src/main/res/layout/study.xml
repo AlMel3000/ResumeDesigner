@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/study1_ll"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,7 +11,7 @@
         android:layout_marginTop="@dimen/spacing_normal_16">
 
         <EditText
-            android:id="@+id/study_title"
+            android:id="@+id/study_title1"
             style="@style/profile_edittext"
             android:hint="@string/study_title_hint"
             android:text="@string/study_title"
@@ -25,10 +26,10 @@
         android:layout_marginTop="@dimen/spacing_normal_16">
 
         <EditText
-            android:id="@+id/study_decription"
+            android:id="@+id/study_decription1"
             style="@style/profile_edittext"
             android:hint="@string/study_description_hint"
-            android:text="@string/study_description"
+            android:text="@string/study_description1"
             android:fontFamily="sans-serif-condensed"
             android:textColor="@color/gray_light"
             android:textColorHint="@color/gray" />
@@ -40,7 +41,7 @@
         android:layout_marginTop="@dimen/spacing_normal_16">
 
         <EditText
-            android:id="@+id/rating"
+            android:id="@+id/rating1"
             style="@style/profile_edittext"
             android:hint="@string/rating_hint"
             android:text="@string/rating_period"
@@ -50,7 +51,11 @@
 
     </android.support.design.widget.TextInputLayout>
 
-
+    <Button
+        android:id="@+id/study_remove_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/study_remove" />
 
     <View
         android:layout_width="match_parent"
