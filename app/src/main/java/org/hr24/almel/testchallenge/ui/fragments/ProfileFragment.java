@@ -54,6 +54,8 @@ import com.squareup.picasso.Picasso;
 import org.hr24.almel.testchallenge.R;
 import org.hr24.almel.testchallenge.ui.StartActivity;
 import org.hr24.almel.testchallenge.utils.ConstantManager;
+import org.hr24.almel.testchallenge.utils.NetworkStatusChecker;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -195,11 +197,16 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         mUserInfoViews.add(jobDuty);
 
 
+        if(NetworkStatusChecker.isNetworkAvailable(getContext())){
         socialNetwork = MainFragment.mSocialNetworkManager.getSocialNetwork(networkId);
         socialNetwork.setOnRequestCurrentPersonCompleteListener(this);
         socialNetwork.requestCurrentPerson();
 
         StartActivity.showProgress("Loading social person");
+        } else {
+            showSnackbar("Сеть недоступна, не удалось загрузить Ваш профиль");
+        }
+
         return rootView;
     }
 
