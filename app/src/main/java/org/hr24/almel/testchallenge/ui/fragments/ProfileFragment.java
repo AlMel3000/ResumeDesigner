@@ -488,6 +488,9 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 removeJobButton1.setVisibility(View.VISIBLE);
             }
             studyAddButton.setVisibility(View.VISIBLE);
+            if (mStudyCount==2){
+                removeStudyButton.setVisibility(View.VISIBLE);
+            }
 
         } else {
             mFab.setImageResource(R.drawable.ic_create_black_24dp);
@@ -514,6 +517,9 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 removeJobButton1.setVisibility(View.GONE);
             }
             studyAddButton.setVisibility(View.GONE);
+            if (mStudyCount==2){
+                removeStudyButton.setVisibility(View.GONE);
+            }
 
         }
     }
@@ -702,7 +708,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                myImgAvatar.setSpacingBefore(30f);
             columnRight.addElement(myImgAvatar);
 
-           }else if(bitmapAva!=null){
+           }else if(bitmapAva!= null){
                ByteArrayOutputStream streamAva = new ByteArrayOutputStream();
                bitmapAva.compress(Bitmap.CompressFormat.JPEG, 100 , streamAva);
                Image myImgAva = Image.getInstance(streamAva.toByteArray());
@@ -713,7 +719,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
 
             }else {
-               showSnackbar("Резюме без фото, пока Вы не сфотографируетсь");
+               Toast.makeText(getContext(), "Резюме без фото, пока Вы не сфотографируетсь", Toast.LENGTH_LONG).show();
            }
 
 
