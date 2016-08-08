@@ -18,7 +18,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -42,6 +41,7 @@ import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
@@ -68,11 +68,11 @@ import java.util.List;
 
 
 public class ProfileFragment extends Fragment implements OnRequestSocialPersonCompleteListener, View.OnClickListener{
-    private String message = "Я устраиваюсь на новую работу";
+    private String message = "Лучший сервис трудоустройства!";
     private String link = "http://hr24.org";
 
     private static final String NETWORK_ID = "NETWORK_ID";
-    public static boolean POST_STATUS = false;
+    public static boolean POST_STATUS = true;
     private SocialNetwork socialNetwork;
     private int networkId;
     private int mJobCount = 1;
@@ -651,77 +651,88 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
             Paragraph header1 = new Paragraph("Опыт работы");
             header1.setFont(headersLeftFont);
+            header1.setAlignment(Element.ALIGN_CENTER);
 
 
 
 
             Paragraph header2 = new Paragraph("Образование");
             header2.setFont(headersLeftFont);
+            header2.setAlignment(Element.ALIGN_CENTER);
 
 
             Paragraph header3 = new Paragraph("Достижения");
             header3.setFont(headersLeftFont);
+            header3.setAlignment(Element.ALIGN_CENTER);
 
 
 
 
 
-            Paragraph name = new Paragraph(this.name.getText().toString());
-            name.setAlignment(Paragraph.ALIGN_CENTER);
-            name.setFont(nameFont);
+            Paragraph nameParagraph = new Paragraph(this.name.getText().toString());
+            nameParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+            nameParagraph.setFont(nameFont);
 
             Paragraph nick = new Paragraph(this.nick.getText().toString());
             nick.setAlignment(Paragraph.ALIGN_CENTER);
             nick.setFont(nickFont);
 
 
-            Paragraph telephone = new Paragraph();
-            Chunk tChunk = new Chunk("  T");
+            Paragraph telephoneParagraph = new Paragraph();
+            Chunk tChunk = new Chunk("T");
             tChunk.setFont(contactsHeaderFont);
             String tel1 = tel.getText().toString();
             Chunk telChunk = new Chunk("    "+ tel1);
             telChunk.setFont(contactsFont);
-            telephone.add(tChunk);
-            telephone.add(telChunk);
-            telephone.setAlignment(Paragraph.ALIGN_LEFT);
+            telephoneParagraph.add(tChunk);
+            telephoneParagraph.add(telChunk);
+            telephoneParagraph.setIndentationLeft(10);
+            telephoneParagraph.setAlignment(Paragraph.ALIGN_LEFT);
 
 
             Paragraph emailParagraph = new Paragraph();
-            Chunk eChunk = new Chunk("  E");
+            Chunk eChunk = new Chunk("E");
             eChunk.setFont(contactsHeaderFont);
             String email1 = email.getText().toString();
             Chunk emailChunk = new Chunk("    "+ email1);
             emailChunk.setFont(contactsFont);
             emailParagraph.add(eChunk);
             emailParagraph.add(emailChunk);
+            emailParagraph.setIndentationLeft(10);
             emailParagraph.setAlignment(Paragraph.ALIGN_LEFT);
 
 
 
             Paragraph header4 = new Paragraph("О себе");
-            header4.setAlignment(Paragraph.ALIGN_CENTER);
+            header4.setAlignment(Paragraph.ALIGN_LEFT);
+            header4.setIndentationLeft(20);
             header4.setFont(headersRightFont);
 
-            Paragraph bio = new Paragraph(this.bio.getText().toString());
-            bio.setAlignment(Paragraph.ALIGN_CENTER);
-            bio.setFont(textLeftFont);
+            Paragraph bioParagraph = new Paragraph(this.bio.getText().toString());
+            bioParagraph.setAlignment(Paragraph.ALIGN_LEFT);
+            bioParagraph.setIndentationLeft(10);
+            bioParagraph.setFont(textLeftFont);
 
             Paragraph header5 = new Paragraph("Навыки");
-            header5.setAlignment(Paragraph.ALIGN_CENTER);
+            header5.setAlignment(Paragraph.ALIGN_LEFT);
             header5.setFont(headersRightFont);
+            header5.setIndentationLeft(20);
 
             Paragraph header6 = new Paragraph("Другая информация");
-            header6.setAlignment(Paragraph.ALIGN_CENTER);
+            header6.setAlignment(Paragraph.ALIGN_LEFT);
             header6.setFont(headersRightFont);
+            header6.setIndentationLeft(20);
 
             Paragraph subHeader1 = new Paragraph("Языки");
-            subHeader1.setAlignment(Paragraph.ALIGN_CENTER);
+            subHeader1.setAlignment(Paragraph.ALIGN_LEFT);
             subHeader1.setFont(skillsFont);
+            subHeader1.setIndentationLeft(15);
 
 
             Paragraph subHeader2 = new Paragraph("Хобби");
-            subHeader2.setAlignment(Paragraph.ALIGN_CENTER);
+            subHeader2.setAlignment(Paragraph.ALIGN_LEFT);
             subHeader2.setFont(skillsFont);
+            subHeader2.setIndentationLeft(15);
 
 
 
@@ -732,7 +743,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             Image myImgExp = Image.getInstance(streamExp.toByteArray());
             myImgExp.setAlignment(Image.MIDDLE);
 
-            myImgExp.scaleAbsolute(45f, 45f);
+            myImgExp.scaleAbsolute(40f, 40f);
 
             ByteArrayOutputStream streamEdu = new ByteArrayOutputStream();
             Bitmap bitmapEdu;
@@ -921,7 +932,6 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
 
             myImgEdu.setSpacingBefore(30f);
-            myImgEdu.setSpacingAfter(15f);
             columnLeft.addElement(myImgEdu);
 
             header2.setSpacingAfter(10f);
@@ -992,21 +1002,21 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
 
 
-            name.setSpacingBefore(10f);
-            name.setSpacingAfter(5f);
+            nameParagraph.setSpacingBefore(10f);
+            nameParagraph.setSpacingAfter(5f);
 
-            columnRight.addElement(name);
+            columnRight.addElement(nameParagraph);
             nick.setSpacingAfter(20f);
             columnRight.addElement(nick);
 
-            columnRight.addElement(telephone);
+            columnRight.addElement(telephoneParagraph);
             columnRight.addElement(emailParagraph);
 
             header4.setSpacingBefore(40f);
             header4.setSpacingAfter(10f);
 
             columnRight.addElement(header4);
-            columnRight.addElement(bio);
+            columnRight.addElement(bioParagraph);
 
             header5.setSpacingBefore(30f);
             header5.setSpacingAfter(10f);
@@ -1016,7 +1026,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             String [] skillsProcessed = stringProcessor(skillString);
             for (String skill : skillsProcessed) {
                 String [] currentSkill = skillsStringProcessor(skill.trim());
-                Chunk skillChunk = new Chunk(currentSkill[0]);
+                Chunk skillChunk = new Chunk(currentSkill[0]+"   ");
                 skillChunk.setFont(skillsFont);
                 int skillRating = Integer.parseInt(currentSkill[1]);
                 int skillBlankRating = 5 - skillRating;
@@ -1037,7 +1047,8 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 skillsParagraph.add(skillBlankRatingChunk);
                 skillsParagraph.add("\n");
             }
-            skillsParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+            skillsParagraph.setAlignment(Paragraph.ALIGN_LEFT);
+            skillsParagraph.setIndentationLeft(10);
             columnRight.addElement(skillsParagraph);
 
             header6.setSpacingBefore(30f);
@@ -1049,16 +1060,17 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             columnRight.addElement(subHeader1);
 
 
-            Paragraph languages = new Paragraph();
+            Paragraph languagesParagraph = new Paragraph();
             String [] languagesProcessed = stringProcessor(languageString);
             for (String language : languagesProcessed) {
                 Chunk languageChunk = new Chunk(language.trim());
-                languages.add(languageChunk+"\n");
+                languagesParagraph.add(languageChunk+"\n");
             }
-            languages.setAlignment(Paragraph.ALIGN_CENTER);
-            languages.setFont(textLeftFont);
-            languages.setSpacingAfter(10f);
-            columnRight.addElement(languages);
+            languagesParagraph.setAlignment(Paragraph.ALIGN_LEFT);
+            languagesParagraph.setFont(textLeftFont);
+            languagesParagraph.setSpacingAfter(10f);
+            languagesParagraph.setIndentationLeft(10);
+            columnRight.addElement(languagesParagraph);
 
             subHeader2.setSpacingAfter(5f);
             columnRight.addElement(subHeader2);
@@ -1069,9 +1081,11 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 Chunk hobbyChunk = new Chunk(hobby.trim());
                 hobbyParagraph.add(hobbyChunk+"\n");
             }
-            hobbyParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+            hobbyParagraph.setAlignment(Paragraph.ALIGN_LEFT);
             hobbyParagraph.setFont(textLeftFont);
+            hobbyParagraph.setIndentationLeft(10);
             columnRight.addElement(hobbyParagraph);
+
 
 
 

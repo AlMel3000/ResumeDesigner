@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.github.gorbin.asne.core.SocialNetwork;
 import com.github.gorbin.asne.core.SocialNetworkManager;
@@ -22,7 +21,6 @@ import com.vk.sdk.VKScope;
 
 import org.hr24.almel.testchallenge.R;
 import org.hr24.almel.testchallenge.ui.StartActivity;
-import org.hr24.almel.testchallenge.utils.ConstantManager;
 import org.hr24.almel.testchallenge.utils.NetworkStatusChecker;
 
 import java.util.List;
@@ -172,6 +170,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
             }
 
             authLinLayout.setVisibility(View.GONE);
+            //// TODO: 08.08.16 убрать 
             fillView.setVisibility(View.GONE);
             AUTHORIZATION_STATUS = true;
 
