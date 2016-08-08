@@ -18,6 +18,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -71,6 +72,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     private String link = "http://hr24.org";
 
     private static final String NETWORK_ID = "NETWORK_ID";
+    public static boolean POST_STATUS = false;
     private SocialNetwork socialNetwork;
     private int networkId;
     private int mJobCount = 1;
@@ -108,7 +110,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     public String achievementString;
     private LinearLayout mStudyLinLay;
     View rootView;
-    Bitmap bitmapAva;
+    Bitmap bitmapAva = null;
 
 
     public static ProfileFragment newInstannce(int id) {
@@ -197,6 +199,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         mUserInfoViews.add(jobDuty);
 
 
+
         if(NetworkStatusChecker.isNetworkAvailable(getContext())){
         socialNetwork = MainFragment.mSocialNetworkManager.getSocialNetwork(networkId);
         socialNetwork.setOnRequestCurrentPersonCompleteListener(this);
@@ -283,7 +286,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     private  void shareClick() {
         
         
-            AlertDialog.Builder ad = alertDialogInit("Would you like to post Link:", link);
+            AlertDialog.Builder ad = alertDialogInit("Отправить запись на стену?", link);
             ad.setPositiveButton("Post link", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     Bundle postParams = new Bundle();
@@ -309,6 +312,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         @Override
         public void onPostSuccessfully(int socialNetworkID) {
             Toast.makeText(getActivity(), "Sent", Toast.LENGTH_LONG).show();
+            POST_STATUS = true;
         }
 
         @Override
@@ -340,10 +344,38 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 }
                 break;
             case R.id.share:
-                shareClick();
+                if (MainFragment.AUTHORIZATION_STATUS) {
+                    shareClick();
+                } else{
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .add(R.id.container, new MainFragment())
+                            .commit();
+                }
                 break;
             case R.id.create_pdf_button:
-                createPdf();
+                if (MainFragment.AUTHORIZATION_STATUS && POST_STATUS) {
+                    createPdf();
+                } else if (!MainFragment.AUTHORIZATION_STATUS){
+
+                    Snackbar.make(mCoordinatorFrame, R.string.load_authorization_request, Snackbar.LENGTH_LONG)
+                            .setAction("Авторизоваться", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    getActivity().getSupportFragmentManager().beginTransaction()
+                                            .add(R.id.container, new MainFragment())
+                                            .commit();
+                                }
+                            }).show();
+                } else {
+
+                    Snackbar.make(mCoordinatorFrame, R.string.load_post_request, Snackbar.LENGTH_LONG)
+                            .setAction("Отправить запись на стену", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    shareClick();
+                                }
+                            }).show();
+                }
                 break;
             case R.id.view:
                 viewPdf();
@@ -463,7 +495,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         }
         catch (ActivityNotFoundException e) {
             Toast.makeText(getContext(),
-                    "No Application Available to View PDF",
+                    "Не установлено приложений для просмотра pdf",
                     Toast.LENGTH_SHORT).show();
         }
         }
@@ -510,9 +542,17 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
             }
             mProfilePlaceholder.setVisibility(View.GONE);
+            if (MainFragment.AUTHORIZATION_STATUS){
+                viewPDF.setVisibility(View.VISIBLE);
+            }
             savePdfButton.setVisibility(View.VISIBLE);
             share.setVisibility(View.VISIBLE);
-            viewPDF.setVisibility(View.VISIBLE);
+            if (!MainFragment.AUTHORIZATION_STATUS){
+                share.setText("АВТОРИЗОВАТЬСЯ");
+            } else {
+                share.setText("Запись на стену");
+            }
+
             photo.setVisibility(View.VISIBLE);
 
             jobAddButton.setVisibility(View.GONE);

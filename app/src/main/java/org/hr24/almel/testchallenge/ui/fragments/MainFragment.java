@@ -22,6 +22,7 @@ import com.vk.sdk.VKScope;
 
 import org.hr24.almel.testchallenge.R;
 import org.hr24.almel.testchallenge.ui.StartActivity;
+import org.hr24.almel.testchallenge.utils.ConstantManager;
 import org.hr24.almel.testchallenge.utils.NetworkStatusChecker;
 
 import java.util.List;
@@ -44,10 +45,11 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
 
     Button vkButton, okButton, fillButton;
     CoordinatorLayout mCoordinatorLayout;
-    LinearLayout authLinLayout, fillLinLayout;
+    LinearLayout authLinLayout;
     View fillView;
     public static SocialNetworkManager mSocialNetworkManager;
     int networkId = 0;
+    public static boolean AUTHORIZATION_STATUS = false;
 
 
     private String mParam1;
@@ -98,8 +100,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
         fillButton = (Button) rootView.findViewById(R.id.fill_btn);
         mCoordinatorLayout = (CoordinatorLayout) rootView.findViewById(R.id.main_coordinator_container);
         authLinLayout = (LinearLayout) rootView.findViewById(R.id.auth_ll);
-        fillView = (View) rootView.findViewById(R.id.fill_v);
-        fillLinLayout = (LinearLayout) rootView.findViewById(R.id.fill_ll);
+        fillView = rootView.findViewById(R.id.fill_v);
 
         vkButton.setOnClickListener(this);
         okButton.setOnClickListener(this);
@@ -122,7 +123,8 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
 
 
         String[] okScope = new String[] {
-                OkScope.VALUABLE_ACCESS
+                OkScope.VALUABLE_ACCESS,
+                OkScope.SET_STATUS
         };
 
 
@@ -171,9 +173,9 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
 
             authLinLayout.setVisibility(View.GONE);
             fillView.setVisibility(View.GONE);
+            AUTHORIZATION_STATUS = true;
 
-            fillButton.setVisibility(View.VISIBLE);
-            fillLinLayout.setVisibility(View.VISIBLE);
+
         }
     }
 
@@ -234,8 +236,11 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
                 }
                 break;
             case R.id.fill_btn:
-                
-                startProfile(networkId);
+                if (AUTHORIZATION_STATUS==false) {
+                    startProfile(VkSocialNetwork.ID);
+                } else {
+                    startProfile(networkId);
+                }
                 //// TODO: 30.07.16  проверить как себя будет вести приложение с неавторизованным пользователем 
 
                 break;
