@@ -71,4 +71,6 @@
     <string name="job_remove">- место работы</string>
     <string name="study_remove">- место учебы</string>
     <string name="load_from_camera_permissions_request">Для корректной работы приложения необходимо дать требуемые разрешения</string>
+    <string name="load_authorization_request">Перед созданием pdf  версии резюме необходимо авторизоваться и отправить на стену запись</string>
+    <string name="load_post_request">Перед созданием pdf версии резюме необходимо отправить запись со ссылкой на наш сайт на стену</string>
 </resources>
