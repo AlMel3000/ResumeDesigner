@@ -34,7 +34,7 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class StartActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener, MainFragment.OnFragmentInteractionListener{
+public class StartActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener{
 
     public static final String SOCIAL_NETWORK_TAG = "SocialIntegrationMain.SOCIAL_NETWORK_TAG";
     private static ProgressDialog pd;
@@ -51,8 +51,8 @@ public class StartActivity extends AppCompatActivity implements FragmentManager.
 
 
         context = this;
-        getSupportFragmentManager().addOnBackStackChangedListener(this);
-        homeAsUpByBackStack();
+
+
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
@@ -66,34 +66,7 @@ public class StartActivity extends AppCompatActivity implements FragmentManager.
 
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return true;
-    }
 
-    @Override
-    public void onBackStackChanged() {
-        homeAsUpByBackStack();
-    }
-
-    private void homeAsUpByBackStack() {
-        int backStackEntryCount = getSupportFragmentManager().getBackStackEntryCount();
-        if (backStackEntryCount > 0) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        } else {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                getSupportFragmentManager().popBackStack();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     public static void showProgress(String message) {
         pd = new ProgressDialog(context);
@@ -122,8 +95,5 @@ public class StartActivity extends AppCompatActivity implements FragmentManager.
     public void onFragmentInteraction(Uri uri) {
 
     }
-
-
-
 
 }

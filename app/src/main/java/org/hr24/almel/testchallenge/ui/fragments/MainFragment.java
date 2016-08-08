@@ -91,7 +91,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.main_fragment, container, false);
-        ((StartActivity)getActivity()).getSupportActionBar().setTitle(R.string.app_name);
+
 
         vkButton = (Button) rootView.findViewById(R.id.vk_btn);
         okButton = (Button) rootView.findViewById(R.id.ok_btn);

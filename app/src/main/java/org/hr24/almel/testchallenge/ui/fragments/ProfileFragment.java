@@ -72,7 +72,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     private String link = "http://hr24.org";
 
     private static final String NETWORK_ID = "NETWORK_ID";
-    public static boolean POST_STATUS = true;
+    public static boolean POST_STATUS = false;
     private SocialNetwork socialNetwork;
     private int networkId;
     private int mJobCount = 1;
@@ -127,7 +127,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
+
         networkId = getArguments().containsKey(NETWORK_ID) ? getArguments().getInt(NETWORK_ID) : 0;
 
 
