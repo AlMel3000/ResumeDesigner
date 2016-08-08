@@ -451,6 +451,19 @@
                 android:layout_marginTop="@dimen/spacing_small_8"
                 android:layout_marginBottom="@dimen/spacing_small_8"/>
 
+            <LinearLayout
+                android:id="@+id/hidden_layout"
+                android:layout_gravity="bottom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="invisible">
+                <Button
+                    android:text="@string/create_pdf"
+                    android:layout_marginEnd="1dp"
+                    style="@style/profile_button" />
+            </LinearLayout>
+
     </LinearLayout>
 
 
