@@ -54,6 +54,7 @@ import com.squareup.picasso.Picasso;
 import org.hr24.almel.testchallenge.R;
 import org.hr24.almel.testchallenge.ui.StartActivity;
 import org.hr24.almel.testchallenge.utils.ConstantManager;
+import org.hr24.almel.testchallenge.utils.DataManager;
 import org.hr24.almel.testchallenge.utils.NetworkStatusChecker;
 
 import java.io.ByteArrayOutputStream;
@@ -67,6 +68,11 @@ import java.util.List;
 
 
 public class ProfileFragment extends Fragment implements OnRequestSocialPersonCompleteListener, View.OnClickListener{
+
+    private int mCurrentEditMode = 1;
+
+    private DataManager mDataManager;
+
     private String message = "Лучший сервис трудоустройства!";
     private String link = "http://hr24.org";
 
@@ -92,7 +98,6 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     private Button removeJobButton1;
     private Button removeStudyButton;
     private FloatingActionButton mFab;
-    private int mCurrentEditMode = 1;
     private List<EditText> mUserInfoViews;
     private LinearLayout mAddPhotoLinLay, mJobLinLay, mProfilePlaceholder;
     private TextView mAddPhototv;
@@ -156,6 +161,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         studyDescription =(EditText) rootView.findViewById(R.id.study_decription);
         rating =(EditText) rootView.findViewById(R.id.rating);
         achievements=(EditText) rootView.findViewById(R.id.achievements);
+
         mCoordinatorFrame = (CoordinatorLayout) rootView.findViewById(R.id.frame);
 
         mFab = (FloatingActionButton) rootView.findViewById(R.id.fab);
@@ -179,6 +185,10 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         studyAddButton.setOnClickListener(this);
         photo.setOnClickListener(this);
 
+
+        mDataManager = DataManager.getINSTANCE();
+
+
         mUserInfoViews = new ArrayList<>();
         mUserInfoViews.add(name);
         mUserInfoViews.add(nick);
@@ -191,11 +201,12 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         mUserInfoViews.add(jobPeriod);
         mUserInfoViews.add(companyTitle);
         mUserInfoViews.add(jobTitle);
+        mUserInfoViews.add(jobDuty);
         mUserInfoViews.add(studyTitle);
         mUserInfoViews.add(studyDescription);
         mUserInfoViews.add(rating);
         mUserInfoViews.add(achievements);
-        mUserInfoViews.add(jobDuty);
+
 
 
 
@@ -209,8 +220,40 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             showSnackbar("Сеть недоступна, не удалось загрузить Ваш профиль");
         }
 
+        initUserFields();
+
+        Picasso.with(getContext())
+                .load(mDataManager.getPreferenceManager().loadUserPhoto())
+                .placeholder(R.drawable.ic_add_a_photo_black_24dp)
+                .resize(100, 100)
+                .centerCrop()
+                .into(photo);
+
+        if (savedInstanceState == null) {
+            //активити запускается впервые
+
+        } else {
+            mCurrentEditMode = savedInstanceState.getInt(ConstantManager.EDIT_MODE_KEY, 1);
+            changeEditMode(mCurrentEditMode);
+
+        }
+
         return rootView;
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        saveUserFields();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(ConstantManager.EDIT_MODE_KEY, mCurrentEditMode);
+    }
+
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -248,12 +291,14 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 .centerCrop()
                 .into(photo);
 
+
         Picasso.with(getContext())
                 .load(selectedImage)
                 .resize(256, 112)
                 .centerCrop()
                 .into(photoPlaceholder);
 
+        mDataManager.getPreferenceManager().saveUserPhoto(selectedImage);
 
     }
 
@@ -265,18 +310,12 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         StartActivity.hideProgress();
         name.setText(socialPerson.name);
 
-        if (socialPerson.avatarURL!=null) {
+        if (socialPerson.avatarURL!=null && MainFragment.AUTHORIZATION_STATUS) {
             Picasso.with(getContext())
                     .load(socialPerson.avatarURL)
                     .resize(100, 100)
                     .centerCrop()
                     .into(photo);
-        } else {
-                Picasso.with(getContext())
-                        .load(R.drawable.ic_add_a_photo_black_24dp)
-                        .resize(100, 100)
-                        .centerCrop()
-                        .into(photo);
         }
 
 
@@ -549,6 +588,9 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 userValue.setFocusable(false);
                 userValue.setFocusableInTouchMode(false);
                 userValue.setTextColor(Color.BLACK);
+
+                saveUserFields();
+                //// TODO: 09.08.16 Вывести из цикла и посмотреть, что получится
 
 
             }
@@ -1218,8 +1260,21 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         return string.split("@");
     }
 
+    private void initUserFields() {
+        List<String> userData = mDataManager.getPreferenceManager().loadUserProfileData();
+        for (int i = 0; i < userData.size(); i++) {
+            mUserInfoViews.get(i).setText(userData.get(i));
+        }
+    }
 
+    private void saveUserFields() {
+        List<String> userData = new ArrayList<>();
+        for (EditText userFieldView : mUserInfoViews) {
+            userData.add(userFieldView.getText().toString());
+        }
 
+        mDataManager.getPreferenceManager().saveUserProfileData(userData);
+    }
 
 
 }

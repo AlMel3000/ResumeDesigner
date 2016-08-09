@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import com.github.gorbin.asne.core.listener.OnLoginCompleteListener;
 import com.github.gorbin.asne.odnoklassniki.OkSocialNetwork;
 import com.github.gorbin.asne.vk.VkSocialNetwork;
 import com.vk.sdk.VKScope;
+import com.vk.sdk.util.VKUtil;
 
 import org.hr24.almel.testchallenge.R;
 import org.hr24.almel.testchallenge.ui.StartActivity;
@@ -109,6 +111,8 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
         String OK_PUBLIC_KEY = getActivity().getString(R.string.ok_public_key);
         String OK_SECRET_KEY = getActivity().getString(R.string.ok_secret_key);
 
+        // getVkFingerprint();
+
         mSocialNetworkManager = (SocialNetworkManager) getFragmentManager().findFragmentByTag(StartActivity.SOCIAL_NETWORK_TAG);
 
         String[] vkScope = new String[] {
@@ -155,6 +159,13 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
 
 
         return rootView;
+    }
+
+    private void getVkFingerprint() {
+        String[] fingerprints = VKUtil.getCertificateFingerprint(getContext(), getActivity().getPackageName());
+        for (int i =0; i<fingerprints.length; i++){
+            Log.d("Fingerprint", fingerprints[i]);
+        }
     }
 
     private void initSocialNetwork(SocialNetwork socialNetwork){
@@ -209,7 +220,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
 
                     if(networkId != 0) {
                         socialNetwork.requestLogin();
-                        StartActivity.showProgress("Loading social person");
+                        StartActivity.showProgress("Загружаем социальную сеть");
                     } else {
                         showSnackbar("Wrong networkId");
                     }
@@ -226,7 +237,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
 
                     if(networkId != 0) {
                         socialNetwork.requestLogin();
-                        StartActivity.showProgress("Loading social person");
+                        StartActivity.showProgress("Загружаем социальную сеть");
                     } else {
                         showSnackbar("Wrong networkId");
                     }
@@ -240,7 +251,6 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
                 } else {
                     startProfile(networkId);
                 }
-                //// TODO: 30.07.16  проверить как себя будет вести приложение с неавторизованным пользователем 
 
                 break;
 
@@ -267,7 +277,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
     @Override
     public void onLoginSuccess(int socialNetworkID) {
         StartActivity.hideProgress();
-        showSnackbar("Login Success");
+        showSnackbar("Успешная авторизация");
 
 
 
@@ -276,7 +286,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
     @Override
     public void onError(int socialNetworkID, String requestID, String errorMessage, Object data) {
         StartActivity.hideProgress();
-        showSnackbar("ERROR: " + errorMessage);
+        showSnackbar("Ошибка: " + errorMessage);
 
     }
 
