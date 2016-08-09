@@ -30,7 +30,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.github.gorbin.asne.core.SocialNetwork;
@@ -84,8 +83,8 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             jobPeriod1, jobTitle1, companyTitle1, jobDuty1,  studyTitle1, studyDescription1, rating1,
             jobPeriod2, jobTitle2, companyTitle2, jobDuty2;
     private Button savePdfButton;
-    private Button share;
-    private Button viewPDF;
+    private Button shareButton;
+    private Button viewPdfButton;
     private Button jobAddButton;
     private Button jobAddButton2;
     private Button studyAddButton;
@@ -95,8 +94,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     private FloatingActionButton mFab;
     private int mCurrentEditMode = 1;
     private List<EditText> mUserInfoViews;
-    private RelativeLayout mProfilePlaceholder;
-    private LinearLayout mAddPhotoLinLay, mJobLinLay;
+    private LinearLayout mAddPhotoLinLay, mJobLinLay, mProfilePlaceholder;
     private TextView mAddPhototv;
     private File mPhotoFile = null;
     private Uri mSelectedImage = null;
@@ -135,7 +133,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
         photo = (ImageView) rootView.findViewById(R.id.imageView);
         photoPlaceholder = (ImageView) rootView.findViewById(R.id.photo_placeholder);
-        mProfilePlaceholder = (RelativeLayout) rootView.findViewById(R.id.profile_placeholder);
+        mProfilePlaceholder = (LinearLayout) rootView.findViewById(R.id.profile_placeholder);
         mAddPhotoLinLay = (LinearLayout) rootView.findViewById(R.id.add_photo_ll);
         mJobLinLay = (LinearLayout) rootView.findViewById(R.id.job_ll);
         mStudyLinLay = (LinearLayout) rootView.findViewById(R.id.study_ll);
@@ -161,17 +159,17 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         mCoordinatorFrame = (CoordinatorLayout) rootView.findViewById(R.id.frame);
 
         mFab = (FloatingActionButton) rootView.findViewById(R.id.fab);
-        share = (Button) rootView.findViewById(R.id.share);
+        shareButton = (Button) rootView.findViewById(R.id.share);
         savePdfButton = (Button) rootView.findViewById(R.id.create_pdf_button);
-        viewPDF = (Button) rootView.findViewById(R.id.view);
+        viewPdfButton = (Button) rootView.findViewById(R.id.view);
         Button camButton = (Button) rootView.findViewById(R.id.cam_btn);
         Button galButton = (Button) rootView.findViewById(R.id.gal_btn);
         jobAddButton = (Button) rootView.findViewById(R.id.job_add_btn);
         studyAddButton = (Button) rootView.findViewById(R.id.study_add_button);
 
         savePdfButton.setOnClickListener(this);
-        viewPDF.setOnClickListener(this);
-        share.setOnClickListener(this);
+        viewPdfButton.setOnClickListener(this);
+        shareButton.setOnClickListener(this);
         mFab.setOnClickListener(this);
         mProfilePlaceholder.setOnClickListener(this);
         mAddPhotoLinLay.setOnClickListener(this);
@@ -179,6 +177,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         galButton.setOnClickListener(this);
         jobAddButton.setOnClickListener(this);
         studyAddButton.setOnClickListener(this);
+        photo.setOnClickListener(this);
 
         mUserInfoViews = new ArrayList<>();
         mUserInfoViews.add(name);
@@ -266,11 +265,19 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         StartActivity.hideProgress();
         name.setText(socialPerson.name);
 
-        Picasso.with(getContext())
-                .load(socialPerson.avatarURL)
-                .resize(100, 100)
-                .centerCrop()
-                .into(photo);
+        if (socialPerson.avatarURL!=null) {
+            Picasso.with(getContext())
+                    .load(socialPerson.avatarURL)
+                    .resize(100, 100)
+                    .centerCrop()
+                    .into(photo);
+        } else {
+                Picasso.with(getContext())
+                        .load(R.drawable.ic_add_a_photo_black_24dp)
+                        .resize(100, 100)
+                        .centerCrop()
+                        .into(photo);
+        }
 
 
     }
@@ -383,6 +390,10 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             case R.id.profile_placeholder:
                 mAddPhotoLinLay.setVisibility(View.VISIBLE);
                 mAddPhototv.setVisibility(View.GONE);
+                break;
+            case R.id.imageView:
+                mProfilePlaceholder.setVisibility(View.VISIBLE);
+                photo.setVisibility(View.GONE);
                 break;
             case R.id.cam_btn:
                 loadPhotoFromCamera();
@@ -514,8 +525,8 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             name.requestFocus();
             mProfilePlaceholder.setVisibility(View.VISIBLE);
             savePdfButton.setVisibility(View.GONE);
-            viewPDF.setVisibility(View.GONE);
-            share.setVisibility(View.GONE);
+            viewPdfButton.setVisibility(View.GONE);
+            shareButton.setVisibility(View.GONE);
             photo.setVisibility(View.GONE);
 
             jobAddButton.setVisibility(View.VISIBLE);
@@ -543,14 +554,14 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             }
             mProfilePlaceholder.setVisibility(View.GONE);
             if (MainFragment.AUTHORIZATION_STATUS){
-                viewPDF.setVisibility(View.VISIBLE);
+                viewPdfButton.setVisibility(View.VISIBLE);
             }
             savePdfButton.setVisibility(View.VISIBLE);
-            share.setVisibility(View.VISIBLE);
+            shareButton.setVisibility(View.VISIBLE);
             if (!MainFragment.AUTHORIZATION_STATUS){
-                share.setText("АВТОРИЗОВАТЬСЯ");
+                shareButton.setText("АВТОРИЗОВАТЬСЯ");
             } else {
-                share.setText("Запись на стену");
+                shareButton.setText("Запись на стену");
             }
 
             photo.setVisibility(View.VISIBLE);
@@ -777,7 +788,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
 
             }else {
-               Toast.makeText(getContext(), "Резюме без фото, пока Вы не сфотографируетсь", Toast.LENGTH_LONG).show();
+               Toast.makeText(getContext(), "Резюме без фото, пока Вы не добавите его из галереи или не сфотографируетесь.", Toast.LENGTH_LONG).show();
            }
 
 

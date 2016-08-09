@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ResumeBuilder</string>
+    <string name="app_name">Resume Builder</string>
     <string name="auth_button_enter">Заполнить резюме</string>
     <string name="auth_enter_tv">Авторизоваться</string>
     <string name="auth_fill_tv">Заполнить резюме</string>
