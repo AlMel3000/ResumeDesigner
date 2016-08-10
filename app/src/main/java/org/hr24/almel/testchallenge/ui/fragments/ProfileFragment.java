@@ -237,14 +237,19 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
         if (mJobCount==2){
             addJob2();
+            initUserFieldsJob2();
         } else if (mJobCount == 3){
             addJob2();
             addJob3();
+            initUserFieldsJob2();
+            initUserFieldsJob3();
         }
 
         if (mStudyCount==2){
             addStudy2();
+            initUserFieldsStudy2();
         }
+
 
         return rootView;
     }
@@ -255,11 +260,29 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     public void onPause() {
         super.onPause();
         saveUserFields();
+        if (mStudyCount==2){
+            saveUserFieldsStudy2();
+        }
+        if (mJobCount==2){
+            saveUserFieldsJob2();
+        } else if (mJobCount==3){
+            saveUserFieldsJob2();
+            saveUserFieldsJob3();
+        }
     }
 
     public void onDestroy() {
         super.onDestroy();
         saveUserFields();
+        if (mStudyCount==2){
+            saveUserFieldsStudy2();
+        }
+        if (mJobCount==2){
+            saveUserFieldsJob2();
+        } else if (mJobCount==3){
+            saveUserFieldsJob2();
+            saveUserFieldsJob3();
+        }
     }
 
     @Override
@@ -458,6 +481,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             case R.id.job_add_btn:
                 mJobCount = 2;
                addJob2();
+                initUserFieldsJob2();
 
                 break;
             case R.id.job_remove_button:
@@ -467,12 +491,14 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 View jobView = rootView.findViewById(R.id.job1_ll);
                 ViewGroup parentJobll = (ViewGroup) jobView.getParent();
                 parentJobll.removeView(jobView);
+                saveUserFieldsJob2();
 
 
                 break;
             case R.id.job_add_btn2:
                 mJobCount = 3;
                 addJob3();
+                initUserFieldsJob3();
 
 
                 break;
@@ -486,10 +512,12 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 ViewGroup parentJobll2 = (ViewGroup) jobView2.getParent();
                 parentJobll2.removeView(jobView2);
 
+                saveUserFieldsJob3();
 
                 break;
             case R.id.study_add_button:
                 mStudyCount = 2;
+                initUserFieldsStudy2();
 
                 addStudy2();
 
@@ -501,6 +529,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 View studyView = rootView.findViewById(R.id.study1_ll);
                 ViewGroup parentStudyll = (ViewGroup) studyView.getParent();
                 parentStudyll.removeView(studyView);
+                saveUserFieldsStudy2();
 
                 break;
             
@@ -538,11 +567,11 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         jobAddButton2.setOnClickListener(this);
         removeJobButton.setOnClickListener(this);
 
-        dutyString1 = jobDuty1.getText().toString();
     }
 
     private void addJob3() {
         jobAddButton2.setVisibility(View.GONE);
+        jobAddButton.setVisibility(View.GONE);
         removeJobButton.setVisibility(View.GONE);
         LayoutInflater ltInflaterJob3 = getActivity().getLayoutInflater();
         ltInflaterJob3.inflate(R.layout.job2, mJobLinLay, true);
@@ -555,7 +584,6 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
         removeJobButton1.setOnClickListener(this);
 
-        dutyString2 = jobDuty2.getText().toString();
     }
 
     private void viewPdf() {
@@ -618,10 +646,16 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 userValue.setFocusableInTouchMode(false);
                 userValue.setTextColor(Color.BLACK);
 
-                saveUserFields();
-                //// TODO: 09.08.16 Вывести из цикла и посмотреть, что получится
-
-
+            }
+            saveUserFields();
+            if (mStudyCount==2){
+                saveUserFieldsStudy2();
+            }
+            if (mJobCount==2){
+                saveUserFieldsJob2();
+            } else if (mJobCount==3){
+                saveUserFieldsJob2();
+                saveUserFieldsJob3();
             }
             mProfilePlaceholder.setVisibility(View.GONE);
             if (MainFragment.AUTHORIZATION_STATUS){
@@ -904,6 +938,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             columnLeft.addElement(jobDutyParagraph);
 
             if (mJobCount ==2){
+
                 Paragraph companyTitleParagraph1 = new Paragraph("\u2022" + companyTitle1.getText().toString());
                 companyTitleParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
                 companyTitleParagraph1.setFont(headersSmallLeftFont);
@@ -925,6 +960,8 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 jobTitleParagraph1.setSpacingAfter(5f);
                 columnLeft.addElement(jobTitleParagraph1);
 
+
+                dutyString1 = jobDuty1.getText().toString();
 
                 Paragraph jobDutyParagraph1 = new Paragraph();
                 String [] jobDutyProcessed1 = stringProcessor(dutyString1);
@@ -962,6 +999,8 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 columnLeft.addElement(jobTitleParagraph1);
 
 
+                dutyString1 = jobDuty1.getText().toString();
+
                 Paragraph jobDutyParagraph1 = new Paragraph();
                 String [] jobDutyProcessed1 = stringProcessor(dutyString1);
                 for (String aJobDutyProcessed1 : jobDutyProcessed1) {
@@ -998,6 +1037,8 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 jobTitleParagraph2.setSpacingAfter(5f);
                 columnLeft.addElement(jobTitleParagraph2);
 
+
+                dutyString2 = jobDuty2.getText().toString();
 
                 Paragraph jobDutyParagraph2 = new Paragraph();
                 String [] jobDutyProcessed2 = stringProcessor(dutyString2);
@@ -1290,8 +1331,6 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     }
 
     private void initUserFields() {
-
-
         List<String> userFields = new ArrayList<>();
         userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_NAME_KEY, null));
         userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_NICK_KEY, null));
@@ -1322,7 +1361,6 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         for (EditText userFieldView : mUserInfoViews) {
             userData.add(userFieldView.getText().toString());
         }
-
 
         SharedPreferences.Editor editor = StartActivity.getSharedPref().edit();
         final String[] USER_FIELDS = {
@@ -1362,6 +1400,137 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         editor.putString(ConstantManager.USER_PHOTO_KEY, uri.toString());
         editor.apply();
     }
+
+
+
+
+
+    private void saveUserFieldsStudy2() {
+        List<String> userData = new ArrayList<>();
+        userData.add(studyTitle1.getText().toString());
+        userData.add(studyDescription1.getText().toString());
+        userData.add(rating1.getText().toString());
+        SharedPreferences.Editor editor = StartActivity.getSharedPref().edit();
+        final String[] USER_FIELDS = {
+                ConstantManager.USER_STUDY_2_TITLE_KEY,
+                ConstantManager.USER_STUDY_2_DESCRIPTION_KEY,
+                ConstantManager.USER_RATING_2_KEY
+        };
+
+        for (int i =0; i<USER_FIELDS.length; i++){
+            editor.putString(USER_FIELDS[i], userData.get(i));
+        }
+        editor.apply();
+
+    }
+
+    private void initUserFieldsStudy2() {
+        List<String> userFields = new ArrayList<>();
+        userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_STUDY_2_TITLE_KEY, null));
+        userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_STUDY_2_DESCRIPTION_KEY, null));
+        userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_RATING_2_KEY, null));
+
+        List<EditText> mUserInfoViewsStudy2= new ArrayList<>();
+        mUserInfoViewsStudy2.add(studyTitle1);
+        mUserInfoViewsStudy2.add(studyDescription1);
+        mUserInfoViewsStudy2.add(rating1);
+
+
+        for (int i = 0; i < userFields.size(); i++) {
+            mUserInfoViewsStudy2.get(i).setText(userFields.get(i));
+        }
+
+    }
+
+
+    private void saveUserFieldsJob2() {
+        List<String> userData = new ArrayList<>();
+        userData.add(jobPeriod1.getText().toString());
+        userData.add(companyTitle1.getText().toString());
+        userData.add(jobTitle1.getText().toString());
+        userData.add(jobDuty1.getText().toString());
+        SharedPreferences.Editor editor = StartActivity.getSharedPref().edit();
+        final String[] USER_FIELDS = {
+                ConstantManager.USER_JOB_2_PERIOD_KEY,
+                ConstantManager.USER_COMPANY_2_TITLE_KEY,
+                ConstantManager.USER_JOB_2_TITLE_KEY,
+                ConstantManager.USER_JOB_2_DUTY_KEY
+        };
+
+        for (int i =0; i<USER_FIELDS.length; i++){
+            editor.putString(USER_FIELDS[i], userData.get(i));
+        }
+        editor.apply();
+    }
+
+    private void initUserFieldsJob2() {
+        List<String> userFields = new ArrayList<>();
+        userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_JOB_2_PERIOD_KEY, null));
+        userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_COMPANY_2_TITLE_KEY, null));
+        userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_JOB_2_TITLE_KEY, null));
+        userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_JOB_2_DUTY_KEY, null));
+
+        List<EditText> mUserInfoViewsJob2= new ArrayList<>();
+        mUserInfoViewsJob2.add(jobPeriod1);
+        mUserInfoViewsJob2.add(companyTitle1);
+        mUserInfoViewsJob2.add(jobTitle1);
+        mUserInfoViewsJob2.add(jobDuty1);
+
+
+
+        for (int i = 0; i < userFields.size(); i++) {
+            mUserInfoViewsJob2.get(i).setText(userFields.get(i));
+        }
+
+    }
+
+
+
+
+
+    private void saveUserFieldsJob3() {
+        List<String> userData = new ArrayList<>();
+        userData.add(jobPeriod2.getText().toString());
+        userData.add(companyTitle2.getText().toString());
+        userData.add(jobTitle2.getText().toString());
+        userData.add(jobDuty2.getText().toString());
+        SharedPreferences.Editor editor = StartActivity.getSharedPref().edit();
+        final String[] USER_FIELDS = {
+                ConstantManager.USER_JOB_3_PERIOD_KEY,
+                ConstantManager.USER_COMPANY_3_TITLE_KEY,
+                ConstantManager.USER_JOB_3_TITLE_KEY,
+                ConstantManager.USER_JOB_3_DUTY_KEY
+        };
+
+        for (int i =0; i<USER_FIELDS.length; i++){
+            editor.putString(USER_FIELDS[i], userData.get(i));
+        }
+        editor.apply();
+    }
+
+    private void initUserFieldsJob3() {
+        List<String> userFields = new ArrayList<>();
+        userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_JOB_3_PERIOD_KEY, null));
+        userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_COMPANY_3_TITLE_KEY, null));
+        userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_JOB_3_TITLE_KEY, null));
+        userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_JOB_3_DUTY_KEY, null));
+
+        List<EditText> mUserInfoViewsJob3= new ArrayList<>();
+        mUserInfoViewsJob3.add(jobPeriod2);
+        mUserInfoViewsJob3.add(companyTitle2);
+        mUserInfoViewsJob3.add(jobTitle2);
+        mUserInfoViewsJob3.add(jobDuty2);
+
+
+
+        for (int i = 0; i < userFields.size(); i++) {
+            mUserInfoViewsJob3.get(i).setText(userFields.get(i));
+        }
+
+    }
+
+
+
 
 }
 
