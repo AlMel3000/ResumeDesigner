@@ -24,6 +24,9 @@ public interface ConstantManager {
     String USER_RATING_KEY = "USER_14_KEY";
     String USER_ACHIEVEMENTS_KEY = "USER_15_KEY";
 
+    String JOB_COUNT_KEY = "JOB_COUNT_KEY";
+    String STUDY_COUNT_KEY = "STUDY_COUNT_KEY";
+
     String USER_PHOTO_KEY="USER_PHOTO_KEY";
 
     int REQUEST_GALLERY_PICTURE=88;

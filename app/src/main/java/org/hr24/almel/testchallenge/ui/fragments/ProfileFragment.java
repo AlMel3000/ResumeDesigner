@@ -5,6 +5,7 @@ import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -54,7 +55,6 @@ import com.squareup.picasso.Picasso;
 import org.hr24.almel.testchallenge.R;
 import org.hr24.almel.testchallenge.ui.StartActivity;
 import org.hr24.almel.testchallenge.utils.ConstantManager;
-import org.hr24.almel.testchallenge.utils.DataManager;
 import org.hr24.almel.testchallenge.utils.NetworkStatusChecker;
 
 import java.io.ByteArrayOutputStream;
@@ -71,7 +71,6 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
     private int mCurrentEditMode = 1;
 
-    private DataManager mDataManager;
 
     private String message = "Лучший сервис трудоустройства!";
     private String link = "http://hr24.org";
@@ -114,6 +113,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     private LinearLayout mStudyLinLay;
     View rootView;
     Bitmap bitmapAva = null;
+
 
 
     public static ProfileFragment newInstannce(int id) {
@@ -186,9 +186,6 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         photo.setOnClickListener(this);
 
 
-        mDataManager = DataManager.getINSTANCE();
-
-
         mUserInfoViews = new ArrayList<>();
         mUserInfoViews.add(name);
         mUserInfoViews.add(nick);
@@ -223,7 +220,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         initUserFields();
 
         Picasso.with(getContext())
-                .load(mDataManager.getPreferenceManager().loadUserPhoto())
+                .load(loadUserPhoto())
                 .placeholder(R.drawable.ic_add_a_photo_black_24dp)
                 .resize(100, 100)
                 .centerCrop()
@@ -238,12 +235,30 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
         }
 
+        if (mJobCount==2){
+            addJob2();
+        } else if (mJobCount == 3){
+            addJob2();
+            addJob3();
+        }
+
+        if (mStudyCount==2){
+            addStudy2();
+        }
+
         return rootView;
     }
+
+
 
     @Override
     public void onPause() {
         super.onPause();
+        saveUserFields();
+    }
+
+    public void onDestroy() {
+        super.onDestroy();
         saveUserFields();
     }
 
@@ -298,7 +313,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 .centerCrop()
                 .into(photoPlaceholder);
 
-        mDataManager.getPreferenceManager().saveUserPhoto(selectedImage);
+        saveUserPhoto(selectedImage);
 
     }
 
@@ -442,23 +457,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 break;
             case R.id.job_add_btn:
                 mJobCount = 2;
-                jobAddButton.setVisibility(View.GONE);
-
-                LayoutInflater ltInflaterJob2 = getActivity().getLayoutInflater();
-                ltInflaterJob2.inflate(R.layout.job, mJobLinLay, true);
-
-                jobPeriod1 = (EditText) rootView.findViewById(R.id.job_period1);
-                companyTitle1 = (EditText) rootView.findViewById(R.id.company_title1);
-                jobTitle1 = (EditText) rootView.findViewById(R.id.job_title1);
-                jobDuty1 =(EditText) rootView.findViewById(R.id.job_duty1);
-
-                jobAddButton2 = (Button) rootView.findViewById(R.id.job_add_btn2);
-                removeJobButton = (Button) rootView.findViewById(R.id.job_remove_button);
-
-                jobAddButton2.setOnClickListener(this);
-                removeJobButton.setOnClickListener(this);
-
-                dutyString1 = jobDuty1.getText().toString();
+               addJob2();
 
                 break;
             case R.id.job_remove_button:
@@ -473,20 +472,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 break;
             case R.id.job_add_btn2:
                 mJobCount = 3;
-                jobAddButton2.setVisibility(View.GONE);
-                removeJobButton.setVisibility(View.GONE);
-                LayoutInflater ltInflaterJob3 = getActivity().getLayoutInflater();
-                ltInflaterJob3.inflate(R.layout.job2, mJobLinLay, true);
-
-                jobPeriod2 = (EditText) rootView.findViewById(R.id.job_period2);
-                companyTitle2 = (EditText) rootView.findViewById(R.id.company_title2);
-                jobTitle2 = (EditText) rootView.findViewById(R.id.job_title2);
-                jobDuty2 =(EditText) rootView.findViewById(R.id.job_duty2);
-                removeJobButton1 = (Button) rootView.findViewById(R.id.job_remove_button1);
-
-                removeJobButton1.setOnClickListener(this);
-
-                dutyString2 = jobDuty2.getText().toString();
+                addJob3();
 
 
                 break;
@@ -504,16 +490,9 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 break;
             case R.id.study_add_button:
                 mStudyCount = 2;
-                studyAddButton.setVisibility(View.GONE);
 
-                LayoutInflater ltInflaterStudy2 = getActivity().getLayoutInflater();
-                ltInflaterStudy2.inflate(R.layout.study, mStudyLinLay, true);
+                addStudy2();
 
-                removeStudyButton = (Button) rootView.findViewById(R.id.study_remove_button);
-                removeStudyButton.setOnClickListener(this);
-                studyTitle1 = (EditText) rootView.findViewById(R.id.study_title1);
-                studyDescription1 = (EditText) rootView.findViewById(R.id.study_decription1);
-                rating1 = (EditText) rootView.findViewById(R.id.rating1);
                 break;
             case R.id.study_remove_button:
 
@@ -527,6 +506,56 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             
 
         }
+    }
+
+    private void addStudy2() {
+        studyAddButton.setVisibility(View.GONE);
+
+        LayoutInflater ltInflaterStudy2 = getActivity().getLayoutInflater();
+        ltInflaterStudy2.inflate(R.layout.study, mStudyLinLay, true);
+
+        removeStudyButton = (Button) rootView.findViewById(R.id.study_remove_button);
+        removeStudyButton.setOnClickListener(this);
+        studyTitle1 = (EditText) rootView.findViewById(R.id.study_title1);
+        studyDescription1 = (EditText) rootView.findViewById(R.id.study_decription1);
+        rating1 = (EditText) rootView.findViewById(R.id.rating1);
+    }
+
+    private void addJob2() {
+        jobAddButton.setVisibility(View.GONE);
+
+        LayoutInflater ltInflaterJob2 = getActivity().getLayoutInflater();
+        ltInflaterJob2.inflate(R.layout.job, mJobLinLay, true);
+
+        jobPeriod1 = (EditText) rootView.findViewById(R.id.job_period1);
+        companyTitle1 = (EditText) rootView.findViewById(R.id.company_title1);
+        jobTitle1 = (EditText) rootView.findViewById(R.id.job_title1);
+        jobDuty1 =(EditText) rootView.findViewById(R.id.job_duty1);
+
+        jobAddButton2 = (Button) rootView.findViewById(R.id.job_add_btn2);
+        removeJobButton = (Button) rootView.findViewById(R.id.job_remove_button);
+
+        jobAddButton2.setOnClickListener(this);
+        removeJobButton.setOnClickListener(this);
+
+        dutyString1 = jobDuty1.getText().toString();
+    }
+
+    private void addJob3() {
+        jobAddButton2.setVisibility(View.GONE);
+        removeJobButton.setVisibility(View.GONE);
+        LayoutInflater ltInflaterJob3 = getActivity().getLayoutInflater();
+        ltInflaterJob3.inflate(R.layout.job2, mJobLinLay, true);
+
+        jobPeriod2 = (EditText) rootView.findViewById(R.id.job_period2);
+        companyTitle2 = (EditText) rootView.findViewById(R.id.company_title2);
+        jobTitle2 = (EditText) rootView.findViewById(R.id.job_title2);
+        jobDuty2 =(EditText) rootView.findViewById(R.id.job_duty2);
+        removeJobButton1 = (Button) rootView.findViewById(R.id.job_remove_button1);
+
+        removeJobButton1.setOnClickListener(this);
+
+        dutyString2 = jobDuty2.getText().toString();
     }
 
     private void viewPdf() {
@@ -1261,10 +1290,31 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     }
 
     private void initUserFields() {
-        List<String> userData = mDataManager.getPreferenceManager().loadUserProfileData();
-        for (int i = 0; i < userData.size(); i++) {
-            mUserInfoViews.get(i).setText(userData.get(i));
+
+
+        List<String> userFields = new ArrayList<>();
+        userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_NAME_KEY, null));
+        userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_NICK_KEY, null));
+        userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_PHONE_KEY, null));
+        userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_MAIL_KEY, null));
+        userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_BIO_KEY, null));
+        userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_SKILLS_KEY, null));
+        userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_LANGUAGES_KEY, null));
+        userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_HOBBY_KEY, null));
+        userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_JOB_PERIOD_KEY, null));
+        userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_COMPANY_TITLE_KEY, null));
+        userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_JOB_TITLE_KEY, null));
+        userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_JOB_DUTY_KEY, null));
+        userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_STUDY_TITLE_KEY, null));
+        userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_STUDY_DESCRIPTION_KEY, null));
+        userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_RATING_KEY, null));
+        userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_ACHIEVEMENTS_KEY, null));
+
+        for (int i = 0; i < userFields.size(); i++) {
+            mUserInfoViews.get(i).setText(userFields.get(i));
         }
+        mJobCount = StartActivity.getSharedPref().getInt(ConstantManager.JOB_COUNT_KEY, 1);
+        mStudyCount = StartActivity.getSharedPref().getInt(ConstantManager.STUDY_COUNT_KEY, 1);
     }
 
     private void saveUserFields() {
@@ -1273,9 +1323,45 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             userData.add(userFieldView.getText().toString());
         }
 
-        mDataManager.getPreferenceManager().saveUserProfileData(userData);
+
+        SharedPreferences.Editor editor = StartActivity.getSharedPref().edit();
+        final String[] USER_FIELDS = {
+                ConstantManager.USER_NAME_KEY,
+                ConstantManager.USER_NICK_KEY,
+                ConstantManager.USER_PHONE_KEY,
+                ConstantManager.USER_MAIL_KEY,
+                ConstantManager.USER_BIO_KEY,
+                ConstantManager.USER_SKILLS_KEY,
+                ConstantManager.USER_LANGUAGES_KEY,
+                ConstantManager.USER_HOBBY_KEY,
+                ConstantManager.USER_JOB_PERIOD_KEY,
+                ConstantManager.USER_COMPANY_TITLE_KEY,
+                ConstantManager.USER_JOB_TITLE_KEY,
+                ConstantManager.USER_JOB_DUTY_KEY,
+                ConstantManager.USER_STUDY_TITLE_KEY,
+                ConstantManager.USER_STUDY_DESCRIPTION_KEY,
+                ConstantManager.USER_RATING_KEY,
+                ConstantManager.USER_ACHIEVEMENTS_KEY
+        };
+
+        for (int i =0; i<USER_FIELDS.length; i++){
+            editor.putString(USER_FIELDS[i], userData.get(i));
+        }
+        editor.putInt(ConstantManager.JOB_COUNT_KEY, mJobCount);
+        editor.putInt(ConstantManager.STUDY_COUNT_KEY, mStudyCount);
+
+        editor.apply();
     }
 
+    public Uri loadUserPhoto(){
+        return Uri.parse(StartActivity.getSharedPref().getString(ConstantManager.USER_PHOTO_KEY, "android.resource://org.hr24.almel.testchallenge/drawable/ic_add_a_photo_black_24dp.xml"));
+    }
+
+    public void saveUserPhoto(Uri uri){
+        SharedPreferences.Editor editor = StartActivity.getSharedPref().edit();
+        editor.putString(ConstantManager.USER_PHOTO_KEY, uri.toString());
+        editor.apply();
+    }
 
 }
 
