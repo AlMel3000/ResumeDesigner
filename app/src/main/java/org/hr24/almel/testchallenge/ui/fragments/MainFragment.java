@@ -287,6 +287,10 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
     public void onLoginSuccess(int socialNetworkID) {
         StartActivity.hideProgress();
         showSnackbar("Успешная авторизация");
+        authLinLayout.setVisibility(View.GONE);
+        fillView.setVisibility(View.GONE);
+        AUTHORIZATION_STATUS = true;
+        saveAuthorizationStatus();
 
 
 

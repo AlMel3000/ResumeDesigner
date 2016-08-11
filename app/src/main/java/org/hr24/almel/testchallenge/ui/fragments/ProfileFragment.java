@@ -228,13 +228,13 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
 
 
-        if(NetworkStatusChecker.isNetworkAvailable(getContext())){
+        if(NetworkStatusChecker.isNetworkAvailable(getContext()) && MainFragment.AUTHORIZATION_STATUS){
         socialNetwork = MainFragment.mSocialNetworkManager.getSocialNetwork(networkId);
         socialNetwork.setOnRequestCurrentPersonCompleteListener(this);
         socialNetwork.requestCurrentPerson();
 
         StartActivity.showProgress("Loading social person");
-        } else {
+        } else if (!NetworkStatusChecker.isNetworkAvailable(getContext()) && MainFragment.AUTHORIZATION_STATUS){
             showSnackbar("Сеть недоступна, не удалось загрузить Ваш профиль");
         }
 
@@ -246,6 +246,12 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 .resize(100, 100)
                 .centerCrop()
                 .into(photo);
+
+        try {
+            bitmapAva = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), loadUserPhoto());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         if (savedInstanceState == null) {
             //активити запускается впервые
@@ -276,6 +282,8 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         if (MainFragment.AUTHORIZATION_STATUS && !POST_STATUS){
             sharePost();
         }
+
+
 
         return rootView;
     }
@@ -339,6 +347,12 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 if (resultCode == Activity.RESULT_OK && mPhotoFile != null) {
                     mSelectedImage = Uri.fromFile(mPhotoFile);
                     insertProfileImage(mSelectedImage);
+
+                    try {
+                        bitmapAva = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), mSelectedImage);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
                     }
 
@@ -761,19 +775,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
             myImgEdu.scaleAbsolute(40f, 40f);
 
-           if (mPhotoFile != null) {
-               ByteArrayOutputStream streamAvatar = new ByteArrayOutputStream();
-
-            Bitmap bitmapAvatar;
-            bitmapAvatar = BitmapFactory.decodeFile(mPhotoFile.getPath());
-            bitmapAvatar.compress(Bitmap.CompressFormat.JPEG, 100 , streamAvatar);
-            Image myImgAvatar = Image.getInstance(streamAvatar.toByteArray());
-            myImgAvatar.setAlignment(Image.MIDDLE);
-            myImgAvatar.scaleAbsolute(100f, 100f);
-               myImgAvatar.setSpacingBefore(30f);
-            columnRight.addElement(myImgAvatar);
-
-           }else if(bitmapAva!= null){
+            if(bitmapAva!= null){
                ByteArrayOutputStream streamAva = new ByteArrayOutputStream();
                bitmapAva.compress(Bitmap.CompressFormat.JPEG, 100 , streamAva);
                Image myImgAva = Image.getInstance(streamAva.toByteArray());
