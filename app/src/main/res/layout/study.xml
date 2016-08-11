@@ -5,46 +5,63 @@
     android:layout_height="match_parent">
 
 
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/profile_edittext"
+                android:text="@string/study_title_hint"
+                android:layout_marginTop="@dimen/spacing_normal_16"/>
+
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_normal_16">
+        android:layout_height="wrap_content">
 
         <EditText
             android:id="@+id/study_title1"
             style="@style/profile_edittext"
-            android:hint="@string/study_title_hint"
-            android:text="@string/study_title"
+            android:hint="@string/study_title"
             android:fontFamily="sans-serif-condensed"
             android:textColor="@color/gray_light"
             android:textColorHint="@color/gray" />
 
     </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                style="@style/profile_edittext"
+                android:text="@string/study_description_hint"
+                android:layout_marginTop="@dimen/spacing_normal_16"/>
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_normal_16">
+        android:layout_height="wrap_content">
 
         <EditText
             android:id="@+id/study_decription1"
             style="@style/profile_edittext"
-            android:hint="@string/study_description_hint"
-            android:text="@string/study_description1"
+            android:hint="@string/study_description"
             android:fontFamily="sans-serif-condensed"
             android:textColor="@color/gray_light"
             android:textColorHint="@color/gray" />
 
     </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                style="@style/profile_edittext"
+                android:text="@string/rating_hint"
+                android:layout_marginTop="@dimen/spacing_normal_16"/>
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_normal_16">
+        android:layout_height="wrap_content">
 
         <EditText
             android:id="@+id/rating1"
             style="@style/profile_edittext"
-            android:hint="@string/rating_hint"
-            android:text="@string/rating_period"
+            android:hint="@string/rating_value"
             android:fontFamily="sans-serif-condensed"
             android:textColor="@color/gray_light"
             android:textColorHint="@color/gray" />
@@ -57,11 +74,12 @@
         android:layout_height="wrap_content"
         android:text="@string/study_remove" />
 
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="@color/hr24_blue"
-        android:layout_marginTop="@dimen/spacing_small_8"
-        android:layout_marginBottom="@dimen/spacing_small_8"/>
+        android:layout_margin="@dimen/spacing_small_8"/>
 
 </LinearLayout>

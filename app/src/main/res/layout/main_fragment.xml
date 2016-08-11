@@ -13,8 +13,10 @@
             android:layout_width="100dp"
             android:layout_height="150dp"
             android:src="@drawable/logo"
-            android:layout_gravity="center_horizontal"
-            />
+            android:layout_gravity="center_horizontal" />
+
+        <android.support.v7.widget.CardView
+            style="@style/auth_child_linear">
         <LinearLayout
             style="@style/auth_child_linear">
             <LinearLayout
@@ -77,6 +79,7 @@
                 android:text="@string/fill_tv"
                 style="@style/button_fill" />
         </LinearLayout>
+        </android.support.v7.widget.CardView>
 
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>
