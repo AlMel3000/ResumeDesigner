@@ -1,6 +1,7 @@
 package org.hr24.almel.testchallenge.ui.fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -23,8 +24,10 @@ import com.vk.sdk.util.VKUtil;
 
 import org.hr24.almel.testchallenge.R;
 import org.hr24.almel.testchallenge.ui.StartActivity;
+import org.hr24.almel.testchallenge.utils.ConstantManager;
 import org.hr24.almel.testchallenge.utils.NetworkStatusChecker;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ru.ok.android.sdk.util.OkScope;
@@ -116,9 +119,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
         mSocialNetworkManager = (SocialNetworkManager) getFragmentManager().findFragmentByTag(StartActivity.SOCIAL_NETWORK_TAG);
 
         String[] vkScope = new String[] {
-                VKScope.FRIENDS,
                 VKScope.WALL,
-                VKScope.PHOTOS,
                 VKScope.NOHTTPS,
                 VKScope.STATUS,
         };
@@ -156,6 +157,13 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
             }
         }
 
+        initAuthorizationStatus();
+
+        if (AUTHORIZATION_STATUS){
+            authLinLayout.setVisibility(View.GONE);
+            fillView.setVisibility(View.GONE);
+        }
+
 
 
         return rootView;
@@ -181,9 +189,9 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
             }
 
             authLinLayout.setVisibility(View.GONE);
-            //// TODO: 08.08.16 убрать 
             fillView.setVisibility(View.GONE);
             AUTHORIZATION_STATUS = true;
+            saveAuthorizationStatus();
 
 
         }
@@ -246,10 +254,11 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
                 }
                 break;
             case R.id.fill_btn:
-                if (AUTHORIZATION_STATUS==false) {
+                if (!AUTHORIZATION_STATUS) {
                     startProfile(VkSocialNetwork.ID);
                 } else {
                     startProfile(networkId);
+
                 }
 
                 break;
@@ -315,5 +324,16 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
 
     private void showSnackbar(String message){
         Snackbar.make(mCoordinatorLayout, message,Snackbar.LENGTH_LONG).show();
+    }
+
+    private void saveAuthorizationStatus(){
+        SharedPreferences.Editor editor = StartActivity.getSharedPref().edit();
+        editor.putBoolean(ConstantManager.AUTHORIZATION_STATUS_KEY, AUTHORIZATION_STATUS);
+        editor.apply();
+    }
+
+    private void initAuthorizationStatus() {
+        AUTHORIZATION_STATUS = StartActivity.getSharedPref().getBoolean(ConstantManager.AUTHORIZATION_STATUS_KEY, false);
+
     }
 }

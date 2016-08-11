@@ -43,6 +43,11 @@ public interface ConstantManager {
     String JOB_COUNT_KEY = "JOB_COUNT_KEY";
     String STUDY_COUNT_KEY = "STUDY_COUNT_KEY";
 
+    String PHOTO_SET_STATUS_KEY = "PHOTO_SET_STATUS_KEY";
+
+    String AUTHORIZATION_STATUS_KEY = "AUTHORIZATION_STATUS_KEY";
+    String POST_STATUS_KEY = "POST_STATUS_KEY";
+
     String USER_PHOTO_KEY="USER_PHOTO_KEY";
 
     int REQUEST_GALLERY_PICTURE=88;
@@ -50,7 +55,6 @@ public interface ConstantManager {
 
     int PERMISSION_REQUEST_SETTINGS_CODE = 101;
     int CAMERA_REQUEST_PERMISSION_CODE = 102;
-
 
 
 }

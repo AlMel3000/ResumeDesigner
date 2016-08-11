@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Resume Builder</string>
     <string name="auth_button_enter">Заполнить резюме</string>
-    <string name="auth_enter_tv">Авторизоваться</string>
+    <string name="auth_enter_tv">Отправить запись на стену</string>
     <string name="auth_fill_tv">Заполнить резюме</string>
     <string name="fill_tv">Приступить</string>
     <string name="vkontakte">Vkontakte</string>
@@ -16,7 +16,7 @@
 
 
     <string name="username_hint">Имя и фамилия</string>
-    <string name="nick_hint">Ник (Подпись под именем)</string>
+    <string name="nick_hint">Желаемая должность</string>
     <string name="tel_hint">Телефон</string>
     <string name="example_number">+7 980 888 88 88</string>
     <string name="e_mail_hint">E-mail</string>
@@ -24,35 +24,32 @@
     <string name="nick">Рекрутер</string>
     <string name="bio_hint">О себе (До 200 символов)</string>
     <string name="bio">Форма есть пустота, а пустота есть форма</string>
-    <string name="skills_hint">Навыки  "\n" Запись: Уборка&amp;3 @ Другой навык \"Уборка\" - название навыка "\n" Цифра поcле \"@\" - оценка от 1 до 5, \"//\" - разделитель навыков></string>
-    <string name="skills">Уборка@3//Photoshop@4</string>
+    <string name="skills_hint">Навыки  "\n" Запись: Уборка@3//Другой навык "\n"\"Уборка\" - название навыка "\n" Цифра поcле \"@\" - оценка от 1 до 5, "\n"\"//\" - разделитель навыков</string>
+    <string name="skills">Например: Уборка@3//Photoshop@4</string>
     <string name="skills_header">Навыки</string>
-    <string name="languages_hint">Языки "\n" Русский: Средний//Киргизкий: Высокий</string>
-    <string name="lang_hint">\"//\" - разделитель языков</string>
+    <string name="languages_hint">Языки "\n" \"//\" - разделитель языков</string>
+    <string name="lang_hint"> Например: Русский: Средний//Киргизкий: Высокий</string>
     <string name="languages">Русский: Средний//Киргизкий: Высокий</string>
-    <string name="hobby_hint">Хобби "\n" Футбол//Хоккей</string>
-    <string name="hob_hint">\"//\" - разделитель хобби</string>
-    <string name="hobby">Футбол//Хоккей</string>
+    <string name="hobby_hint">Хобби "\n" Футбол//Хоккей "\n"  \"//\" - разделитель хобби</string>
+    <string name="hob_hint">Например Футбол//Хоккей</string>
     <string name="job_period_hint">Период</string>
-    <string name="job_period">09/2015–12/2015</string>
     <string name="company_title_hint">Название компании</string>
-    <string name="company_title">HP</string>
+    <string name="company_title">Например Microsoft</string>
     <string name="job_title_hint">Занимаемая позиция</string>
-    <string name="job_title">Директор</string>
-    <string name="jb_duty_hint">Обязанности</string>
-    <string name="job_duty_hint">\"//\" - разделитель обязанностей</string>
-    <string name="job_duty">Управлял персоналом//Оптимизировал расходы</string>
+    <string name="job_title">Например Коммерческий директор</string>
+    <string name="jb_duty_hint">Обязанности "\n" \"//\" - разделитель обязанностей</string>
+    <string name="job_duty">Например Управлял персоналом//Оптимизировал расходы</string>
     <string name="first_work">Первая работа?</string>
     <string name="current_work">Текущая работа?</string>
     <string name="job_add">+ место работы</string>
     <string name="study_title_hint">Название заведения</string>
-    <string name="study_title">МНУ(2011–2015)</string>
+    <string name="study_title">Например МГУ(2011–2015)</string>
     <string name="study_description_hint">Описание</string>
-    <string name="study_description">Бакалавр. Социология</string>
+    <string name="study_description">Например Бакалавр. Социология</string>
     <string name="rating_hint">Средний балл</string>
-    <string name="rating_period">GPA: 5 из 5</string>
-    <string name="achievements_hint">Достижения</string>
-    <string name="achievements">Лауреат//Победитель</string>
+    <string name="rating_value">Например 4,67 из 5</string>
+    <string name="achievements_hint">Достижения "\n" \"//\" - разделитель достижений</string>
+    <string name="achievements">Например Лауреат//Победитель</string>
     <string name="share">Пост</string>
     <string name="create_pdf">Создать pdf</string>
     <string name="study_add">+ место учебы</string>
@@ -71,6 +68,8 @@
     <string name="job_remove">- место работы</string>
     <string name="study_remove">- место учебы</string>
     <string name="load_from_camera_permissions_request">Для корректной работы приложения необходимо дать требуемые разрешения</string>
-    <string name="load_authorization_request">Перед созданием pdf  версии резюме необходимо авторизоваться и отправить на стену запись</string>
+    <string name="load_authorization_request">Перед созданием pdf  версии резюме необходимо отправить запись на стену в соцсети</string>
     <string name="load_post_request">Перед созданием pdf версии резюме необходимо отправить запись со ссылкой на наш сайт на стену</string>
+    <string name="nick_hint2">Например Коммерческий директор</string>
+    <string name="job_period">Например 09/2015–12/2015</string>
 </resources>

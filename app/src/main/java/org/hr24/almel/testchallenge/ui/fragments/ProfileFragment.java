@@ -3,7 +3,6 @@ package org.hr24.almel.testchallenge.ui.fragments;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -22,15 +21,16 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.github.gorbin.asne.core.SocialNetwork;
@@ -76,13 +76,14 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     private String link = "http://hr24.org";
 
     private static final String NETWORK_ID = "NETWORK_ID";
+    public static boolean PHOTO_SET = false;
     public static boolean POST_STATUS = false;
     private SocialNetwork socialNetwork;
     private int networkId;
     private int mJobCount = 1;
     private int mStudyCount = 1;
 
-    private ImageView photo, photoPlaceholder;
+    private ImageView photo;
     private EditText name, nick,tel, email, bio, skills, languages, hobby,
             jobPeriod, jobTitle, companyTitle, jobDuty, studyTitle, studyDescription, rating, achievements,
             jobPeriod1, jobTitle1, companyTitle1, jobDuty1,  studyTitle1, studyDescription1, rating1,
@@ -113,6 +114,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     private LinearLayout mStudyLinLay;
     View rootView;
     Bitmap bitmapAva = null;
+    ScrollView scrollView;
 
 
 
@@ -137,7 +139,6 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         rootView = inflater.inflate(R.layout.profile_fragment, container, false);
 
         photo = (ImageView) rootView.findViewById(R.id.imageView);
-        photoPlaceholder = (ImageView) rootView.findViewById(R.id.photo_placeholder);
         mProfilePlaceholder = (LinearLayout) rootView.findViewById(R.id.profile_placeholder);
         mAddPhotoLinLay = (LinearLayout) rootView.findViewById(R.id.add_photo_ll);
         mJobLinLay = (LinearLayout) rootView.findViewById(R.id.job_ll);
@@ -172,6 +173,26 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         Button galButton = (Button) rootView.findViewById(R.id.gal_btn);
         jobAddButton = (Button) rootView.findViewById(R.id.job_add_btn);
         studyAddButton = (Button) rootView.findViewById(R.id.study_add_button);
+        scrollView = (ScrollView) rootView.findViewById(R.id.sv_main);
+
+
+        scrollView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        mFab.hide();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        mFab.show();
+                        break;
+
+                }
+                return false;
+            }
+        });
+
+
 
         savePdfButton.setOnClickListener(this);
         viewPdfButton.setOnClickListener(this);
@@ -229,27 +250,32 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         if (savedInstanceState == null) {
             //активити запускается впервые
 
+
         } else {
-            mCurrentEditMode = savedInstanceState.getInt(ConstantManager.EDIT_MODE_KEY, 1);
-            changeEditMode(mCurrentEditMode);
+
 
         }
 
         if (mJobCount==2){
             addJob2();
-            initUserFieldsJob2();
         } else if (mJobCount == 3){
             addJob2();
             addJob3();
-            initUserFieldsJob2();
-            initUserFieldsJob3();
+
         }
 
         if (mStudyCount==2){
             addStudy2();
-            initUserFieldsStudy2();
+
         }
 
+        if(PHOTO_SET){
+            mAddPhototv.setText("Изменить фото");
+        }
+
+        if (MainFragment.AUTHORIZATION_STATUS && !POST_STATUS){
+            sharePost();
+        }
 
         return rootView;
     }
@@ -325,18 +351,14 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     private void insertProfileImage(Uri selectedImage) {
         Picasso.with(getContext())
                 .load(selectedImage)
-                .resize(256, 112)
+                .resize(104, 104)
                 .centerCrop()
                 .into(photo);
 
 
-        Picasso.with(getContext())
-                .load(selectedImage)
-                .resize(256, 112)
-                .centerCrop()
-                .into(photoPlaceholder);
 
         saveUserPhoto(selectedImage);
+        PHOTO_SET = true;
 
     }
 
@@ -347,16 +369,6 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     public void onRequestSocialPersonSuccess(int i, SocialPerson socialPerson) {
         StartActivity.hideProgress();
         name.setText(socialPerson.name);
-
-        if (socialPerson.avatarURL!=null && MainFragment.AUTHORIZATION_STATUS) {
-            Picasso.with(getContext())
-                    .load(socialPerson.avatarURL)
-                    .resize(100, 100)
-                    .centerCrop()
-                    .into(photo);
-        }
-
-
     }
 
     @Override
@@ -367,35 +379,16 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
 
 
-    private  void shareClick() {
-        
-        
-            AlertDialog.Builder ad = alertDialogInit("Отправить запись на стену?", link);
-            ad.setPositiveButton("Post link", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
+    public  void sharePost() {
                     Bundle postParams = new Bundle();
                     postParams.putString(SocialNetwork.BUNDLE_LINK, link);
                     socialNetwork.requestPostLink(postParams, message, postingComplete);
-                }
-            });
-            ad.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int i) {
-                    dialog.cancel();
-                }
-            });
-            ad.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                public void onCancel(DialogInterface dialog) {
-                    dialog.cancel();
-                }
-            });
-            ad.create().show();
         }
 
     private OnPostingCompleteListener postingComplete = new OnPostingCompleteListener() {
         @Override
         public void onPostSuccessfully(int socialNetworkID) {
-            Toast.makeText(getActivity(), "Sent", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Запись отправлена на стену", Toast.LENGTH_LONG).show();
             POST_STATUS = true;
         }
 
@@ -407,13 +400,6 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
 
 
-    private AlertDialog.Builder alertDialogInit(String title, String message){
-        AlertDialog.Builder ad = new AlertDialog.Builder(getActivity());
-        ad.setTitle(title);
-        ad.setMessage(message);
-        ad.setCancelable(true);
-        return ad;
-    }
 
     @Override
     public void onClick(View v) {
@@ -428,35 +414,24 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 }
                 break;
             case R.id.share:
-                if (MainFragment.AUTHORIZATION_STATUS) {
-                    shareClick();
-                } else{
+                if (!MainFragment.AUTHORIZATION_STATUS) {
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .add(R.id.container, new MainFragment())
                             .commit();
                 }
                 break;
             case R.id.create_pdf_button:
-                if (MainFragment.AUTHORIZATION_STATUS && POST_STATUS) {
+                if (MainFragment.AUTHORIZATION_STATUS) {
                     createPdf();
                 } else if (!MainFragment.AUTHORIZATION_STATUS){
 
                     Snackbar.make(mCoordinatorFrame, R.string.load_authorization_request, Snackbar.LENGTH_LONG)
-                            .setAction("Авторизоваться", new View.OnClickListener() {
+                            .setAction("Отправить запись на стену", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     getActivity().getSupportFragmentManager().beginTransaction()
                                             .add(R.id.container, new MainFragment())
                                             .commit();
-                                }
-                            }).show();
-                } else {
-
-                    Snackbar.make(mCoordinatorFrame, R.string.load_post_request, Snackbar.LENGTH_LONG)
-                            .setAction("Отправить запись на стену", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    shareClick();
                                 }
                             }).show();
                 }
@@ -470,7 +445,6 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 break;
             case R.id.imageView:
                 mProfilePlaceholder.setVisibility(View.VISIBLE);
-                photo.setVisibility(View.GONE);
                 break;
             case R.id.cam_btn:
                 loadPhotoFromCamera();
@@ -548,6 +522,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         studyTitle1 = (EditText) rootView.findViewById(R.id.study_title1);
         studyDescription1 = (EditText) rootView.findViewById(R.id.study_decription1);
         rating1 = (EditText) rootView.findViewById(R.id.rating1);
+        initUserFieldsStudy2();
     }
 
     private void addJob2() {
@@ -566,6 +541,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
         jobAddButton2.setOnClickListener(this);
         removeJobButton.setOnClickListener(this);
+        initUserFieldsJob2();
 
     }
 
@@ -583,6 +559,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         removeJobButton1 = (Button) rootView.findViewById(R.id.job_remove_button1);
 
         removeJobButton1.setOnClickListener(this);
+        initUserFieldsJob3();
 
     }
 
@@ -623,9 +600,9 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             savePdfButton.setVisibility(View.GONE);
             viewPdfButton.setVisibility(View.GONE);
             shareButton.setVisibility(View.GONE);
-            photo.setVisibility(View.GONE);
 
-            jobAddButton.setVisibility(View.VISIBLE);
+
+            if (mJobCount ==1){jobAddButton.setVisibility(View.VISIBLE);}
             if (mJobCount==2){
                 jobAddButton2.setVisibility(View.VISIBLE);
                 removeJobButton.setVisibility(View.VISIBLE);
@@ -666,10 +643,12 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             if (!MainFragment.AUTHORIZATION_STATUS){
                 shareButton.setText("АВТОРИЗОВАТЬСЯ");
             } else {
-                shareButton.setText("Запись на стену");
+                shareButton.setVisibility(View.GONE);
             }
 
-            photo.setVisibility(View.VISIBLE);
+            if(PHOTO_SET){
+                mAddPhototv.setText("Изменить фото");
+            }
 
             jobAddButton.setVisibility(View.GONE);
             if (mJobCount==2){
@@ -764,94 +743,6 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             Font skillsBlankRatingFont= new Font(droidSans, 20.0f, 1, BaseColor.WHITE);
             Font skillsRatingFont= new Font(droidSans, 20.0f, 1, BaseColor.BLACK);
 
-
-            Paragraph header1 = new Paragraph("Опыт работы");
-            header1.setFont(headersLeftFont);
-            header1.setAlignment(Element.ALIGN_CENTER);
-
-
-
-
-            Paragraph header2 = new Paragraph("Образование");
-            header2.setFont(headersLeftFont);
-            header2.setAlignment(Element.ALIGN_CENTER);
-
-
-            Paragraph header3 = new Paragraph("Достижения");
-            header3.setFont(headersLeftFont);
-            header3.setAlignment(Element.ALIGN_CENTER);
-
-
-
-
-
-            Paragraph nameParagraph = new Paragraph(this.name.getText().toString());
-            nameParagraph.setAlignment(Paragraph.ALIGN_CENTER);
-            nameParagraph.setFont(nameFont);
-
-            Paragraph nick = new Paragraph(this.nick.getText().toString());
-            nick.setAlignment(Paragraph.ALIGN_CENTER);
-            nick.setFont(nickFont);
-
-
-            Paragraph telephoneParagraph = new Paragraph();
-            Chunk tChunk = new Chunk("T");
-            tChunk.setFont(contactsHeaderFont);
-            String tel1 = tel.getText().toString();
-            Chunk telChunk = new Chunk("    "+ tel1);
-            telChunk.setFont(contactsFont);
-            telephoneParagraph.add(tChunk);
-            telephoneParagraph.add(telChunk);
-            telephoneParagraph.setIndentationLeft(10);
-            telephoneParagraph.setAlignment(Paragraph.ALIGN_LEFT);
-
-
-            Paragraph emailParagraph = new Paragraph();
-            Chunk eChunk = new Chunk("E");
-            eChunk.setFont(contactsHeaderFont);
-            String email1 = email.getText().toString();
-            Chunk emailChunk = new Chunk("    "+ email1);
-            emailChunk.setFont(contactsFont);
-            emailParagraph.add(eChunk);
-            emailParagraph.add(emailChunk);
-            emailParagraph.setIndentationLeft(10);
-            emailParagraph.setAlignment(Paragraph.ALIGN_LEFT);
-
-
-
-            Paragraph header4 = new Paragraph("О себе");
-            header4.setAlignment(Paragraph.ALIGN_LEFT);
-            header4.setIndentationLeft(20);
-            header4.setFont(headersRightFont);
-
-            Paragraph bioParagraph = new Paragraph(this.bio.getText().toString());
-            bioParagraph.setAlignment(Paragraph.ALIGN_LEFT);
-            bioParagraph.setIndentationLeft(10);
-            bioParagraph.setFont(textLeftFont);
-
-            Paragraph header5 = new Paragraph("Навыки");
-            header5.setAlignment(Paragraph.ALIGN_LEFT);
-            header5.setFont(headersRightFont);
-            header5.setIndentationLeft(20);
-
-            Paragraph header6 = new Paragraph("Другая информация");
-            header6.setAlignment(Paragraph.ALIGN_LEFT);
-            header6.setFont(headersRightFont);
-            header6.setIndentationLeft(20);
-
-            Paragraph subHeader1 = new Paragraph("Языки");
-            subHeader1.setAlignment(Paragraph.ALIGN_LEFT);
-            subHeader1.setFont(skillsFont);
-            subHeader1.setIndentationLeft(15);
-
-
-            Paragraph subHeader2 = new Paragraph("Хобби");
-            subHeader2.setAlignment(Paragraph.ALIGN_LEFT);
-            subHeader2.setFont(skillsFont);
-            subHeader2.setIndentationLeft(15);
-
-
-
             ByteArrayOutputStream streamExp = new ByteArrayOutputStream();
             Bitmap bitmapExp;
             bitmapExp = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.exp);
@@ -898,29 +789,40 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
 
 
+            Paragraph header1 = new Paragraph("Опыт работы");
+            header1.setFont(headersLeftFont);
+            header1.setAlignment(Element.ALIGN_CENTER);
             columnLeft.addElement(myImgExp);
             header1.setSpacingAfter(10f);
             columnLeft.addElement(header1);
 
 
-            Paragraph companyTitleParagraph = new Paragraph("\u2022" + this.companyTitle.getText().toString());
-            companyTitleParagraph.setAlignment(Paragraph.ALIGN_LEFT);
-            companyTitleParagraph.setFont(headersSmallLeftFont);
 
-            Paragraph jobPeriodParagraph = new Paragraph(this.jobPeriod.getText().toString());
-            jobPeriodParagraph.setAlignment(Paragraph.ALIGN_LEFT);
-            jobPeriodParagraph.setFont(textLeftFontGray);
+
+
+
+
+
+
+
+                Paragraph companyTitleParagraph = new Paragraph("\u2022" + this.companyTitle.getText().toString());
+                companyTitleParagraph.setAlignment(Paragraph.ALIGN_LEFT);
+                companyTitleParagraph.setFont(headersSmallLeftFont);
+                columnLeft.addElement(companyTitleParagraph);
+
+
+
+
+                Paragraph jobPeriodParagraph = new Paragraph(this.jobPeriod.getText().toString());
+                jobPeriodParagraph.setAlignment(Paragraph.ALIGN_LEFT);
+                jobPeriodParagraph.setFont(textLeftFontGray);
+                jobPeriodParagraph.setSpacingAfter(5f);
+                columnLeft.addElement(jobPeriodParagraph);
 
 
             Paragraph jobTitleParagraph = new Paragraph(this.jobTitle.getText().toString());
             jobTitleParagraph.setAlignment(Paragraph.ALIGN_LEFT);
             jobTitleParagraph.setFont(textLeftFont);
-
-            columnLeft.addElement(companyTitleParagraph);
-
-            jobPeriodParagraph.setSpacingAfter(5f);
-            columnLeft.addElement(jobPeriodParagraph);
-
             jobTitleParagraph.setSpacingAfter(5f);
             columnLeft.addElement(jobTitleParagraph);
 
@@ -1057,6 +959,10 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             myImgEdu.setSpacingBefore(30f);
             columnLeft.addElement(myImgEdu);
 
+
+            Paragraph header2 = new Paragraph("Образование");
+            header2.setFont(headersLeftFont);
+            header2.setAlignment(Element.ALIGN_CENTER);
             header2.setSpacingAfter(10f);
             columnLeft.addElement(header2);
 
@@ -1106,6 +1012,10 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
             }
 
+
+            Paragraph header3 = new Paragraph("Достижения");
+            header3.setFont(headersLeftFont);
+            header3.setAlignment(Element.ALIGN_CENTER);
             header3.setSpacingBefore(30f);
             header3.setSpacingAfter(10f);
             columnLeft.addElement(header3);
@@ -1125,60 +1035,110 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
 
 
+            Paragraph nameParagraph = new Paragraph(this.name.getText().toString());
+            nameParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+            nameParagraph.setFont(nameFont);
             nameParagraph.setSpacingBefore(10f);
             nameParagraph.setSpacingAfter(5f);
-
             columnRight.addElement(nameParagraph);
+
+            Paragraph nick = new Paragraph(this.nick.getText().toString());
+            nick.setAlignment(Paragraph.ALIGN_CENTER);
+            nick.setFont(nickFont);
             nick.setSpacingAfter(20f);
             columnRight.addElement(nick);
 
+            Paragraph telephoneParagraph = new Paragraph();
+            Chunk tChunk = new Chunk("T");
+            tChunk.setFont(contactsHeaderFont);
+            String tel1 = tel.getText().toString();
+            Chunk telChunk = new Chunk("    "+ tel1);
+            telChunk.setFont(contactsFont);
+            telephoneParagraph.add(tChunk);
+            telephoneParagraph.add(telChunk);
+            telephoneParagraph.setIndentationLeft(10);
+            telephoneParagraph.setAlignment(Paragraph.ALIGN_LEFT);
             columnRight.addElement(telephoneParagraph);
+
+            Paragraph emailParagraph = new Paragraph();
+            Chunk eChunk = new Chunk("E");
+            eChunk.setFont(contactsHeaderFont);
+            String email1 = email.getText().toString();
+            Chunk emailChunk = new Chunk("    "+ email1);
+            emailChunk.setFont(contactsFont);
+            emailParagraph.add(eChunk);
+            emailParagraph.add(emailChunk);
+            emailParagraph.setIndentationLeft(10);
+            emailParagraph.setAlignment(Paragraph.ALIGN_LEFT);
             columnRight.addElement(emailParagraph);
 
+            Paragraph header4 = new Paragraph("О себе");
+            header4.setAlignment(Paragraph.ALIGN_LEFT);
+            header4.setIndentationLeft(20);
+            header4.setFont(headersRightFont);
             header4.setSpacingBefore(40f);
             header4.setSpacingAfter(10f);
 
+            Paragraph bioParagraph = new Paragraph(this.bio.getText().toString());
+            bioParagraph.setAlignment(Paragraph.ALIGN_LEFT);
+            bioParagraph.setIndentationLeft(10);
+            bioParagraph.setFont(textLeftFont);
             columnRight.addElement(header4);
             columnRight.addElement(bioParagraph);
 
+            Paragraph header5 = new Paragraph("Навыки");
+            header5.setAlignment(Paragraph.ALIGN_LEFT);
+            header5.setFont(headersRightFont);
+            header5.setIndentationLeft(20);
             header5.setSpacingBefore(30f);
             header5.setSpacingAfter(10f);
             columnRight.addElement(header5);
 
             Paragraph skillsParagraph = new Paragraph();
+            Chunk skillRatingChunk = new Chunk();
+            Chunk skillBlankRatingChunk = new Chunk();
             String [] skillsProcessed = stringProcessor(skillString);
             for (String skill : skillsProcessed) {
                 String [] currentSkill = skillsStringProcessor(skill.trim());
                 Chunk skillChunk = new Chunk(currentSkill[0]+"   ");
                 skillChunk.setFont(skillsFont);
-                int skillRating = Integer.parseInt(currentSkill[1]);
-                int skillBlankRating = 5 - skillRating;
-                Chunk skillRatingChunk = new Chunk();
-                skillRatingChunk.setFont(skillsRatingFont);
-                for (int i = 0; i<= skillRating; i++){
-                    skillRatingChunk.append("\u2022");
-                }
-                Chunk skillBlankRatingChunk = new Chunk();
-                skillBlankRatingChunk.setFont(skillsBlankRatingFont);
-                while (skillBlankRating>0){
-                    skillBlankRatingChunk.append("\u2022");
-                    skillBlankRating--;
-                }
+                if (currentSkill.length>1) {
+                    int skillRating = Integer.parseInt(currentSkill[1]);
+                    int skillBlankRating = 5 - skillRating;
+                    skillRatingChunk.setFont(skillsRatingFont);
+                    for (int i = 0; i <= skillRating; i++) {
+                        skillRatingChunk.append("\u2022");
+                    }
+                    skillBlankRatingChunk.setFont(skillsBlankRatingFont);
+                    while (skillBlankRating > 0) {
+                        skillBlankRatingChunk.append("\u2022");
+                        skillBlankRating--;
+                    }
 
+                }
                 skillsParagraph.add(skillChunk);
-                skillsParagraph.add(skillRatingChunk);
-                skillsParagraph.add(skillBlankRatingChunk);
+                if (currentSkill.length>1)
+                    skillsParagraph.add(skillRatingChunk);
+                if (currentSkill.length>1)
+                    skillsParagraph.add(skillBlankRatingChunk);
                 skillsParagraph.add("\n");
             }
             skillsParagraph.setAlignment(Paragraph.ALIGN_LEFT);
             skillsParagraph.setIndentationLeft(10);
             columnRight.addElement(skillsParagraph);
 
-            header6.setSpacingBefore(30f);
-            header6.setSpacingAfter(10f);
 
+            Paragraph header6 = new Paragraph("Другая информация");
+            header6.setAlignment(Paragraph.ALIGN_LEFT);
+            header6.setFont(headersRightFont);
+            header6.setIndentationLeft(20);header6.setSpacingBefore(30f);
+            header6.setSpacingAfter(10f);
             columnRight.addElement(header6);
 
+            Paragraph subHeader1 = new Paragraph("Языки");
+            subHeader1.setAlignment(Paragraph.ALIGN_LEFT);
+            subHeader1.setFont(skillsFont);
+            subHeader1.setIndentationLeft(15);
             subHeader1.setSpacingAfter(5f);
             columnRight.addElement(subHeader1);
 
@@ -1195,6 +1155,10 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             languagesParagraph.setIndentationLeft(10);
             columnRight.addElement(languagesParagraph);
 
+            Paragraph subHeader2 = new Paragraph("Хобби");
+            subHeader2.setAlignment(Paragraph.ALIGN_LEFT);
+            subHeader2.setFont(skillsFont);
+            subHeader2.setIndentationLeft(15);
             subHeader2.setSpacingAfter(5f);
             columnRight.addElement(subHeader2);
 
@@ -1354,6 +1318,9 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         }
         mJobCount = StartActivity.getSharedPref().getInt(ConstantManager.JOB_COUNT_KEY, 1);
         mStudyCount = StartActivity.getSharedPref().getInt(ConstantManager.STUDY_COUNT_KEY, 1);
+        PHOTO_SET = StartActivity.getSharedPref().getBoolean(ConstantManager.PHOTO_SET_STATUS_KEY, false);
+        POST_STATUS = StartActivity.getSharedPref().getBoolean(ConstantManager.POST_STATUS_KEY, false);
+
     }
 
     private void saveUserFields() {
@@ -1387,6 +1354,8 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         }
         editor.putInt(ConstantManager.JOB_COUNT_KEY, mJobCount);
         editor.putInt(ConstantManager.STUDY_COUNT_KEY, mStudyCount);
+        editor.putBoolean(ConstantManager.PHOTO_SET_STATUS_KEY, PHOTO_SET);
+        editor.putBoolean(ConstantManager.POST_STATUS_KEY, POST_STATUS );
 
         editor.apply();
     }

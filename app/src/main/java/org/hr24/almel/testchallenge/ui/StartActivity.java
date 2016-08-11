@@ -53,7 +53,7 @@ public class StartActivity extends AppCompatActivity implements MainFragment.OnF
         pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         pd.setMessage(message);
         pd.setCancelable(false);
-        pd.setCanceledOnTouchOutside(false);
+        pd.setCanceledOnTouchOutside(true);
         pd.show();
     }
 
