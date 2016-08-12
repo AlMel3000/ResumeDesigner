@@ -40,7 +40,7 @@
     <string name="rating_hint">Средний балл</string>
     <string name="rating_value">Например: 4,67 из 5</string>
     <string name="achievements_hint">Достижения "\n" \"//\" - разделитель достижений</string>
-    <string name="achievements">Например: Лауреат//Победитель</string>
+    <string name="achievements">Например: Лауреат конкурса …//Имею опубликованные научные работы</string>
     <string name="share">Пост</string>
     <string name="create_pdf">Создать pdf</string>
     <string name="study_add">+ место учебы</string>

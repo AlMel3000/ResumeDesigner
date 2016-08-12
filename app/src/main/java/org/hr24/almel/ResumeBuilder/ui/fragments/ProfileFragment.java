@@ -111,6 +111,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     View rootView;
     Bitmap bitmapAva = null;
     ScrollView scrollView;
+    List<EditText> mUserInfoViewsJob2, mUserInfoViewsJob3, mUserInfoViewsStudy2;
 
 
 
@@ -532,6 +533,12 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         studyTitle2 = (EditText) rootView.findViewById(R.id.study_title1);
         studyDescription2 = (EditText) rootView.findViewById(R.id.study_decription1);
         rating2 = (EditText) rootView.findViewById(R.id.rating1);
+
+        mUserInfoViewsStudy2= new ArrayList<>();
+        mUserInfoViewsStudy2.add(studyTitle2);
+        mUserInfoViewsStudy2.add(studyDescription2);
+        mUserInfoViewsStudy2.add(rating2);
+
         initUserFieldsStudy2();
     }
 
@@ -551,6 +558,13 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
         job3AddButton.setOnClickListener(this);
         removeJob2Button.setOnClickListener(this);
+
+        mUserInfoViewsJob2= new ArrayList<>();
+        mUserInfoViewsJob2.add(jobPeriod2);
+        mUserInfoViewsJob2.add(companyTitle2);
+        mUserInfoViewsJob2.add(jobTitle2);
+        mUserInfoViewsJob2.add(jobDuty2);
+
         initUserFieldsJob2();
 
     }
@@ -569,6 +583,13 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         removeJob3Button = (Button) rootView.findViewById(R.id.job_3_remove_button);
 
         removeJob3Button.setOnClickListener(this);
+
+        mUserInfoViewsJob3= new ArrayList<>();
+        mUserInfoViewsJob3.add(jobPeriod3);
+        mUserInfoViewsJob3.add(companyTitle3);
+        mUserInfoViewsJob3.add(jobTitle3);
+        mUserInfoViewsJob3.add(jobDuty3);
+
         initUserFieldsJob3();
 
     }
@@ -606,25 +627,54 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
             }
 
+            if (mJobCount==2){
+            for (EditText userValueJob2:mUserInfoViewsJob2){
+                userValueJob2.setEnabled(true);
+                userValueJob2.setFocusable(true);
+                userValueJob2.setFocusableInTouchMode(true);
+                userValueJob2.setTextColor(Color.DKGRAY);
+            }
+                job3AddButton.setVisibility(View.VISIBLE);
+                removeJob2Button.setVisibility(View.VISIBLE);
+
+            } else if (mJobCount==3){
+                for (EditText userValueJob2:mUserInfoViewsJob2){
+                    userValueJob2.setEnabled(true);
+                    userValueJob2.setFocusable(true);
+                    userValueJob2.setFocusableInTouchMode(true);
+                    userValueJob2.setTextColor(Color.DKGRAY);
+                }
+                for (EditText userValueJob3:mUserInfoViewsJob3){
+                    userValueJob3.setEnabled(true);
+                    userValueJob3.setFocusable(true);
+                    userValueJob3.setFocusableInTouchMode(true);
+                    userValueJob3.setTextColor(Color.DKGRAY);
+                }
+                removeJob3Button.setVisibility(View.VISIBLE);
+
+            }
+
+            if (mStudyCount==2){
+                for (EditText userValueStudy2:mUserInfoViewsStudy2){
+                    userValueStudy2.setEnabled(true);
+                    userValueStudy2.setFocusable(true);
+                    userValueStudy2.setFocusableInTouchMode(true);
+                    userValueStudy2.setTextColor(Color.DKGRAY);
+                }
+                removeStudy2Button.setVisibility(View.VISIBLE);
+            }
+
+
+
             mProfilePlaceholder.setVisibility(View.VISIBLE);
             savePdfButton.setVisibility(View.GONE);
             viewPdfButton.setVisibility(View.GONE);
             shareButton.setVisibility(View.GONE);
 
 
-            if (mJobCount ==1){
-                job2AddButton.setVisibility(View.VISIBLE);}
-            if (mJobCount==2){
-                job3AddButton.setVisibility(View.VISIBLE);
-                removeJob2Button.setVisibility(View.VISIBLE);
-            }
-            if (mJobCount == 3){
-                removeJob3Button.setVisibility(View.VISIBLE);
-            }
-            study2AddButton.setVisibility(View.VISIBLE);
-            if (mStudyCount==2){
-                removeStudy2Button.setVisibility(View.VISIBLE);
-            }
+            if (mJobCount ==1){job2AddButton.setVisibility(View.VISIBLE);}
+
+            if (mStudyCount==1){study2AddButton.setVisibility(View.VISIBLE);}
 
         } else {
             mFab.setImageResource(R.drawable.ic_create_black_24dp);
@@ -633,25 +683,61 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 userValue.setFocusable(false);
                 userValue.setFocusableInTouchMode(false);
                 userValue.setTextColor(Color.BLACK);
+            }
 
-            }
-            saveUserFields();
-            if (mStudyCount==2){
-                saveUserFieldsStudy2();
-            }
             if (mJobCount==2){
+                for (EditText userValueJob2:mUserInfoViewsJob2){
+                    userValueJob2.setEnabled(false);
+                    userValueJob2.setFocusable(false);
+                    userValueJob2.setFocusableInTouchMode(false);
+                    userValueJob2.setTextColor(Color.BLACK);
+                }
                 saveUserFieldsJob2();
+                job3AddButton.setVisibility(View.GONE);
+                removeJob2Button.setVisibility(View.GONE);
+
             } else if (mJobCount==3){
+                for (EditText userValueJob2:mUserInfoViewsJob2){
+                    userValueJob2.setEnabled(false);
+                    userValueJob2.setFocusable(false);
+                    userValueJob2.setFocusableInTouchMode(false);
+                    userValueJob2.setTextColor(Color.BLACK);
+                }
+                for (EditText userValueJob3:mUserInfoViewsJob3){
+                    userValueJob3.setEnabled(false);
+                    userValueJob3.setFocusable(false);
+                    userValueJob3.setFocusableInTouchMode(false);
+                    userValueJob3.setTextColor(Color.BLACK);
+                }
                 saveUserFieldsJob2();
                 saveUserFieldsJob3();
+                removeJob3Button.setVisibility(View.GONE);
+
             }
+
+            if (mStudyCount==2){
+                for (EditText userValueStudy2:mUserInfoViewsStudy2){
+                    userValueStudy2.setEnabled(false);
+                    userValueStudy2.setFocusable(false);
+                    userValueStudy2.setFocusableInTouchMode(false);
+                    userValueStudy2.setTextColor(Color.BLACK);
+                }
+                saveUserFieldsStudy2();
+                removeStudy2Button.setVisibility(View.GONE);
+            }
+
+            saveUserFields();
+
+
+
             mProfilePlaceholder.setVisibility(View.GONE);
             if (MainFragment.AUTHORIZATION_STATUS){
                 viewPdfButton.setVisibility(View.VISIBLE);
             }
             savePdfButton.setVisibility(View.VISIBLE);
-            shareButton.setVisibility(View.VISIBLE);
+
             if (!MainFragment.AUTHORIZATION_STATUS){
+                shareButton.setVisibility(View.VISIBLE);
                 shareButton.setText("АВТОРИЗОВАТЬСЯ");
             } else {
                 shareButton.setVisibility(View.GONE);
@@ -662,17 +748,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             }
 
             job2AddButton.setVisibility(View.GONE);
-            if (mJobCount==2){
-                job3AddButton.setVisibility(View.GONE);
-                removeJob2Button.setVisibility(View.GONE);
-            }
-            if (mJobCount == 3){
-                removeJob3Button.setVisibility(View.GONE);
-            }
             study2AddButton.setVisibility(View.GONE);
-            if (mStudyCount==2){
-                removeStudy2Button.setVisibility(View.GONE);
-            }
 
         }
     }
@@ -1398,12 +1474,6 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_STUDY_2_DESCRIPTION_KEY, null));
         userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_RATING_2_KEY, null));
 
-        List<EditText> mUserInfoViewsStudy2= new ArrayList<>();
-        mUserInfoViewsStudy2.add(studyTitle2);
-        mUserInfoViewsStudy2.add(studyDescription2);
-        mUserInfoViewsStudy2.add(rating2);
-
-
         for (int i = 0; i < userFields.size(); i++) {
             mUserInfoViewsStudy2.get(i).setText(userFields.get(i));
         }
@@ -1437,14 +1507,6 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_COMPANY_2_TITLE_KEY, null));
         userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_JOB_2_TITLE_KEY, null));
         userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_JOB_2_DUTY_KEY, null));
-
-        List<EditText> mUserInfoViewsJob2= new ArrayList<>();
-        mUserInfoViewsJob2.add(jobPeriod2);
-        mUserInfoViewsJob2.add(companyTitle2);
-        mUserInfoViewsJob2.add(jobTitle2);
-        mUserInfoViewsJob2.add(jobDuty2);
-
-
 
         for (int i = 0; i < userFields.size(); i++) {
             mUserInfoViewsJob2.get(i).setText(userFields.get(i));
@@ -1482,14 +1544,6 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_COMPANY_3_TITLE_KEY, null));
         userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_JOB_3_TITLE_KEY, null));
         userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_JOB_3_DUTY_KEY, null));
-
-        List<EditText> mUserInfoViewsJob3= new ArrayList<>();
-        mUserInfoViewsJob3.add(jobPeriod3);
-        mUserInfoViewsJob3.add(companyTitle3);
-        mUserInfoViewsJob3.add(jobTitle3);
-        mUserInfoViewsJob3.add(jobDuty3);
-
-
 
 
         for (int i = 0; i < userFields.size(); i++) {
