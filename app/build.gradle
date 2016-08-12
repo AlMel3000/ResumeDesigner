@@ -5,7 +5,7 @@ android {
     buildToolsVersion "24.0.0"
 
     defaultConfig {
-        applicationId "org.hr24.almel.testchallenge"
+        applicationId "org.hr24.almel.ResumeBuilder"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1

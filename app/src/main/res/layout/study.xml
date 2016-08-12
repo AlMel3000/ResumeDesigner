@@ -26,6 +26,7 @@
             android:id="@+id/study_title1"
             style="@style/profile_edittext"
             android:hint="@string/study_title"
+            android:maxLength="30"
             android:fontFamily="sans-serif-condensed"
             android:textColor="@color/gray_light"
             android:textColorHint="@color/gray" />
@@ -44,6 +45,7 @@
             android:id="@+id/study_decription1"
             style="@style/profile_edittext"
             android:hint="@string/study_description"
+            android:maxLength="40"
             android:fontFamily="sans-serif-condensed"
             android:textColor="@color/gray_light"
             android:textColorHint="@color/gray" />
@@ -62,6 +64,7 @@
             android:id="@+id/rating1"
             style="@style/profile_edittext"
             android:hint="@string/rating_value"
+            android:maxLength="30"
             android:fontFamily="sans-serif-condensed"
             android:textColor="@color/gray_light"
             android:textColorHint="@color/gray" />
@@ -69,7 +72,7 @@
     </android.support.design.widget.TextInputLayout>
 
     <Button
-        android:id="@+id/study_remove_button"
+        android:id="@+id/study_2_remove_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/study_remove" />

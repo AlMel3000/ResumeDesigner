@@ -1,4 +1,4 @@
-package org.hr24.almel.testchallenge.ui;
+package org.hr24.almel.ResumeBuilder.ui;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -9,8 +9,8 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import org.hr24.almel.testchallenge.R;
-import org.hr24.almel.testchallenge.ui.fragments.MainFragment;
+import org.hr24.almel.ResumeBuilder.R;
+import org.hr24.almel.ResumeBuilder.ui.fragments.MainFragment;
 
 public class StartActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener{
 

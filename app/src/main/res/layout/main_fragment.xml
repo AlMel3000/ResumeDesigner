@@ -33,7 +33,6 @@
                     android:layout_height="wrap_content"
                     android:background="@color/colorPrimaryDark"/>
                 <TextView
-                    android:id="@+id/auth_tv"
                     android:text="@string/auth_enter_tv"
                     style="@style/start_screen_headers" />
             </LinearLayout>
@@ -62,7 +61,6 @@
                 android:background="@color/hr24_blue"
                 android:layout_margin="@dimen/spacing_small_8" />
             <LinearLayout
-                android:id="@+id/fill_ll"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/size_small_24"
                 android:orientation="horizontal">

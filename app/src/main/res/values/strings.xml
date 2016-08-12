@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Resume Builder</string>
-    <string name="auth_button_enter">Заполнить резюме</string>
     <string name="auth_enter_tv">Отправить запись на стену</string>
     <string name="auth_fill_tv">Заполнить резюме</string>
     <string name="fill_tv">Приступить</string>
@@ -18,18 +17,12 @@
     <string name="username_hint">Имя и фамилия</string>
     <string name="nick_hint">Желаемая должность</string>
     <string name="tel_hint">Телефон</string>
-    <string name="example_number">+7 980 888 88 88</string>
     <string name="e_mail_hint">E-mail</string>
-    <string name="email_default">vasia@pupkin.ru</string>
-    <string name="nick">Рекрутер</string>
     <string name="bio_hint">О себе (До 200 символов)</string>
-    <string name="bio">Форма есть пустота, а пустота есть форма</string>
     <string name="skills_hint">Навыки  "\n" Запись: Уборка@3//Другой навык "\n"\"Уборка\" - название навыка "\n" Цифра поcле \"@\" - оценка от 1 до 5, "\n"\"//\" - разделитель навыков</string>
     <string name="skills">Например: Уборка@3//Photoshop@4</string>
-    <string name="skills_header">Навыки</string>
     <string name="languages_hint">Языки "\n" \"//\" - разделитель языков</string>
     <string name="lang_hint"> Например: Русский: Средний//Киргизкий: Высокий</string>
-    <string name="languages">Русский: Средний//Киргизкий: Высокий</string>
     <string name="hobby_hint">Хобби "\n" Футбол//Хоккей "\n"  \"//\" - разделитель хобби</string>
     <string name="hob_hint">Например: Футбол//Хоккей</string>
     <string name="job_period_hint">Период</string>
@@ -39,8 +32,6 @@
     <string name="job_title">Например: Коммерческий директор</string>
     <string name="jb_duty_hint">Обязанности "\n" \"//\" - разделитель обязанностей</string>
     <string name="job_duty">Например: Управлял персоналом//Оптимизировал расходы</string>
-    <string name="first_work">Первая работа?</string>
-    <string name="current_work">Текущая работа?</string>
     <string name="job_add">+ место работы</string>
     <string name="study_title_hint">Название заведения</string>
     <string name="study_title">Например: МГУ(2011–2015)</string>
@@ -53,23 +44,17 @@
     <string name="share">Пост</string>
     <string name="create_pdf">Создать pdf</string>
     <string name="study_add">+ место учебы</string>
-    <string name="user_profile_placeholder_image">Выберите фото</string>
     <string name="view">Просмотр</string>
     <string name="add_photo">Добавьте фото</string>
     <string name="from_cam">С камеры</string>
     <string name="form_gallery">Из галереи</string>
     <string name="user_profile_choose_picture">выберите фото</string>
-    <string name="company_title1">Oracle</string>
-    <string name="job_title1">Manager</string>
-    <string name="job_duty1">Отвечал за работу с клиентами//Осуществлял поддержку клиентов</string>
     <string name="jobs">Места работы</string>
     <string name="studies">Места учебы</string>
-    <string name="study_description1">Магистр. Социология</string>
     <string name="job_remove">- место работы</string>
     <string name="study_remove">- место учебы</string>
     <string name="load_from_camera_permissions_request">Для корректной работы приложения необходимо дать требуемые разрешения</string>
     <string name="load_authorization_request">Перед созданием pdf  версии резюме необходимо отправить запись на стену в соцсети</string>
-    <string name="load_post_request">Перед созданием pdf версии резюме необходимо отправить запись со ссылкой на наш сайт на стену</string>
     <string name="nick_hint2">Например: Коммерческий директор</string>
     <string name="job_period">Например: 09/2015–12/2015</string>
 </resources>

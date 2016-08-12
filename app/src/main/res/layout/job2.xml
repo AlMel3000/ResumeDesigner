@@ -26,6 +26,7 @@
                     android:id="@+id/job_period2"
                     style="@style/profile_edittext"
                     android:hint="@string/job_period"
+                    android:maxLength="25"
                     android:fontFamily="sans-serif-condensed"
                     android:textColor="@color/gray_light"
                     android:textColorHint="@color/gray" />
@@ -44,21 +45,26 @@
                     android:id="@+id/company_title2"
                     style="@style/profile_edittext"
                     android:hint="@string/company_title"
+                    android:maxLength="30"
                     android:fontFamily="sans-serif-condensed"
                     android:textColor="@color/gray_light"
                     android:textColorHint="@color/gray" />
 
             </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                style="@style/profile_edittext"
+                android:text="@string/job_title_hint"
+                android:layout_marginTop="@dimen/spacing_normal_16"/>
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_normal_16">
+        android:layout_height="wrap_content">
 
         <EditText
             android:id="@+id/job_title2"
             style="@style/profile_edittext"
-            android:hint="@string/job_title_hint"
-            android:text="@string/job_title"
+            android:hint="@string/job_title"
+            android:maxLength="50"
             android:fontFamily="sans-serif-condensed"
             android:textColor="@color/gray_light"
             android:textColorHint="@color/gray" />
@@ -77,6 +83,7 @@
                     android:id="@+id/job_duty2"
                     style="@style/profile_edittext"
                     android:hint="@string/job_duty"
+                    android:maxLength="100"
                     android:fontFamily="sans-serif-condensed"
                     android:textColor="@color/gray_light"
                     android:textColorHint="@color/gray"
@@ -85,7 +92,7 @@
             </android.support.design.widget.TextInputLayout>
 
     <Button
-        android:id="@+id/job_remove_button1"
+        android:id="@+id/job_3_remove_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/job_remove" />

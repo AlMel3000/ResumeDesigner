@@ -1,4 +1,4 @@
-package org.hr24.almel.testchallenge.utils;
+package org.hr24.almel.ResumeBuilder.utils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

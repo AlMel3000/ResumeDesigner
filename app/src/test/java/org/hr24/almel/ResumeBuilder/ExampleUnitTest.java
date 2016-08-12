@@ -1,4 +1,4 @@
-package org.hr24.almel.testchallenge;
+package org.hr24.almel.ResumeBuilder;
 
 import org.junit.Test;
 

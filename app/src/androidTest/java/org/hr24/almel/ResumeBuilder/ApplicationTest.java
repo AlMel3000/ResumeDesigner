@@ -1,4 +1,4 @@
-package org.hr24.almel.testchallenge;
+package org.hr24.almel.ResumeBuilder;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

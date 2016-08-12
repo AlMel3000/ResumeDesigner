@@ -1,4 +1,4 @@
-package org.hr24.almel.testchallenge.ui.fragments;
+package org.hr24.almel.ResumeBuilder.ui.fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -22,12 +22,11 @@ import com.github.gorbin.asne.vk.VkSocialNetwork;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.util.VKUtil;
 
-import org.hr24.almel.testchallenge.R;
-import org.hr24.almel.testchallenge.ui.StartActivity;
-import org.hr24.almel.testchallenge.utils.ConstantManager;
-import org.hr24.almel.testchallenge.utils.NetworkStatusChecker;
+import org.hr24.almel.ResumeBuilder.R;
+import org.hr24.almel.ResumeBuilder.ui.StartActivity;
+import org.hr24.almel.ResumeBuilder.utils.ConstantManager;
+import org.hr24.almel.ResumeBuilder.utils.NetworkStatusChecker;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ru.ok.android.sdk.util.OkScope;

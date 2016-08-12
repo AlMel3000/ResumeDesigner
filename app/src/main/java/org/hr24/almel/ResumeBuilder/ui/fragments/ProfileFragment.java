@@ -1,4 +1,4 @@
-package org.hr24.almel.testchallenge.ui.fragments;
+package org.hr24.almel.ResumeBuilder.ui.fragments;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -52,11 +52,10 @@ import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.squareup.picasso.Picasso;
-import org.hr24.almel.testchallenge.R;
-import org.hr24.almel.testchallenge.ui.StartActivity;
-import org.hr24.almel.testchallenge.utils.ConstantManager;
-import org.hr24.almel.testchallenge.utils.NetworkStatusChecker;
-
+import org.hr24.almel.ResumeBuilder.R;
+import org.hr24.almel.ResumeBuilder.ui.StartActivity;
+import org.hr24.almel.ResumeBuilder.utils.ConstantManager;
+import org.hr24.almel.ResumeBuilder.utils.NetworkStatusChecker;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -72,9 +71,6 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     private int mCurrentEditMode = 1;
 
 
-    private String message = "Лучший сервис трудоустройства!";
-    private String link = "http://hr24.org";
-
     private static final String NETWORK_ID = "NETWORK_ID";
     public static boolean PHOTO_SET = false;
     public static boolean POST_STATUS = false;
@@ -83,20 +79,20 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     private int mJobCount = 1;
     private int mStudyCount = 1;
 
-    private ImageView photo;
+    private ImageView photoImgV;
     private EditText name, nick,tel, email, bio, skills, languages, hobby,
             jobPeriod, jobTitle, companyTitle, jobDuty, studyTitle, studyDescription, rating, achievements,
-            jobPeriod1, jobTitle1, companyTitle1, jobDuty1,  studyTitle1, studyDescription1, rating1,
-            jobPeriod2, jobTitle2, companyTitle2, jobDuty2;
+            jobPeriod2, jobTitle2, companyTitle2, jobDuty2, studyTitle2, studyDescription2, rating2,
+            jobPeriod3, jobTitle3, companyTitle3, jobDuty3;
     private Button savePdfButton;
     private Button shareButton;
     private Button viewPdfButton;
-    private Button jobAddButton;
-    private Button jobAddButton2;
-    private Button studyAddButton;
-    private Button removeJobButton;
-    private Button removeJobButton1;
-    private Button removeStudyButton;
+    private Button job2AddButton;
+    private Button job3AddButton;
+    private Button study2AddButton;
+    private Button removeJob2Button;
+    private Button removeJob3Button;
+    private Button removeStudy2Button;
     private FloatingActionButton mFab;
     private List<EditText> mUserInfoViews;
     private LinearLayout mAddPhotoLinLay, mJobLinLay, mProfilePlaceholder;
@@ -138,7 +134,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
         rootView = inflater.inflate(R.layout.profile_fragment, container, false);
 
-        photo = (ImageView) rootView.findViewById(R.id.imageView);
+        photoImgV = (ImageView) rootView.findViewById(R.id.imageView);
         mProfilePlaceholder = (LinearLayout) rootView.findViewById(R.id.profile_placeholder);
         mAddPhotoLinLay = (LinearLayout) rootView.findViewById(R.id.add_photo_ll);
         mJobLinLay = (LinearLayout) rootView.findViewById(R.id.job_ll);
@@ -171,8 +167,8 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         viewPdfButton = (Button) rootView.findViewById(R.id.view);
         Button camButton = (Button) rootView.findViewById(R.id.cam_btn);
         Button galButton = (Button) rootView.findViewById(R.id.gal_btn);
-        jobAddButton = (Button) rootView.findViewById(R.id.job_add_btn);
-        studyAddButton = (Button) rootView.findViewById(R.id.study_add_button);
+        job2AddButton = (Button) rootView.findViewById(R.id.job_2_add_btn);
+        study2AddButton = (Button) rootView.findViewById(R.id.study_2_add_button);
         scrollView = (ScrollView) rootView.findViewById(R.id.sv_main);
 
 
@@ -180,7 +176,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()){
-                    case MotionEvent.ACTION_DOWN:
+                    case MotionEvent.ACTION_MOVE:
                         mFab.hide();
                         break;
                     case MotionEvent.ACTION_UP:
@@ -202,9 +198,9 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         mAddPhotoLinLay.setOnClickListener(this);
         camButton.setOnClickListener(this);
         galButton.setOnClickListener(this);
-        jobAddButton.setOnClickListener(this);
-        studyAddButton.setOnClickListener(this);
-        photo.setOnClickListener(this);
+        job2AddButton.setOnClickListener(this);
+        study2AddButton.setOnClickListener(this);
+        photoImgV.setOnClickListener(this);
 
 
         mUserInfoViews = new ArrayList<>();
@@ -234,6 +230,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         socialNetwork.requestCurrentPerson();
 
         StartActivity.showProgress("Loading social person");
+
         } else if (!NetworkStatusChecker.isNetworkAvailable(getContext()) && MainFragment.AUTHORIZATION_STATUS){
             showSnackbar("Сеть недоступна, не удалось загрузить Ваш профиль");
         }
@@ -245,7 +242,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 .placeholder(R.drawable.ic_add_a_photo_black_24dp)
                 .resize(100, 100)
                 .centerCrop()
-                .into(photo);
+                .into(photoImgV);
 
         try {
             bitmapAva = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), loadUserPhoto());
@@ -367,7 +364,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 .load(selectedImage)
                 .resize(104, 104)
                 .centerCrop()
-                .into(photo);
+                .into(photoImgV);
 
 
 
@@ -395,20 +392,21 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
     public  void sharePost() {
                     Bundle postParams = new Bundle();
-                    postParams.putString(SocialNetwork.BUNDLE_LINK, link);
-                    socialNetwork.requestPostLink(postParams, message, postingComplete);
+        String link = "http://hr24.org";
+        postParams.putString(SocialNetwork.BUNDLE_LINK, link);
+        String message = "Лучший сервис трудоустройства!";
+        socialNetwork.requestPostLink(postParams, message, postingComplete);
         }
 
     private OnPostingCompleteListener postingComplete = new OnPostingCompleteListener() {
         @Override
         public void onPostSuccessfully(int socialNetworkID) {
-            Toast.makeText(getActivity(), "Запись отправлена на стену", Toast.LENGTH_LONG).show();
             POST_STATUS = true;
         }
 
         @Override
         public void onError(int socialNetworkID, String requestID, String errorMessage, Object data) {
-            Toast.makeText(getActivity(), "Error while sending: " + errorMessage, Toast.LENGTH_LONG).show();
+            Log.d("PostError", "Error while sending: " + errorMessage);
         }
     };
 
@@ -466,58 +464,56 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             case R.id.gal_btn:
                 loadPhotoFromGallery();
                 break;
-            case R.id.job_add_btn:
+            case R.id.job_2_add_btn:
                 mJobCount = 2;
                addJob2();
-                initUserFieldsJob2();
 
                 break;
-            case R.id.job_remove_button:
+            case R.id.job_2_remove_button:
                 mJobCount = 1;
-                jobAddButton.setVisibility(View.VISIBLE);
-
+                saveUserFieldsJob2();
+                job2AddButton.setVisibility(View.VISIBLE);
                 View jobView = rootView.findViewById(R.id.job1_ll);
                 ViewGroup parentJobll = (ViewGroup) jobView.getParent();
                 parentJobll.removeView(jobView);
-                saveUserFieldsJob2();
+
 
 
                 break;
-            case R.id.job_add_btn2:
+            case R.id.job_3_add_btn:
                 mJobCount = 3;
                 addJob3();
-                initUserFieldsJob3();
 
 
                 break;
-            case R.id.job_remove_button1:
+            case R.id.job_3_remove_button:
                 mJobCount = 2;
-
-                jobAddButton2.setVisibility(View.VISIBLE);
-                removeJobButton.setVisibility(View.VISIBLE);
+                saveUserFieldsJob3();
+                job3AddButton.setVisibility(View.VISIBLE);
+                removeJob2Button.setVisibility(View.VISIBLE);
 
                 View jobView2 = rootView.findViewById(R.id.job2_ll);
                 ViewGroup parentJobll2 = (ViewGroup) jobView2.getParent();
                 parentJobll2.removeView(jobView2);
 
-                saveUserFieldsJob3();
+
 
                 break;
-            case R.id.study_add_button:
+            case R.id.study_2_add_button:
                 mStudyCount = 2;
-                initUserFieldsStudy2();
-
                 addStudy2();
 
+
                 break;
-            case R.id.study_remove_button:
+            case R.id.study_2_remove_button:
 
                 mStudyCount = 1;
-                studyAddButton.setVisibility(View.VISIBLE);
+                saveUserFieldsStudy2();
+                study2AddButton.setVisibility(View.VISIBLE);
                 View studyView = rootView.findViewById(R.id.study1_ll);
                 ViewGroup parentStudyll = (ViewGroup) studyView.getParent();
                 parentStudyll.removeView(studyView);
-                saveUserFieldsStudy2();
+
 
                 break;
             
@@ -526,53 +522,53 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     }
 
     private void addStudy2() {
-        studyAddButton.setVisibility(View.GONE);
+        study2AddButton.setVisibility(View.GONE);
 
         LayoutInflater ltInflaterStudy2 = getActivity().getLayoutInflater();
         ltInflaterStudy2.inflate(R.layout.study, mStudyLinLay, true);
 
-        removeStudyButton = (Button) rootView.findViewById(R.id.study_remove_button);
-        removeStudyButton.setOnClickListener(this);
-        studyTitle1 = (EditText) rootView.findViewById(R.id.study_title1);
-        studyDescription1 = (EditText) rootView.findViewById(R.id.study_decription1);
-        rating1 = (EditText) rootView.findViewById(R.id.rating1);
+        removeStudy2Button = (Button) rootView.findViewById(R.id.study_2_remove_button);
+        removeStudy2Button.setOnClickListener(this);
+        studyTitle2 = (EditText) rootView.findViewById(R.id.study_title1);
+        studyDescription2 = (EditText) rootView.findViewById(R.id.study_decription1);
+        rating2 = (EditText) rootView.findViewById(R.id.rating1);
         initUserFieldsStudy2();
     }
 
     private void addJob2() {
-        jobAddButton.setVisibility(View.GONE);
+        job2AddButton.setVisibility(View.GONE);
 
         LayoutInflater ltInflaterJob2 = getActivity().getLayoutInflater();
         ltInflaterJob2.inflate(R.layout.job, mJobLinLay, true);
 
-        jobPeriod1 = (EditText) rootView.findViewById(R.id.job_period1);
-        companyTitle1 = (EditText) rootView.findViewById(R.id.company_title1);
-        jobTitle1 = (EditText) rootView.findViewById(R.id.job_title1);
-        jobDuty1 =(EditText) rootView.findViewById(R.id.job_duty1);
+        jobPeriod2 = (EditText) rootView.findViewById(R.id.job_period1);
+        companyTitle2 = (EditText) rootView.findViewById(R.id.company_title1);
+        jobTitle2 = (EditText) rootView.findViewById(R.id.job_title1);
+        jobDuty2 =(EditText) rootView.findViewById(R.id.job_duty1);
 
-        jobAddButton2 = (Button) rootView.findViewById(R.id.job_add_btn2);
-        removeJobButton = (Button) rootView.findViewById(R.id.job_remove_button);
+        job3AddButton = (Button) rootView.findViewById(R.id.job_3_add_btn);
+        removeJob2Button = (Button) rootView.findViewById(R.id.job_2_remove_button);
 
-        jobAddButton2.setOnClickListener(this);
-        removeJobButton.setOnClickListener(this);
+        job3AddButton.setOnClickListener(this);
+        removeJob2Button.setOnClickListener(this);
         initUserFieldsJob2();
 
     }
 
     private void addJob3() {
-        jobAddButton2.setVisibility(View.GONE);
-        jobAddButton.setVisibility(View.GONE);
-        removeJobButton.setVisibility(View.GONE);
+        job3AddButton.setVisibility(View.GONE);
+        job2AddButton.setVisibility(View.GONE);
+        removeJob2Button.setVisibility(View.GONE);
         LayoutInflater ltInflaterJob3 = getActivity().getLayoutInflater();
         ltInflaterJob3.inflate(R.layout.job2, mJobLinLay, true);
 
-        jobPeriod2 = (EditText) rootView.findViewById(R.id.job_period2);
-        companyTitle2 = (EditText) rootView.findViewById(R.id.company_title2);
-        jobTitle2 = (EditText) rootView.findViewById(R.id.job_title2);
-        jobDuty2 =(EditText) rootView.findViewById(R.id.job_duty2);
-        removeJobButton1 = (Button) rootView.findViewById(R.id.job_remove_button1);
+        jobPeriod3 = (EditText) rootView.findViewById(R.id.job_period2);
+        companyTitle3 = (EditText) rootView.findViewById(R.id.company_title2);
+        jobTitle3 = (EditText) rootView.findViewById(R.id.job_title2);
+        jobDuty3 =(EditText) rootView.findViewById(R.id.job_duty2);
+        removeJob3Button = (Button) rootView.findViewById(R.id.job_3_remove_button);
 
-        removeJobButton1.setOnClickListener(this);
+        removeJob3Button.setOnClickListener(this);
         initUserFieldsJob3();
 
     }
@@ -609,24 +605,25 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 userValue.setTextColor(Color.DKGRAY);
 
             }
-            name.requestFocus();
+
             mProfilePlaceholder.setVisibility(View.VISIBLE);
             savePdfButton.setVisibility(View.GONE);
             viewPdfButton.setVisibility(View.GONE);
             shareButton.setVisibility(View.GONE);
 
 
-            if (mJobCount ==1){jobAddButton.setVisibility(View.VISIBLE);}
+            if (mJobCount ==1){
+                job2AddButton.setVisibility(View.VISIBLE);}
             if (mJobCount==2){
-                jobAddButton2.setVisibility(View.VISIBLE);
-                removeJobButton.setVisibility(View.VISIBLE);
+                job3AddButton.setVisibility(View.VISIBLE);
+                removeJob2Button.setVisibility(View.VISIBLE);
             }
             if (mJobCount == 3){
-                removeJobButton1.setVisibility(View.VISIBLE);
+                removeJob3Button.setVisibility(View.VISIBLE);
             }
-            studyAddButton.setVisibility(View.VISIBLE);
+            study2AddButton.setVisibility(View.VISIBLE);
             if (mStudyCount==2){
-                removeStudyButton.setVisibility(View.VISIBLE);
+                removeStudy2Button.setVisibility(View.VISIBLE);
             }
 
         } else {
@@ -664,17 +661,17 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 mAddPhototv.setText("Изменить фото");
             }
 
-            jobAddButton.setVisibility(View.GONE);
+            job2AddButton.setVisibility(View.GONE);
             if (mJobCount==2){
-                jobAddButton2.setVisibility(View.GONE);
-                removeJobButton.setVisibility(View.GONE);
+                job3AddButton.setVisibility(View.GONE);
+                removeJob2Button.setVisibility(View.GONE);
             }
             if (mJobCount == 3){
-                removeJobButton1.setVisibility(View.GONE);
+                removeJob3Button.setVisibility(View.GONE);
             }
-            studyAddButton.setVisibility(View.GONE);
+            study2AddButton.setVisibility(View.GONE);
             if (mStudyCount==2){
-                removeStudyButton.setVisibility(View.GONE);
+                removeStudy2Button.setVisibility(View.GONE);
             }
 
         }
@@ -843,16 +840,16 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
             if (mJobCount ==2){
 
-                Paragraph companyTitleParagraph1 = new Paragraph("\u2022" + companyTitle1.getText().toString());
+                Paragraph companyTitleParagraph1 = new Paragraph("\u2022" + companyTitle2.getText().toString());
                 companyTitleParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
                 companyTitleParagraph1.setFont(headersSmallLeftFont);
 
-                Paragraph jobPeriodParagraph1 = new Paragraph(jobPeriod1.getText().toString());
+                Paragraph jobPeriodParagraph1 = new Paragraph(jobPeriod2.getText().toString());
                 jobPeriodParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
                 jobPeriodParagraph1.setFont(textLeftFontGray);
 
 
-                Paragraph jobTitleParagraph1 = new Paragraph(jobTitle1.getText().toString());
+                Paragraph jobTitleParagraph1 = new Paragraph(jobTitle2.getText().toString());
                 jobTitleParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
                 jobTitleParagraph1.setFont(textLeftFont);
 
@@ -865,7 +862,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 columnLeft.addElement(jobTitleParagraph1);
 
 
-                dutyString1 = jobDuty1.getText().toString();
+                dutyString1 = jobDuty2.getText().toString();
 
                 Paragraph jobDutyParagraph1 = new Paragraph();
                 String [] jobDutyProcessed1 = stringProcessor(dutyString1);
@@ -881,16 +878,16 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             }
 
             if (mJobCount ==3){
-                Paragraph companyTitleParagraph1 = new Paragraph("\u2022" + companyTitle1.getText().toString());
+                Paragraph companyTitleParagraph1 = new Paragraph("\u2022" + companyTitle2.getText().toString());
                 companyTitleParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
                 companyTitleParagraph1.setFont(headersSmallLeftFont);
 
-                Paragraph jobPeriodParagraph1 = new Paragraph(jobPeriod1.getText().toString());
+                Paragraph jobPeriodParagraph1 = new Paragraph(jobPeriod2.getText().toString());
                 jobPeriodParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
                 jobPeriodParagraph1.setFont(textLeftFontGray);
 
 
-                Paragraph jobTitleParagraph1 = new Paragraph(jobTitle1.getText().toString());
+                Paragraph jobTitleParagraph1 = new Paragraph(jobTitle2.getText().toString());
                 jobTitleParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
                 jobTitleParagraph1.setFont(textLeftFont);
 
@@ -903,7 +900,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 columnLeft.addElement(jobTitleParagraph1);
 
 
-                dutyString1 = jobDuty1.getText().toString();
+                dutyString1 = jobDuty2.getText().toString();
 
                 Paragraph jobDutyParagraph1 = new Paragraph();
                 String [] jobDutyProcessed1 = stringProcessor(dutyString1);
@@ -920,16 +917,16 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
 
 
-                Paragraph companyTitleParagraph2 = new Paragraph("\u2022" + companyTitle2.getText().toString());
+                Paragraph companyTitleParagraph2 = new Paragraph("\u2022" + companyTitle3.getText().toString());
                 companyTitleParagraph2.setAlignment(Paragraph.ALIGN_LEFT);
                 companyTitleParagraph2.setFont(headersSmallLeftFont);
 
-                Paragraph jobPeriodParagraph2 = new Paragraph(jobPeriod2.getText().toString());
+                Paragraph jobPeriodParagraph2 = new Paragraph(jobPeriod3.getText().toString());
                 jobPeriodParagraph2.setAlignment(Paragraph.ALIGN_LEFT);
                 jobPeriodParagraph2.setFont(textLeftFontGray);
 
 
-                Paragraph jobTitleParagraph2 = new Paragraph(jobTitle2.getText().toString());
+                Paragraph jobTitleParagraph2 = new Paragraph(jobTitle3.getText().toString());
                 jobTitleParagraph2.setAlignment(Paragraph.ALIGN_LEFT);
                 jobTitleParagraph2.setFont(textLeftFont);
 
@@ -942,7 +939,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 columnLeft.addElement(jobTitleParagraph2);
 
 
-                dutyString2 = jobDuty2.getText().toString();
+                dutyString2 = jobDuty3.getText().toString();
 
                 Paragraph jobDutyParagraph2 = new Paragraph();
                 String [] jobDutyProcessed2 = stringProcessor(dutyString2);
@@ -991,15 +988,15 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             columnLeft.addElement(studyRatingParagraph);
 
             if (mStudyCount==2){
-                Paragraph studyTitleParagraph1 = new Paragraph("\u2022" + studyTitle1.getText().toString());
+                Paragraph studyTitleParagraph1 = new Paragraph("\u2022" + studyTitle2.getText().toString());
                 studyTitleParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
                 studyTitleParagraph1.setFont(headersSmallLeftFont);
 
-                Paragraph studyDescriptionParagraph1 = new Paragraph(studyDescription1.getText().toString());
+                Paragraph studyDescriptionParagraph1 = new Paragraph(studyDescription2.getText().toString());
                 studyDescriptionParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
                 studyDescriptionParagraph1.setFont(textLeftFont);
 
-                Paragraph studyRatingParagraph1 = new Paragraph(rating1.getText().toString());
+                Paragraph studyRatingParagraph1 = new Paragraph(rating2.getText().toString());
                 studyRatingParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
                 studyRatingParagraph1.setFont(textLeftFont);
 
@@ -1363,7 +1360,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     }
 
     public Uri loadUserPhoto(){
-        return Uri.parse(StartActivity.getSharedPref().getString(ConstantManager.USER_PHOTO_KEY, "android.resource://org.hr24.almel.testchallenge/drawable/ic_add_a_photo_black_24dp.xml"));
+        return Uri.parse(StartActivity.getSharedPref().getString(ConstantManager.USER_PHOTO_KEY, "android.resource://org.hr24.almel.ResumeBuilder/drawable/ic_add_a_photo_black_24dp.xml"));
     }
 
     public void saveUserPhoto(Uri uri){
@@ -1378,9 +1375,9 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
     private void saveUserFieldsStudy2() {
         List<String> userData = new ArrayList<>();
-        userData.add(studyTitle1.getText().toString());
-        userData.add(studyDescription1.getText().toString());
-        userData.add(rating1.getText().toString());
+        userData.add(studyTitle2.getText().toString());
+        userData.add(studyDescription2.getText().toString());
+        userData.add(rating2.getText().toString());
         SharedPreferences.Editor editor = StartActivity.getSharedPref().edit();
         final String[] USER_FIELDS = {
                 ConstantManager.USER_STUDY_2_TITLE_KEY,
@@ -1402,9 +1399,9 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_RATING_2_KEY, null));
 
         List<EditText> mUserInfoViewsStudy2= new ArrayList<>();
-        mUserInfoViewsStudy2.add(studyTitle1);
-        mUserInfoViewsStudy2.add(studyDescription1);
-        mUserInfoViewsStudy2.add(rating1);
+        mUserInfoViewsStudy2.add(studyTitle2);
+        mUserInfoViewsStudy2.add(studyDescription2);
+        mUserInfoViewsStudy2.add(rating2);
 
 
         for (int i = 0; i < userFields.size(); i++) {
@@ -1416,10 +1413,10 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
     private void saveUserFieldsJob2() {
         List<String> userData = new ArrayList<>();
-        userData.add(jobPeriod1.getText().toString());
-        userData.add(companyTitle1.getText().toString());
-        userData.add(jobTitle1.getText().toString());
-        userData.add(jobDuty1.getText().toString());
+        userData.add(jobPeriod2.getText().toString());
+        userData.add(companyTitle2.getText().toString());
+        userData.add(jobTitle2.getText().toString());
+        userData.add(jobDuty2.getText().toString());
         SharedPreferences.Editor editor = StartActivity.getSharedPref().edit();
         final String[] USER_FIELDS = {
                 ConstantManager.USER_JOB_2_PERIOD_KEY,
@@ -1442,10 +1439,10 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_JOB_2_DUTY_KEY, null));
 
         List<EditText> mUserInfoViewsJob2= new ArrayList<>();
-        mUserInfoViewsJob2.add(jobPeriod1);
-        mUserInfoViewsJob2.add(companyTitle1);
-        mUserInfoViewsJob2.add(jobTitle1);
-        mUserInfoViewsJob2.add(jobDuty1);
+        mUserInfoViewsJob2.add(jobPeriod2);
+        mUserInfoViewsJob2.add(companyTitle2);
+        mUserInfoViewsJob2.add(jobTitle2);
+        mUserInfoViewsJob2.add(jobDuty2);
 
 
 
@@ -1461,10 +1458,10 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
     private void saveUserFieldsJob3() {
         List<String> userData = new ArrayList<>();
-        userData.add(jobPeriod2.getText().toString());
-        userData.add(companyTitle2.getText().toString());
-        userData.add(jobTitle2.getText().toString());
-        userData.add(jobDuty2.getText().toString());
+        userData.add(jobPeriod3.getText().toString());
+        userData.add(companyTitle3.getText().toString());
+        userData.add(jobTitle3.getText().toString());
+        userData.add(jobDuty3.getText().toString());
         SharedPreferences.Editor editor = StartActivity.getSharedPref().edit();
         final String[] USER_FIELDS = {
                 ConstantManager.USER_JOB_3_PERIOD_KEY,
@@ -1487,10 +1484,11 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_JOB_3_DUTY_KEY, null));
 
         List<EditText> mUserInfoViewsJob3= new ArrayList<>();
-        mUserInfoViewsJob3.add(jobPeriod2);
-        mUserInfoViewsJob3.add(companyTitle2);
-        mUserInfoViewsJob3.add(jobTitle2);
-        mUserInfoViewsJob3.add(jobDuty2);
+        mUserInfoViewsJob3.add(jobPeriod3);
+        mUserInfoViewsJob3.add(companyTitle3);
+        mUserInfoViewsJob3.add(jobTitle3);
+        mUserInfoViewsJob3.add(jobDuty3);
+
 
 
 

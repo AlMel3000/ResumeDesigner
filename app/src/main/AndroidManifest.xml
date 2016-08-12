@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.hr24.almel.testchallenge">
+    package="org.hr24.almel.ResumeBuilder">
 
     <uses-permission android:name="android.permission.CAMERA" />
 
@@ -21,7 +21,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.StartActivity"
+        <activity android:name="org.hr24.almel.ResumeBuilder.ui.StartActivity"
             android:screenOrientation="portrait">
 
             <intent-filter>

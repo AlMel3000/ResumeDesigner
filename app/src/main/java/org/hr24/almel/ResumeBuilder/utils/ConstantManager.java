@@ -1,4 +1,4 @@
-package org.hr24.almel.testchallenge.utils;
+package org.hr24.almel.ResumeBuilder.utils;
 
 /**
  * Created by Alexey on 02.08.16.
