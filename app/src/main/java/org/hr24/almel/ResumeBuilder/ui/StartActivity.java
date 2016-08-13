@@ -52,7 +52,7 @@ public class StartActivity extends AppCompatActivity implements MainFragment.OnF
         pd = new ProgressDialog(context);
         pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         pd.setMessage(message);
-        pd.setCancelable(false);
+        pd.setCancelable(true);
         pd.setCanceledOnTouchOutside(true);
         pd.show();
     }

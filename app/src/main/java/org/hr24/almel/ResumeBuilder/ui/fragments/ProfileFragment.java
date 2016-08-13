@@ -9,6 +9,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -230,7 +232,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         socialNetwork.setOnRequestCurrentPersonCompleteListener(this);
         socialNetwork.requestCurrentPerson();
 
-        StartActivity.showProgress("Loading social person");
+        StartActivity.showProgress("Загружаем профиль");
 
         } else if (!NetworkStatusChecker.isNetworkAvailable(getContext()) && MainFragment.AUTHORIZATION_STATUS){
             showSnackbar("Сеть недоступна, не удалось загрузить Ваш профиль");
@@ -238,27 +240,37 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
         initUserFields();
 
-        Picasso.with(getContext())
-                .load(loadUserPhoto())
-                .placeholder(R.drawable.ic_add_a_photo_black_24dp)
-                .resize(100, 100)
-                .centerCrop()
-                .into(photoImgV);
+        if (PHOTO_SET) {
+            Picasso.with(getContext())
+                    .load(loadUserPhoto())
+                    .placeholder(R.drawable.ic_add_a_photo_black_24dp)
+                    .resize(100, 100)
+                    .centerCrop()
+                    .into(photoImgV);
 
+
+        Bitmap sourceBitmap = null;
         try {
-            bitmapAva = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), loadUserPhoto());
+            sourceBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), loadUserPhoto());
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        if (savedInstanceState == null) {
+        try {
+            bitmapAva = rotatePhoto(loadUserPhoto(), sourceBitmap);
+        } catch (IOException e) {
+            Log.e("BitMapError", e.getMessage());
+        }
+        }
+
+        /*if (savedInstanceState == null) {
             //активити запускается впервые
 
 
         } else {
 
 
-        }
+        }*/
 
         if (mJobCount==2){
             addJob2();
@@ -346,13 +358,20 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                     mSelectedImage = Uri.fromFile(mPhotoFile);
                     insertProfileImage(mSelectedImage);
 
+                    Bitmap sourceBitmap = null;
                     try {
-                        bitmapAva = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), mSelectedImage);
+                       sourceBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), mSelectedImage);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
 
+                    try {
+                        bitmapAva = rotatePhoto(mSelectedImage, sourceBitmap);
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
+
+                }
 
 
                 }
@@ -380,7 +399,10 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     @Override
     public void onRequestSocialPersonSuccess(int i, SocialPerson socialPerson) {
         StartActivity.hideProgress();
-        name.setText(socialPerson.name);
+        if (name.getText() == null) {
+            name.setText(socialPerson.name);
+        }
+
     }
 
     @Override
@@ -596,7 +618,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
     private void viewPdf() {
 
-        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/cv/sample.pdf");
+        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/cv/Resume.pdf");
         if(!file.exists()){
             Toast.makeText(getContext(),
                     "Сначала создайте pdf",
@@ -790,7 +812,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             if(!dir.exists())
                 dir.mkdirs();
 
-            File file = new File(dir, "sample.pdf");
+            File file = new File(dir, "Resume.pdf");
             FileOutputStream fOut = new FileOutputStream(file);
 
             PdfWriter writer =PdfWriter.getInstance(document, fOut);
@@ -1552,7 +1574,25 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
     }
 
+    private Bitmap rotatePhoto(Uri uri, Bitmap sourceBitmap) throws IOException {
 
+        ExifInterface exif = new ExifInterface(uri.getPath());
+        int rotation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+        int rotationInDegrees = exifToDegrees(rotation);Matrix matrix = new Matrix();
+        if (rotation != 0f) {matrix.preRotate(rotationInDegrees);}
+
+        return Bitmap.createBitmap(sourceBitmap, 0, 0, sourceBitmap.getWidth(), sourceBitmap.getHeight(), matrix, true);
+
+
+
+    }
+
+    private static int exifToDegrees(int exifOrientation) {
+        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) { return 90; }
+        else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {  return 180; }
+        else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {  return 270; }
+        return 0;
+    }
 
 
 }
