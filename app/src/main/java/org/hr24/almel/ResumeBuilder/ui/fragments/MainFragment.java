@@ -125,8 +125,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
 
 
         String[] okScope = new String[] {
-                OkScope.VALUABLE_ACCESS,
-                OkScope.SET_STATUS
+                OkScope.VALUABLE_ACCESS
         };
 
 

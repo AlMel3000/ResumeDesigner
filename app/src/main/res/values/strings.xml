@@ -57,4 +57,5 @@
     <string name="load_authorization_request">Перед созданием pdf  версии резюме необходимо отправить запись на стену в соцсети</string>
     <string name="nick_hint2">Например: Коммерческий директор</string>
     <string name="job_period">Например: 09/2015–12/2015</string>
+    <string name="sharePdf">Отправить pdf</string>
 </resources>

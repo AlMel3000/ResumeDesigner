@@ -95,6 +95,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     private Button removeJob2Button;
     private Button removeJob3Button;
     private Button removeStudy2Button;
+    private Button sharePdfButton;
     private FloatingActionButton mFab;
     private List<EditText> mUserInfoViews;
     private LinearLayout mAddPhotoLinLay, mJobLinLay, mProfilePlaceholder;
@@ -165,13 +166,15 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         mCoordinatorFrame = (CoordinatorLayout) rootView.findViewById(R.id.frame);
 
         mFab = (FloatingActionButton) rootView.findViewById(R.id.fab);
-        shareButton = (Button) rootView.findViewById(R.id.share);
+        shareButton = (Button) rootView.findViewById(R.id.sharePost);
         savePdfButton = (Button) rootView.findViewById(R.id.create_pdf_button);
         viewPdfButton = (Button) rootView.findViewById(R.id.view);
         Button camButton = (Button) rootView.findViewById(R.id.cam_btn);
         Button galButton = (Button) rootView.findViewById(R.id.gal_btn);
         job2AddButton = (Button) rootView.findViewById(R.id.job_2_add_btn);
         study2AddButton = (Button) rootView.findViewById(R.id.study_2_add_button);
+        sharePdfButton = (Button) rootView.findViewById(R.id.sharePdf);
+
         scrollView = (ScrollView) rootView.findViewById(R.id.sv_main);
 
 
@@ -204,6 +207,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         job2AddButton.setOnClickListener(this);
         study2AddButton.setOnClickListener(this);
         photoImgV.setOnClickListener(this);
+        sharePdfButton.setOnClickListener(this);
 
 
         mUserInfoViews = new ArrayList<>();
@@ -448,7 +452,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                     mCurrentEditMode = 0;
                 }
                 break;
-            case R.id.share:
+            case R.id.sharePost:
                 if (!MainFragment.AUTHORIZATION_STATUS) {
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .add(R.id.container, new MainFragment())
@@ -473,6 +477,9 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 break;
             case R.id.view:
                 viewPdf();
+                break;
+            case R.id.sharePdf:
+                sendPdf();
                 break;
             case R.id.profile_placeholder:
                 mAddPhotoLinLay.setVisibility(View.VISIBLE);
@@ -638,6 +645,29 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         }
     }
 
+    private void sendPdf() {
+
+        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/cv/Resume.pdf");
+        if(!file.exists()){
+            Toast.makeText(getContext(),
+                    "Сначала создайте pdf",
+                    Toast.LENGTH_SHORT).show();
+        } else{
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("application/pdf");
+            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+
+            try {
+                startActivity(Intent.createChooser(intent, "Выберите куда отправить файл резюме:"));
+            }
+            catch (ActivityNotFoundException e) {
+                Toast.makeText(getContext(),
+                        "Не установлено приложений для отправки файлов. Попробуйте Dropbox например.",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
     private void changeEditMode(int mode) {
         if (mode == 1) {
             mFab.setImageResource(R.drawable.ic_done_black_24dp);
@@ -692,6 +722,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             savePdfButton.setVisibility(View.GONE);
             viewPdfButton.setVisibility(View.GONE);
             shareButton.setVisibility(View.GONE);
+            sharePdfButton.setVisibility(View.GONE);
 
 
             if (mJobCount ==1){job2AddButton.setVisibility(View.VISIBLE);}
@@ -755,6 +786,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             mProfilePlaceholder.setVisibility(View.GONE);
             if (MainFragment.AUTHORIZATION_STATUS){
                 viewPdfButton.setVisibility(View.VISIBLE);
+                sharePdfButton.setVisibility(View.VISIBLE);
             }
             savePdfButton.setVisibility(View.VISIBLE);
 

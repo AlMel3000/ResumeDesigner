@@ -534,7 +534,12 @@
                 android:visibility="gone"/>
             <Button
                 android:text="@string/share"
-                android:id="@+id/share"
+                android:id="@+id/sharePost"
+                style="@style/profile_button"
+                android:visibility="gone"/>
+            <Button
+                android:text="@string/sharePdf"
+                android:id="@+id/sharePdf"
                 style="@style/profile_button"
                 android:visibility="gone"/>
 
