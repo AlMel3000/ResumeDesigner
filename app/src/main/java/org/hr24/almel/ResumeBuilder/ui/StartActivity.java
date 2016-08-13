@@ -9,6 +9,8 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 import org.hr24.almel.ResumeBuilder.R;
 import org.hr24.almel.ResumeBuilder.ui.fragments.MainFragment;
 
@@ -27,6 +29,7 @@ public class StartActivity extends AppCompatActivity implements MainFragment.OnF
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_start);
 
 

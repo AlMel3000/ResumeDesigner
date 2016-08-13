@@ -418,7 +418,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
 
     public  void sharePost() {
-                    Bundle postParams = new Bundle();
+       Bundle postParams = new Bundle();
         String link = "http://hr24.org";
         postParams.putString(SocialNetwork.BUNDLE_LINK, link);
         String message = "Лучший сервис трудоустройства!";
