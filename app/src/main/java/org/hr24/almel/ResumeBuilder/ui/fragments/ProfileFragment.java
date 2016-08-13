@@ -362,11 +362,12 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
                     try {
                         bitmapAva = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), mSelectedImage);
-                        bitmapAva = getCircleMaskedBitmapUsingPorterDuff(bitmapAva, 480);
+
                     } catch (IOException e) {
                         e.printStackTrace();
                         Crashlytics.logException(e);
                     }
+                    bitmapAva = getCircleMaskedBitmapUsingPorterDuff(bitmapAva, 480);
 
                 }
                 break;
@@ -390,6 +391,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                         e.printStackTrace();
                         Crashlytics.logException(e);
                     }
+                    bitmapAva = getCircleMaskedBitmapUsingPorterDuff(bitmapAva, 480);
 
                 }
 
