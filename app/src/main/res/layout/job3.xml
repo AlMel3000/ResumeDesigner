@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/job1_ll"
+    android:id="@+id/job2_ll"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#fafafa">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/jobs3"
+        android:textColor="@color/hr24_blue"
+        android:layout_marginTop="@dimen/spacing_small_8"
+        android:textSize="18sp"/>
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -23,7 +32,7 @@
 
 
                 <EditText
-                    android:id="@+id/job_period1"
+                    android:id="@+id/job_period2"
                     style="@style/profile_edittext"
                     android:hint="@string/job_period"
                     android:maxLength="25"
@@ -32,6 +41,7 @@
                     android:textColorHint="@color/gray" />
 
             </android.support.design.widget.TextInputLayout>
+
             <TextView
                 style="@style/profile_edittext"
                 android:text="@string/company_title_hint"
@@ -41,7 +51,7 @@
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/company_title1"
+                    android:id="@+id/company_title2"
                     style="@style/profile_edittext"
                     android:hint="@string/company_title"
                     android:maxLength="30"
@@ -50,65 +60,59 @@
                     android:textColorHint="@color/gray" />
 
             </android.support.design.widget.TextInputLayout>
+
             <TextView
                 style="@style/profile_edittext"
                 android:text="@string/job_title_hint"
                 android:layout_marginTop="@dimen/spacing_normal_16"/>
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:id="@+id/job_title1"
-                    style="@style/profile_edittext"
-                    android:hint="@string/job_title"
-                    android:maxLength="50"
-                    android:fontFamily="sans-serif-condensed"
-                    android:textColor="@color/gray_light"
-                    android:textColorHint="@color/gray" />
-
-            </android.support.design.widget.TextInputLayout>
-
-    <TextView
-        style="@style/profile_edittext"
-        android:text="@string/jb_duty_hint"
-        android:layout_marginTop="@dimen/spacing_normal_16"/>
-
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/job_duty1"
+            android:id="@+id/job_title2"
             style="@style/profile_edittext"
-            android:hint="@string/job_duty"
-            android:maxLength="100"
+            android:hint="@string/job_title"
+            android:maxLength="50"
             android:fontFamily="sans-serif-condensed"
             android:textColor="@color/gray_light"
-            android:textColorHint="@color/gray"
-            android:maxLines="2" />
+            android:textColorHint="@color/gray" />
 
     </android.support.design.widget.TextInputLayout>
+            <TextView
+                style="@style/profile_edittext"
+                android:text="@string/jb_duty_hint"
+                android:layout_marginTop="@dimen/spacing_normal_16"/>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/job_duty2"
+                    style="@style/profile_edittext"
+                    android:hint="@string/job_duty"
+                    android:maxLength="100"
+                    android:fontFamily="sans-serif-condensed"
+                    android:textColor="@color/gray_light"
+                    android:textColorHint="@color/gray"
+                    android:maxLines="2" />
+
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
 
     <Button
-        android:id="@+id/job_3_add_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/job_add" />
-
-    <Button
-        android:id="@+id/job_2_remove_button"
+        android:id="@+id/job_3_remove_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/job_remove" />
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/hr24_blue"
-        android:layout_margin="@dimen/spacing_small_8"
-        />
+        android:layout_margin="@dimen/spacing_small_8"/>
 
 </LinearLayout>

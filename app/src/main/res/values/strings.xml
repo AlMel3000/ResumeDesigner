@@ -58,4 +58,7 @@
     <string name="nick_hint2">Например: Коммерческий директор</string>
     <string name="job_period">Например: 09/2015–12/2015</string>
     <string name="sharePdf">Отправить pdf</string>
+    <string name="jobs2">Место работы 2</string>
+    <string name="jobs3">Место работы 3</string>
+    <string name="study2">Место учебы 2</string>
 </resources>

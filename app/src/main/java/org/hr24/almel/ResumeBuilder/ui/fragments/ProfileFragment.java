@@ -555,7 +555,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         study2AddButton.setVisibility(View.GONE);
 
         LayoutInflater ltInflaterStudy2 = getActivity().getLayoutInflater();
-        ltInflaterStudy2.inflate(R.layout.study, mStudyLinLay, true);
+        ltInflaterStudy2.inflate(R.layout.study2, mStudyLinLay, true);
 
         removeStudy2Button = (Button) rootView.findViewById(R.id.study_2_remove_button);
         removeStudy2Button.setOnClickListener(this);
@@ -575,7 +575,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         job2AddButton.setVisibility(View.GONE);
 
         LayoutInflater ltInflaterJob2 = getActivity().getLayoutInflater();
-        ltInflaterJob2.inflate(R.layout.job, mJobLinLay, true);
+        ltInflaterJob2.inflate(R.layout.job2, mJobLinLay, true);
 
         jobPeriod2 = (EditText) rootView.findViewById(R.id.job_period1);
         companyTitle2 = (EditText) rootView.findViewById(R.id.company_title1);
@@ -603,7 +603,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         job2AddButton.setVisibility(View.GONE);
         removeJob2Button.setVisibility(View.GONE);
         LayoutInflater ltInflaterJob3 = getActivity().getLayoutInflater();
-        ltInflaterJob3.inflate(R.layout.job2, mJobLinLay, true);
+        ltInflaterJob3.inflate(R.layout.job3, mJobLinLay, true);
 
         jobPeriod3 = (EditText) rootView.findViewById(R.id.job_period2);
         companyTitle3 = (EditText) rootView.findViewById(R.id.company_title2);
