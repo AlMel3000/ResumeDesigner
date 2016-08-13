@@ -35,6 +35,8 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.crashlytics.android.Crashlytics;
 import com.github.gorbin.asne.core.SocialNetwork;
 import com.github.gorbin.asne.core.listener.OnPostingCompleteListener;
 import com.github.gorbin.asne.core.listener.OnRequestSocialPersonCompleteListener;
@@ -258,12 +260,14 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             sourceBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), loadUserPhoto());
         } catch (IOException e) {
             e.printStackTrace();
+            Crashlytics.logException(e);
         }
 
         try {
             bitmapAva = rotatePhoto(loadUserPhoto(), sourceBitmap);
         } catch (IOException e) {
             Log.e("BitMapError", e.getMessage());
+            Crashlytics.logException(e);
         }
         }
 
@@ -353,6 +357,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                         bitmapAva = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), mSelectedImage);
                     } catch (IOException e) {
                         e.printStackTrace();
+                        Crashlytics.logException(e);
                     }
 
                 }
@@ -367,12 +372,14 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                        sourceBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), mSelectedImage);
                     } catch (IOException e) {
                         e.printStackTrace();
+                        Crashlytics.logException(e);
                     }
 
                     try {
                         bitmapAva = rotatePhoto(mSelectedImage, sourceBitmap);
                     } catch (IOException e) {
                         e.printStackTrace();
+                        Crashlytics.logException(e);
                     }
 
                 }
@@ -418,11 +425,12 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
 
     public  void sharePost() {
-       Bundle postParams = new Bundle();
-        String link = "http://hr24.org";
-        postParams.putString(SocialNetwork.BUNDLE_LINK, link);
-        String message = "Лучший сервис трудоустройства!";
-        socialNetwork.requestPostLink(postParams, message, postingComplete);
+           Bundle postParams = new Bundle();
+           String link = "http://hr24.org";
+           postParams.putString(SocialNetwork.BUNDLE_LINK, link);
+           String message = "Лучший сервис трудоустройства!";
+           socialNetwork.requestPostLink(postParams, message, postingComplete);
+
         }
 
     private OnPostingCompleteListener postingComplete = new OnPostingCompleteListener() {
@@ -641,6 +649,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             Toast.makeText(getContext(),
                     "Не установлено приложений для просмотра pdf",
                     Toast.LENGTH_SHORT).show();
+            Crashlytics.logException(e);
         }
         }
     }
@@ -664,6 +673,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 Toast.makeText(getContext(),
                         "Не установлено приложений для отправки файлов. Попробуйте Dropbox например.",
                         Toast.LENGTH_SHORT).show();
+                Crashlytics.logException(e);
             }
         }
     }
@@ -1313,8 +1323,10 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
         } catch (DocumentException de) {
             Log.e("PDFCreator", "DocumentException:" + de);
+            Crashlytics.logException(de);
         } catch (IOException e) {
             Log.e("PDFCreator", "ioException:" + e);
+            Crashlytics.logException(e);
         }
         finally
         {
@@ -1363,6 +1375,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             } catch (IOException e) {
                 e.printStackTrace();
                 showSnackbar("Ошибка получения фото" + e);
+                Crashlytics.logException(e);
             }
             if (mPhotoFile != null) {
                 takeCaptureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mPhotoFile));

@@ -41,7 +41,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingLeft="@dimen/spacing_normal_16"
-                android:paddingRight="@dimen/spacing_normal_16">
+                android:paddingRight="@dimen/spacing_normal_16"
+                android:layout_marginTop="@dimen/spacing_small_8">
                 <Button
                     android:id="@+id/vk_btn"
                     style="@style/start_screen_buttons"
@@ -78,6 +79,7 @@
                     style="@style/start_screen_headers" />
             </LinearLayout>
             <Button
+                android:layout_marginTop="@dimen/spacing_small_8"
                 android:id="@+id/fill_btn"
                 android:text="@string/fill_tv"
                 style="@style/button_fill"
