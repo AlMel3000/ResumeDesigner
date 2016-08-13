@@ -918,18 +918,13 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
 
 
+            columnLeft.addElement(myImgExp);
+
             Paragraph header1 = new Paragraph("Опыт работы");
             header1.setFont(headersLeftFont);
             header1.setAlignment(Element.ALIGN_CENTER);
-            columnLeft.addElement(myImgExp);
-            header1.setSpacingAfter(10f);
+            header1.setSpacingAfter(8f);
             columnLeft.addElement(header1);
-
-
-
-
-
-
 
 
 
@@ -945,14 +940,14 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 Paragraph jobPeriodParagraph = new Paragraph(this.jobPeriod.getText().toString());
                 jobPeriodParagraph.setAlignment(Paragraph.ALIGN_LEFT);
                 jobPeriodParagraph.setFont(textLeftFontGray);
-                jobPeriodParagraph.setSpacingAfter(5f);
+                jobPeriodParagraph.setSpacingAfter(4f);
                 columnLeft.addElement(jobPeriodParagraph);
 
 
             Paragraph jobTitleParagraph = new Paragraph(this.jobTitle.getText().toString());
             jobTitleParagraph.setAlignment(Paragraph.ALIGN_LEFT);
             jobTitleParagraph.setFont(textLeftFont);
-            jobTitleParagraph.setSpacingAfter(5f);
+            jobTitleParagraph.setSpacingAfter(4f);
             columnLeft.addElement(jobTitleParagraph);
 
 
@@ -985,10 +980,10 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
                 columnLeft.addElement(companyTitleParagraph1);
 
-                jobPeriodParagraph1.setSpacingAfter(5f);
+                jobPeriodParagraph1.setSpacingAfter(4f);
                 columnLeft.addElement(jobPeriodParagraph1);
 
-                jobTitleParagraph1.setSpacingAfter(5f);
+                jobTitleParagraph1.setSpacingAfter(4f);
                 columnLeft.addElement(jobTitleParagraph1);
 
 
@@ -1023,10 +1018,10 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
                 columnLeft.addElement(companyTitleParagraph1);
 
-                jobPeriodParagraph1.setSpacingAfter(5f);
+                jobPeriodParagraph1.setSpacingAfter(4f);
                 columnLeft.addElement(jobPeriodParagraph1);
 
-                jobTitleParagraph1.setSpacingAfter(5f);
+                jobTitleParagraph1.setSpacingAfter(4f);
                 columnLeft.addElement(jobTitleParagraph1);
 
 
@@ -1062,10 +1057,10 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
                 columnLeft.addElement(companyTitleParagraph2);
 
-                jobPeriodParagraph2.setSpacingAfter(5f);
+                jobPeriodParagraph2.setSpacingAfter(4f);
                 columnLeft.addElement(jobPeriodParagraph2);
 
-                jobTitleParagraph2.setSpacingAfter(5f);
+                jobTitleParagraph2.setSpacingAfter(4f);
                 columnLeft.addElement(jobTitleParagraph2);
 
 
@@ -1085,14 +1080,14 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             }
 
 
-            myImgEdu.setSpacingBefore(30f);
+            myImgEdu.setSpacingBefore(20f);
             columnLeft.addElement(myImgEdu);
 
 
             Paragraph header2 = new Paragraph("Образование");
             header2.setFont(headersLeftFont);
             header2.setAlignment(Element.ALIGN_CENTER);
-            header2.setSpacingAfter(10f);
+            header2.setSpacingAfter(8f);
             columnLeft.addElement(header2);
 
 
@@ -1108,13 +1103,13 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             studyRatingParagraph.setAlignment(Paragraph.ALIGN_LEFT);
             studyRatingParagraph.setFont(textLeftFont);
 
-            studyTitleParagraph.setSpacingAfter(5f);
+            studyTitleParagraph.setSpacingAfter(4f);
             columnLeft.addElement(studyTitleParagraph);
 
-            studyDescriptionParagraph.setSpacingAfter(5f);
+            studyDescriptionParagraph.setSpacingAfter(4f);
             columnLeft.addElement(studyDescriptionParagraph);
 
-            studyRatingParagraph.setSpacingAfter(5f);
+            studyRatingParagraph.setSpacingAfter(4f);
             columnLeft.addElement(studyRatingParagraph);
 
             if (mStudyCount==2){
@@ -1130,13 +1125,13 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 studyRatingParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
                 studyRatingParagraph1.setFont(textLeftFont);
 
-                studyTitleParagraph1.setSpacingAfter(5f);
+                studyTitleParagraph1.setSpacingAfter(4f);
                 columnLeft.addElement(studyTitleParagraph1);
 
-                studyDescriptionParagraph1.setSpacingAfter(5f);
+                studyDescriptionParagraph1.setSpacingAfter(4f);
                 columnLeft.addElement(studyDescriptionParagraph1);
 
-                studyRatingParagraph1.setSpacingAfter(5f);
+                studyRatingParagraph1.setSpacingAfter(4f);
                 columnLeft.addElement(studyRatingParagraph1);
 
             }
@@ -1145,8 +1140,8 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             Paragraph header3 = new Paragraph("Достижения");
             header3.setFont(headersLeftFont);
             header3.setAlignment(Element.ALIGN_CENTER);
-            header3.setSpacingBefore(30f);
-            header3.setSpacingAfter(10f);
+            header3.setSpacingBefore(20f);
+            header3.setSpacingAfter(8f);
             columnLeft.addElement(header3);
 
 
@@ -1167,8 +1162,8 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             Paragraph nameParagraph = new Paragraph(this.name.getText().toString());
             nameParagraph.setAlignment(Paragraph.ALIGN_CENTER);
             nameParagraph.setFont(nameFont);
-            nameParagraph.setSpacingBefore(10f);
-            nameParagraph.setSpacingAfter(5f);
+            nameParagraph.setSpacingBefore(8f);
+            nameParagraph.setSpacingAfter(4f);
             columnRight.addElement(nameParagraph);
 
             Paragraph nick = new Paragraph(this.nick.getText().toString());
@@ -1206,7 +1201,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             header4.setIndentationLeft(20);
             header4.setFont(headersRightFont);
             header4.setSpacingBefore(40f);
-            header4.setSpacingAfter(10f);
+            header4.setSpacingAfter(8f);
 
             Paragraph bioParagraph = new Paragraph(this.bio.getText().toString());
             bioParagraph.setAlignment(Paragraph.ALIGN_LEFT);
@@ -1220,22 +1215,25 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             header5.setFont(headersRightFont);
             header5.setIndentationLeft(20);
             header5.setSpacingBefore(30f);
-            header5.setSpacingAfter(10f);
+            header5.setSpacingAfter(8f);
             columnRight.addElement(header5);
 
             Paragraph skillsParagraph = new Paragraph();
-            Chunk skillRatingChunk = new Chunk();
-            Chunk skillBlankRatingChunk = new Chunk();
-            String [] skillsProcessed = stringProcessor(skillString);
+            Chunk skillChunk = new Chunk();
+
+
+            String [] skillsProcessed = stringProcessor(skillString.trim());
             for (String skill : skillsProcessed) {
                 String [] currentSkill = skillsStringProcessor(skill.trim());
-                Chunk skillChunk = new Chunk(currentSkill[0]+"   ");
+                skillChunk = new Chunk(currentSkill[0]+"   ");
                 skillChunk.setFont(skillsFont);
+                Chunk skillRatingChunk = new Chunk();
+                Chunk skillBlankRatingChunk = new Chunk();
                 if (currentSkill.length>1) {
                     int skillRating = Integer.parseInt(currentSkill[1]);
                     int skillBlankRating = 5 - skillRating;
                     skillRatingChunk.setFont(skillsRatingFont);
-                    for (int i = 0; i <= skillRating; i++) {
+                    for (int i = 0; i < skillRating; i++) {
                         skillRatingChunk.append("\u2022");
                     }
                     skillBlankRatingChunk.setFont(skillsBlankRatingFont);
@@ -1261,14 +1259,14 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             header6.setAlignment(Paragraph.ALIGN_LEFT);
             header6.setFont(headersRightFont);
             header6.setIndentationLeft(20);header6.setSpacingBefore(30f);
-            header6.setSpacingAfter(10f);
+            header6.setSpacingAfter(8f);
             columnRight.addElement(header6);
 
             Paragraph subHeader1 = new Paragraph("Языки");
             subHeader1.setAlignment(Paragraph.ALIGN_LEFT);
             subHeader1.setFont(skillsFont);
             subHeader1.setIndentationLeft(15);
-            subHeader1.setSpacingAfter(5f);
+            subHeader1.setSpacingAfter(4f);
             columnRight.addElement(subHeader1);
 
 
@@ -1280,7 +1278,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             }
             languagesParagraph.setAlignment(Paragraph.ALIGN_LEFT);
             languagesParagraph.setFont(textLeftFont);
-            languagesParagraph.setSpacingAfter(10f);
+            languagesParagraph.setSpacingAfter(8f);
             languagesParagraph.setIndentationLeft(10);
             columnRight.addElement(languagesParagraph);
 
@@ -1288,7 +1286,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             subHeader2.setAlignment(Paragraph.ALIGN_LEFT);
             subHeader2.setFont(skillsFont);
             subHeader2.setIndentationLeft(15);
-            subHeader2.setSpacingAfter(5f);
+            subHeader2.setSpacingAfter(4f);
             columnRight.addElement(subHeader2);
 
             Paragraph hobbyParagraph = new Paragraph();
