@@ -8,8 +8,13 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -268,7 +273,10 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             Log.e("BitMapError", e.getMessage());
             Crashlytics.logException(e);
         }
+            bitmapAva = getCircleMaskedBitmapUsingPorterDuff(bitmapAva, 480);
         }
+
+
 
         /*if (savedInstanceState == null) {
             //активити запускается впервые
@@ -354,6 +362,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
                     try {
                         bitmapAva = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), mSelectedImage);
+                        bitmapAva = getCircleMaskedBitmapUsingPorterDuff(bitmapAva, 480);
                     } catch (IOException e) {
                         e.printStackTrace();
                         Crashlytics.logException(e);
@@ -376,6 +385,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
                     try {
                         bitmapAva = rotatePhoto(mSelectedImage, sourceBitmap);
+                        bitmapAva = getCircleMaskedBitmapUsingPorterDuff(bitmapAva, 480);
                     } catch (IOException e) {
                         e.printStackTrace();
                         Crashlytics.logException(e);
@@ -1639,6 +1649,54 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {  return 180; }
         else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {  return 270; }
         return 0;
+    }
+
+    public static Bitmap getCircleMaskedBitmapUsingPorterDuff(Bitmap source, int radius)
+    {
+        if (source == null)
+        {
+            return null;
+        }
+
+        int diam = radius << 1;
+        Bitmap scaledBitmap = scaleTo(source, diam);
+
+        Bitmap targetBitmap = Bitmap.createBitmap(diam, diam, Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(targetBitmap);
+
+        final int color = 0xff424242;
+        final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        final Rect rect = new Rect(0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight());
+
+        canvas.drawARGB(0, 28, 169, 196);
+        paint.setColor(color);
+
+        canvas.drawCircle(radius, radius, radius, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(scaledBitmap, rect, rect, paint);
+        return targetBitmap;
+    }
+
+    public static Bitmap scaleTo(Bitmap source, int size)
+    {
+        int destWidth = source.getWidth();
+
+        int destHeight = source.getHeight();
+
+        destHeight = destHeight * size / destWidth;
+        destWidth = size;
+
+        if (destHeight < size)
+        {
+            destWidth = destWidth * size / destHeight;
+            destHeight = size;
+        }
+
+        Bitmap destBitmap = Bitmap.createBitmap(destWidth, destHeight, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(destBitmap);
+        canvas.drawBitmap(source, new Rect(0, 0, source.getWidth(), source.getHeight()), new Rect(0, 0, destWidth, destHeight), new Paint(Paint.ANTI_ALIAS_FLAG));
+        return destBitmap;
     }
 
 
