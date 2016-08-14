@@ -1,4 +1,4 @@
-package org.hr24.almel.ResumeBuilder.util;
+package org.hr24.almel.ResumeBuilder.billing;
 
 /**
  * Created by Alexey on 14.08.16.
