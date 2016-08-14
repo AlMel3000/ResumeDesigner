@@ -19,12 +19,12 @@
     <string name="tel_hint">Телефон</string>
     <string name="e_mail_hint">E-mail</string>
     <string name="bio_hint">О себе (До 200 символов)</string>
-    <string name="skills_hint">Навыки  "\n" Запись: Уборка@3//Другой навык "\n"\"Уборка\" - название навыка "\n" Цифра поcле \"@\" - оценка от 1 до 5, "\n"\"//\" - разделитель навыков</string>
+    <string name="skills_hint">Навыки  "\n" Запись: Photoshop@3//Другой навык "\n"\"Уборка\" - название навыка "\n" Цифра поcле \"@\" - оценка от 1 до 5, "\n"\"//\" - разделитель навыков</string>
     <string name="skills">Например: Уборка@3//Photoshop@4</string>
     <string name="languages_hint">Языки "\n" \"//\" - разделитель языков</string>
-    <string name="lang_hint"> Например: Русский: Средний//Киргизкий: Высокий</string>
-    <string name="hobby_hint">Хобби "\n" Футбол//Хоккей "\n"  \"//\" - разделитель хобби</string>
-    <string name="hob_hint">Например: Футбол//Хоккей</string>
+    <string name="lang_hint"> Например: Русский: Средний//English: intermediate</string>
+    <string name="hobby_hint">Хобби "\n" \"//\" - разделитель хобби</string>
+    <string name="hob_hint">Например: Оригами//Хоккей</string>
     <string name="job_period_hint">Период</string>
     <string name="company_title_hint">Название компании</string>
     <string name="company_title">Например Microsoft</string>
@@ -65,4 +65,6 @@
     <string name="auth_premium_tv">Приобрести премиум</string>
     <string name="or_tv">ИЛИ</string>
     <string name="premium">Премиум</string>
+    <string name="or_lowercase_tv">или</string>
+    <string name="contact_us">Свяжитесь с нами</string>
 </resources>
