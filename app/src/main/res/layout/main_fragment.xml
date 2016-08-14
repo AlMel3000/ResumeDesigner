@@ -11,14 +11,57 @@
         style="@style/auth_parent_linear">
         <ImageView
             android:layout_width="100dp"
-            android:layout_height="150dp"
+            android:layout_height="0dp"
             android:src="@drawable/logo"
+            android:layout_weight="3"
             android:layout_gravity="center_horizontal" />
 
         <android.support.v7.widget.CardView
-            style="@style/auth_child_linear">
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="256dp"
+            android:background="@color/white"
+            android:orientation="vertical">
         <LinearLayout
-            style="@style/auth_child_linear">
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:paddingTop="@dimen/spacing_small_8"
+            android:layout_width="256dp"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/spacing_small_8"
+                    android:layout_marginBottom="@dimen/spacing_small_8">
+                    <View
+                        android:layout_width="@dimen/line_size"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorPrimaryDark"/>
+                    <TextView
+                        android:text="@string/auth_fill_tv"
+                        style="@style/start_screen_headers"
+                        android:layout_gravity="center_horizontal"
+                        android:textColor="@color/vk_black"/>
+                </LinearLayout>
+                <Button
+                    android:id="@+id/fill_btn"
+                    android:text="@string/fill_tv"
+                    style="@style/button_fill"
+                    android:background="@drawable/transparent_button"
+                    android:layout_gravity="center_vertical"
+                    android:padding="4dp"
+                    android:drawableLeft="@drawable/ic_format_list_bulleted_black_24dp"/>
+                <View
+                    android:id="@+id/fill_v"
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"
+                    android:background="@color/hr24_blue"
+                    android:layout_margin="@dimen/spacing_small_8" />
+
             <LinearLayout
                 android:id="@+id/auth_ll"
                 android:layout_width="match_parent"
@@ -26,23 +69,34 @@
                 android:orientation="vertical">
                 <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/size_small_24"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <View
                     android:layout_width="@dimen/line_size"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:background="@color/colorPrimaryDark"/>
                 <TextView
-                    android:text="@string/auth_enter_tv"
-                    style="@style/start_screen_headers" />
+                    android:text="@string/auth_full_func_tv"
+                    style="@style/start_screen_headers"
+                    android:layout_marginRight="@dimen/spacing_medial_24"
+                    android:textColor="@color/vk_black"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingLeft="@dimen/spacing_normal_16"
-                android:paddingRight="@dimen/spacing_normal_16"
-                android:layout_marginTop="@dimen/spacing_small_8">
+                android:paddingRight="@dimen/spacing_normal_16">
+                <TextView
+                    android:text="@string/auth_enter_tv"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="8dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:textColor="@color/gray"
+                    android:gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/spacing_small_8"/>
                 <Button
                     android:id="@+id/vk_btn"
                     style="@style/start_screen_buttons"
@@ -58,34 +112,39 @@
                     android:text="@string/odnoklassniki"
                     style="@style/start_screen_buttons"
                     android:background="@drawable/transparent_button"/>
-            </LinearLayout>
-            </LinearLayout>
-            <View
-                android:id="@+id/fill_v"
-                android:layout_width="match_parent"
-                android:layout_height="4dp"
-                android:background="@color/hr24_blue"
-                android:layout_margin="@dimen/spacing_small_8" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/size_small_24"
-                android:orientation="horizontal">
-                <View
-                    android:layout_width="@dimen/line_size"
-                    android:layout_height="wrap_content"
-                    android:background="@color/colorPrimaryDark"/>
                 <TextView
-                    android:text="@string/auth_fill_tv"
-                    style="@style/start_screen_headers" />
+                    android:text="@string/or_tv"
+                    android:textSize="16sp"
+                    android:layout_margin="8dp"
+                    android:layout_gravity="center_horizontal"
+                    android:fontFamily="serif-monospace"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:textColor="@color/vk_black" />
+                <TextView
+                    android:text="@string/auth_premium_tv"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_gravity="center"
+                    android:fontFamily="sans-serif-medium"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:textColor="@color/gray" />
+                <Button
+                    android:id="@+id/premium_btn"
+                    style="@style/start_screen_buttons"
+                    android:padding="4dp"
+                    android:drawableLeft="@drawable/ic_shopping_basket_24dp"
+                    android:text="@string/premium"
+                    android:background="@drawable/transparent_button"/>
             </LinearLayout>
-            <Button
-                android:layout_marginTop="@dimen/spacing_small_8"
-                android:id="@+id/fill_btn"
-                android:text="@string/fill_tv"
-                style="@style/button_fill"
-                android:background="@drawable/transparent_button"/>
+            </LinearLayout>
+
         </LinearLayout>
         </android.support.v7.widget.CardView>
-
+<LinearLayout
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:layout_weight="4"/>
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

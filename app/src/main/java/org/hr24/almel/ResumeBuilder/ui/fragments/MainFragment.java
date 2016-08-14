@@ -45,13 +45,14 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    Button vkButton, okButton, fillButton;
+    Button vkButton, okButton, fillButton, premiumButton;
     CoordinatorLayout mCoordinatorLayout;
     LinearLayout authLinLayout;
     View fillView;
     public static SocialNetworkManager mSocialNetworkManager;
     int networkId = 0;
     public static boolean AUTHORIZATION_STATUS = false;
+    public static boolean PREMIUM_STATUS = false;
 
 
     private String mParam1;
@@ -103,10 +104,12 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
         mCoordinatorLayout = (CoordinatorLayout) rootView.findViewById(R.id.main_coordinator_container);
         authLinLayout = (LinearLayout) rootView.findViewById(R.id.auth_ll);
         fillView = rootView.findViewById(R.id.fill_v);
+        premiumButton = (Button) rootView.findViewById(R.id.premium_btn);
 
         vkButton.setOnClickListener(this);
         okButton.setOnClickListener(this);
         fillButton.setOnClickListener(this);
+        premiumButton.setOnClickListener(this);
 
         String VK_KEY = getActivity().getString(R.string.vk_app_id);
         String OK_APP_ID = getActivity().getString(R.string.ok_app_id);
@@ -155,9 +158,9 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
             }
         }
 
-        initAuthorizationStatus();
+        initStatus();
 
-        if (AUTHORIZATION_STATUS){
+        if (AUTHORIZATION_STATUS||PREMIUM_STATUS){
             authLinLayout.setVisibility(View.GONE);
             fillView.setVisibility(View.GONE);
         }
@@ -165,6 +168,18 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
 
 
         return rootView;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        saveStatus();
+
+    }
+
+    public void onDestroy() {
+        super.onDestroy();
+        saveStatus();
     }
 
     private void getVkFingerprint() {
@@ -189,7 +204,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
             authLinLayout.setVisibility(View.GONE);
             fillView.setVisibility(View.GONE);
             AUTHORIZATION_STATUS = true;
-            saveAuthorizationStatus();
+            saveStatus();
 
 
         }
@@ -258,6 +273,13 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
                     startProfile(networkId);
 
                 }
+                break;
+            case R.id.premium_btn:
+                PREMIUM_STATUS = true;
+                saveStatus();
+                authLinLayout.setVisibility(View.GONE);
+                fillView.setVisibility(View.GONE);
+                showSnackbar("Эта функиональность пока не работает, поэтому премиум БЕСПЛАТНОесплатно");
 
                 break;
 
@@ -288,7 +310,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
         authLinLayout.setVisibility(View.GONE);
         fillView.setVisibility(View.GONE);
         AUTHORIZATION_STATUS = true;
-        saveAuthorizationStatus();
+        saveStatus();
 
 
 
@@ -328,14 +350,16 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
         Snackbar.make(mCoordinatorLayout, message,Snackbar.LENGTH_LONG).show();
     }
 
-    private void saveAuthorizationStatus(){
+    private void saveStatus(){
         SharedPreferences.Editor editor = StartActivity.getSharedPref().edit();
         editor.putBoolean(ConstantManager.AUTHORIZATION_STATUS_KEY, AUTHORIZATION_STATUS);
+        editor.putBoolean(ConstantManager.PREMIUM_STATUS_KEY, PREMIUM_STATUS);
         editor.apply();
     }
 
-    private void initAuthorizationStatus() {
+    private void initStatus() {
         AUTHORIZATION_STATUS = StartActivity.getSharedPref().getBoolean(ConstantManager.AUTHORIZATION_STATUS_KEY, false);
+        PREMIUM_STATUS = StartActivity.getSharedPref().getBoolean(ConstantManager.PREMIUM_STATUS_KEY, false);
 
     }
 }

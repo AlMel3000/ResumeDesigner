@@ -48,6 +48,8 @@ public interface ConstantManager {
     String AUTHORIZATION_STATUS_KEY = "AUTHORIZATION_STATUS_KEY";
     String POST_STATUS_KEY = "POST_STATUS_KEY";
 
+    String PREMIUM_STATUS_KEY = "PREMIUM_STATUS_KEY";
+
     String USER_PHOTO_KEY="USER_PHOTO_KEY";
 
     int REQUEST_GALLERY_PICTURE=88;
@@ -55,6 +57,7 @@ public interface ConstantManager {
 
     int PERMISSION_REQUEST_SETTINGS_CODE = 101;
     int CAMERA_REQUEST_PERMISSION_CODE = 102;
+
 
 
 }
