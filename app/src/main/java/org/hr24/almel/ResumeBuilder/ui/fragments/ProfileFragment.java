@@ -238,7 +238,6 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         socialNetwork.setOnRequestCurrentPersonCompleteListener(this);
         socialNetwork.requestCurrentPerson();
 
-        StartActivity.showProgress("Загружаем профиль");
 
         } else if (!NetworkStatusChecker.isNetworkAvailable(getContext()) && MainFragment.AUTHORIZATION_STATUS){
             showSnackbar("Сеть недоступна, не удалось загрузить Ваш профиль");
@@ -409,7 +408,6 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
     @Override
     public void onRequestSocialPersonSuccess(int i, SocialPerson socialPerson) {
-        StartActivity.hideProgress();
         if (name.getText() == null) {
             name.setText(socialPerson.name);
         }
@@ -419,7 +417,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     @Override
     public void onError(int networkId, String requestID, String errorMessage, Object data) {
         StartActivity.hideProgress();
-        Toast.makeText(getActivity(), "ERROR: " + errorMessage, Toast.LENGTH_LONG).show();
+
     }
 
 
@@ -433,7 +431,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             socialNetwork.requestPostLink(postParams, message, postingComplete);
         } catch (Exception e) {
 
-            Log.d("SharePostException", e.getMessage());
+            Crashlytics.logException(e);
         }
 
         }
@@ -654,7 +652,6 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             Toast.makeText(getContext(),
                     "Не установлено приложений для просмотра pdf",
                     Toast.LENGTH_SHORT).show();
-            Crashlytics.logException(e);
         }
         }
     }
