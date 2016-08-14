@@ -41,7 +41,7 @@
 
                     <ImageView
                         android:layout_width="104dp"
-                        android:layout_height="match_parent"
+                        android:layout_height="104dp"
                         android:id="@+id/imageView"
                         android:src="@drawable/ic_add_a_photo_black_24dp"
                         android:adjustViewBounds="true"

@@ -425,11 +425,16 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
 
     public  void sharePost() {
-           Bundle postParams = new Bundle();
-           String link = "http://hr24.org";
-           postParams.putString(SocialNetwork.BUNDLE_LINK, link);
-           String message = "Лучший сервис трудоустройства!";
-           socialNetwork.requestPostLink(postParams, message, postingComplete);
+        try {
+            Bundle postParams = new Bundle();
+            String link = "http://hr24.org";
+            postParams.putString(SocialNetwork.BUNDLE_LINK, link);
+            String message = "Лучший сервис трудоустройства!";
+            socialNetwork.requestPostLink(postParams, message, postingComplete);
+        } catch (Exception e) {
+
+            Log.d("SharePostException", e.getMessage());
+        }
 
         }
 
@@ -729,6 +734,12 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
 
             mProfilePlaceholder.setVisibility(View.VISIBLE);
+            if(PHOTO_SET) {
+                mAddPhototv.setText("Изменить фото");
+                mAddPhotoLinLay.setVisibility(View.GONE);
+                mAddPhototv.setVisibility(View.VISIBLE);
+            }
+
             savePdfButton.setVisibility(View.GONE);
             viewPdfButton.setVisibility(View.GONE);
             shareButton.setVisibility(View.GONE);
@@ -807,9 +818,6 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 shareButton.setVisibility(View.GONE);
             }
 
-            if(PHOTO_SET){
-                mAddPhototv.setText("Изменить фото");
-            }
 
             job2AddButton.setVisibility(View.GONE);
             study2AddButton.setVisibility(View.GONE);
