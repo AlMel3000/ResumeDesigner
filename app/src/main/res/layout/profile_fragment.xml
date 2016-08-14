@@ -543,27 +543,27 @@
                 android:id="@+id/create_pdf_button"
                 android:layout_marginRight="1dp"
                 style="@style/profile_button"
+                android:drawableLeft="@drawable/ic_insert_drive_file_black_24dp"
                 android:visibility="gone"/>
             <Button
                 android:text="@string/view"
                 android:id="@+id/view"
                 style="@style/profile_button"
                 android:layout_marginRight="1dp"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                android:drawableLeft="@drawable/ic_visibility_black_24dp"/>
             <Button
-                android:text="@string/share"
+                android:text="@string/unblock"
                 android:id="@+id/sharePost"
                 style="@style/profile_button"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                android:drawableLeft="@drawable/ic_shopping_basket_white_24dp"/>
             <Button
                 android:text="@string/sharePdf"
                 android:id="@+id/sharePdf"
                 style="@style/profile_button"
+                android:drawableLeft="@drawable/ic_share_black_24dp"
                 android:visibility="gone"/>
-
-
-
-
 
         </LinearLayout>
 

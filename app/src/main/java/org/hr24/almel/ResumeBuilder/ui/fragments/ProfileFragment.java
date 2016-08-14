@@ -296,7 +296,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             mAddPhototv.setText("Изменить фото");
         }
 
-        if (MainFragment.AUTHORIZATION_STATUS && !POST_STATUS){
+        if (MainFragment.AUTHORIZATION_STATUS && !POST_STATUS && !MainFragment.PREMIUM_STATUS){
             sharePost();
         }
 
@@ -464,19 +464,19 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 }
                 break;
             case R.id.sharePost:
-                if (!MainFragment.AUTHORIZATION_STATUS) {
+                if (!MainFragment.AUTHORIZATION_STATUS && !MainFragment.PREMIUM_STATUS) {
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .add(R.id.container, new MainFragment())
                             .commit();
                 }
                 break;
             case R.id.create_pdf_button:
-                if (MainFragment.AUTHORIZATION_STATUS) {
+                if (MainFragment.AUTHORIZATION_STATUS||MainFragment.PREMIUM_STATUS) {
                     createPdf();
-                } else if (!MainFragment.AUTHORIZATION_STATUS){
+                } else {
 
                     Snackbar.make(mCoordinatorFrame, R.string.load_authorization_request, Snackbar.LENGTH_LONG)
-                            .setAction("Отправить запись на стену", new View.OnClickListener() {
+                            .setAction("Разблокировать функиональность", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     getActivity().getSupportFragmentManager().beginTransaction()
@@ -802,15 +802,14 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
 
             mProfilePlaceholder.setVisibility(View.GONE);
-            if (MainFragment.AUTHORIZATION_STATUS){
+            if (MainFragment.AUTHORIZATION_STATUS || MainFragment.PREMIUM_STATUS){
                 viewPdfButton.setVisibility(View.VISIBLE);
                 sharePdfButton.setVisibility(View.VISIBLE);
             }
             savePdfButton.setVisibility(View.VISIBLE);
 
-            if (!MainFragment.AUTHORIZATION_STATUS){
+            if (!MainFragment.AUTHORIZATION_STATUS && !MainFragment.PREMIUM_STATUS){
                 shareButton.setVisibility(View.VISIBLE);
-                shareButton.setText("АВТОРИЗОВАТЬСЯ");
             } else {
                 shareButton.setVisibility(View.GONE);
             }
