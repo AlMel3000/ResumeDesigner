@@ -119,6 +119,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     public String achievementString;
     private LinearLayout mStudyLinLay;
     View rootView;
+    Bitmap sourceForCircleMaskingBitmap = null;
     Bitmap bitmapAva = null;
     ScrollView scrollView;
     List<EditText> mUserInfoViewsJob2, mUserInfoViewsJob3, mUserInfoViewsStudy2;
@@ -268,12 +269,12 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         }
 
         try {
-            bitmapAva = rotatePhoto(loadUserPhoto(), sourceBitmap);
+            sourceForCircleMaskingBitmap = rotatePhoto(loadUserPhoto(), sourceBitmap);
         } catch (IOException e) {
             Log.e("BitMapError", e.getMessage());
             Crashlytics.logException(e);
         }
-            bitmapAva = getCircleMaskedBitmapUsingPorterDuff(bitmapAva, 480);
+            bitmapAva = getCircleMaskedBitmapUsingPorterDuff(sourceForCircleMaskingBitmap, 480);
         }
 
 
@@ -361,13 +362,13 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                     insertProfileImage(mSelectedImage);
 
                     try {
-                        bitmapAva = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), mSelectedImage);
+                        sourceForCircleMaskingBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), mSelectedImage);
 
                     } catch (IOException e) {
                         e.printStackTrace();
                         Crashlytics.logException(e);
                     }
-                    bitmapAva = getCircleMaskedBitmapUsingPorterDuff(bitmapAva, 480);
+                    bitmapAva = getCircleMaskedBitmapUsingPorterDuff(sourceForCircleMaskingBitmap, 480);
 
                 }
                 break;
@@ -385,13 +386,13 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                     }
 
                     try {
-                        bitmapAva = rotatePhoto(mSelectedImage, sourceBitmap);
-                        bitmapAva = getCircleMaskedBitmapUsingPorterDuff(bitmapAva, 480);
+                        sourceForCircleMaskingBitmap = rotatePhoto(mSelectedImage, sourceBitmap);
+                        bitmapAva = getCircleMaskedBitmapUsingPorterDuff(sourceForCircleMaskingBitmap, 480);
                     } catch (IOException e) {
                         e.printStackTrace();
                         Crashlytics.logException(e);
                     }
-                    bitmapAva = getCircleMaskedBitmapUsingPorterDuff(bitmapAva, 480);
+                    bitmapAva = getCircleMaskedBitmapUsingPorterDuff(sourceForCircleMaskingBitmap, 480);
 
                 }
 
