@@ -30,8 +30,8 @@
     <style name="button_fill">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginRight">@dimen/spacing_normal_16</item>
-        <item name="android:layout_marginLeft">@dimen/spacing_normal_16</item>
+        <item name="android:layout_marginRight">@dimen/spacing_medial_24</item>
+        <item name="android:layout_marginLeft">@dimen/spacing_medial_24</item>
     </style>
 
     <style name="start_screen_headers">
@@ -41,6 +41,7 @@
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textColor">@color/gray</item>
         <item name="android:layout_marginLeft">@dimen/spacing_medial_24</item>
+        <item name="android:layout_marginRight">@dimen/spacing_medial_24</item>
         <item name="android:gravity">center_horizontal</item>
     </style>
 

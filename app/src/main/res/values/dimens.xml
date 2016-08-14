@@ -3,7 +3,6 @@
 
 
     <!--Sizes-->
-    <dimen name="size_small_24">24dp</dimen>
 
     <!--Spaces-->
     <dimen name="spacing_small_8">8dp</dimen>
