@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-
 import com.crashlytics.android.Crashlytics;
 import com.github.gorbin.asne.core.SocialNetwork;
 import com.github.gorbin.asne.core.SocialNetworkManager;
@@ -25,7 +25,6 @@ import com.github.gorbin.asne.odnoklassniki.OkSocialNetwork;
 import com.github.gorbin.asne.vk.VkSocialNetwork;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.util.VKUtil;
-
 import org.hr24.almel.ResumeBuilder.R;
 import org.hr24.almel.ResumeBuilder.ui.StartActivity;
 import org.hr24.almel.ResumeBuilder.util.IabBroadcastReceiver;
@@ -36,7 +35,6 @@ import org.hr24.almel.ResumeBuilder.util.Purchase;
 import org.hr24.almel.ResumeBuilder.utils.ConstantManager;
 import org.hr24.almel.ResumeBuilder.utils.NetworkStatusChecker;
 import java.util.List;
-
 import ru.ok.android.sdk.util.OkScope;
 
 /**
@@ -58,7 +56,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
     Button vkButton, okButton, fillButton, premiumButton;
     CoordinatorLayout mCoordinatorLayout;
     LinearLayout authLinLayout;
-    View fillView;
+    CardView fillView;
     ImageView logoImageView, mailImageView, callImageView;
     public static SocialNetworkManager mSocialNetworkManager;
     int networkId = 0;
@@ -125,7 +123,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
         fillButton = (Button) rootView.findViewById(R.id.fill_btn);
         mCoordinatorLayout = (CoordinatorLayout) rootView.findViewById(R.id.main_coordinator_container);
         authLinLayout = (LinearLayout) rootView.findViewById(R.id.auth_ll);
-        fillView = rootView.findViewById(R.id.fill_v);
+        fillView = (CardView) rootView.findViewById(R.id.fill_v);
         premiumButton = (Button) rootView.findViewById(R.id.premium_btn);
         logoImageView = (ImageView) rootView.findViewById(R.id.logo_iv);
         mailImageView = (ImageView) rootView.findViewById(R.id.mail_iv);
