@@ -21,6 +21,7 @@
 
 
         <LinearLayout
+            android:id="@+id/parent_ll_in_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -533,16 +534,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/hr24_blue"
-                android:layout_margin="@dimen/spacing_small_8"
-                />
+                android:layout_margin="@dimen/spacing_small_8" />
 
-            <LinearLayout
-                android:layout_gravity="bottom"
-                android:layout_width="match_parent"
-                android:layout_height="256dp"
-                android:orientation="horizontal"
-                android:visibility="invisible">
-            </LinearLayout>
 
     </LinearLayout>
 

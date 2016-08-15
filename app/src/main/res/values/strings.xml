@@ -19,8 +19,8 @@
     <string name="tel_hint">Телефон</string>
     <string name="e_mail_hint">E-mail</string>
     <string name="bio_hint">О себе (До 200 символов)</string>
-    <string name="skills_hint">Навыки  "\n" Запись: Photoshop@3,Другой навык "\n"\ "Photoshop\" - название навыка "\n" Цифра поcле \"@\" - оценка от 1 до 5 "\n"ведите навыки через запятую</string>
-    <string name="skills">Например: MS office@3,Photoshop@4</string>
+    <string name="skills_hint">Навыки  "\n" Запись: Photoshop/3, Другой навык "\n" \"Photoshop\" - название навыка "\n" Цифра поcле \"/\" - оценка от 1 до 5 "\n"ведите навыки через запятую</string>
+    <string name="skills">Например: MS office/3, Photoshop/4</string>
     <string name="languages_hint">Языки "\n" введите языки через запятую</string>
     <string name="lang_hint"> Например: Русский: Средний, English: intermediate</string>
     <string name="hobby_hint">Хобби "\n" введите хобби через запятую</string>

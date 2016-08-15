@@ -106,7 +106,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     private Button sharePdfButton;
     private FloatingActionButton mFab;
     private List<EditText> mUserInfoViews;
-    private LinearLayout mAddPhotoLinLay, mJobLinLay, mProfilePlaceholder;
+    private LinearLayout mAddPhotoLinLay, mJobLinLay, mProfilePlaceholder, mParentLinLay;
     private TextView mAddPhototv;
     private File mPhotoFile = null;
     private Uri mSelectedImage = null;
@@ -148,6 +148,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         rootView = inflater.inflate(R.layout.profile_fragment, container, false);
 
         photoImgV = (ImageView) rootView.findViewById(R.id.imageView);
+        mParentLinLay = (LinearLayout) rootView.findViewById(R.id.parent_ll_in_scroll_view);
         mProfilePlaceholder = (LinearLayout) rootView.findViewById(R.id.profile_placeholder);
         mAddPhotoLinLay = (LinearLayout) rootView.findViewById(R.id.add_photo_ll);
         mJobLinLay = (LinearLayout) rootView.findViewById(R.id.job_ll);
@@ -776,6 +777,10 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
             if (mStudyCount==1){study2AddButton.setVisibility(View.VISIBLE);}
 
+            View buttonView = rootView.findViewById(R.id.button_placeholder);
+            ViewGroup parentButtonPlaceholderll = (ViewGroup) buttonView.getParent();
+            parentButtonPlaceholderll.removeView(buttonView);
+
         } else {
             mFab.setImageResource(R.drawable.ic_create_black_24dp);
             for (EditText userValue : mUserInfoViews) {
@@ -846,6 +851,9 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
             job2AddButton.setVisibility(View.GONE);
             study2AddButton.setVisibility(View.GONE);
+
+            LayoutInflater ltInflaterButtonPlaceholder = getActivity().getLayoutInflater();
+            ltInflaterButtonPlaceholder.inflate(R.layout.button_palceholder, mParentLinLay, true);
 
         }
     }
@@ -1465,7 +1473,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
     private String[] skillsStringProcessor(String string){
 
-        return string.trim().split("@");
+        return string.trim().split("/");
     }
 
     private void initUserFields() {
