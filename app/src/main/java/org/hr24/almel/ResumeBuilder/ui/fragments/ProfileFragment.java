@@ -864,104 +864,101 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
         try {
 
-
-            String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/cv";
-
-            File dir = new File(path);
-            if(!dir.exists())
-                dir.mkdirs();
-
-            File file = new File(dir, "Resume.pdf");
-            FileOutputStream fOut = new FileOutputStream(file);
-
-            PdfWriter writer =PdfWriter.getInstance(document, fOut);
-
-            document.open();
-
-            PdfContentByte canvas = writer.getDirectContent();
-
-            ColumnText columnLeft = new ColumnText(canvas);
-            ColumnText columnRight = new ColumnText(canvas);
-            int side_of_the_page = 0;
-            int side_of_the_page2 = 1;
-
-            COLUMNS[1].setBackgroundColor(hr24blue);
-            canvas.rectangle(COLUMNS[1]);
+            if (isExternalStorageWritable()) {
 
 
-            columnLeft.setSimpleColumn(COLUMNS[side_of_the_page]);
-            columnRight.setSimpleColumn(COLUMNS[side_of_the_page2]);
+                String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/cv";
 
-            columnLeft.setAlignment(Paragraph.ALIGN_CENTER);
-            columnRight.setAlignment(Paragraph.ALIGN_CENTER);
+                File dir = new File(path);
+                if (!dir.exists())
+                    dir.mkdirs();
 
-           BaseFont droidSans = BaseFont.createFont("/system/fonts/DroidSans.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+                File file = new File(dir, "Resume.pdf");
+                FileOutputStream fOut = new FileOutputStream(file);
 
-            Font headersLeftFont= new Font(droidSans, 16.0f, 1, hr24blue);
-            Font headersSmallLeftFont= new Font(droidSans, 14.0f, 1, BaseColor.BLACK);
-            Font textLeftFont= new Font(droidSans, 12.0f, 0, BaseColor.BLACK);
-            Font textLeftFontGray= new Font(droidSans, 12.0f, 0, BaseColor.GRAY);
+                PdfWriter writer = PdfWriter.getInstance(document, fOut);
 
-            Font nameFont= new Font(droidSans, 18.0f,0, CMYKColor.BLACK);
-            Font nickFont= new Font(droidSans, 14.0f,0, CMYKColor.WHITE);
-            Font contactsFont= new Font(droidSans, 10.0f,1, CMYKColor.WHITE);
-            Font contactsHeaderFont= new Font(droidSans, 10.0f,1, CMYKColor.BLACK);
-            Font headersRightFont= new Font(droidSans, 16.0f, 1, BaseColor.BLACK);
-            Font skillsFont= new Font(droidSans, 12.0f, 1, BaseColor.WHITE);
-            Font skillsBlankRatingFont= new Font(droidSans, 20.0f, 1, BaseColor.WHITE);
-            Font skillsRatingFont= new Font(droidSans, 20.0f, 1, BaseColor.BLACK);
+                document.open();
 
-            ByteArrayOutputStream streamExp = new ByteArrayOutputStream();
-            Bitmap bitmapExp;
-            bitmapExp = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.exp);
-            bitmapExp.compress(Bitmap.CompressFormat.JPEG, 100 , streamExp);
-            Image myImgExp = Image.getInstance(streamExp.toByteArray());
-            myImgExp.setAlignment(Image.MIDDLE);
+                PdfContentByte canvas = writer.getDirectContent();
 
-            myImgExp.scaleAbsolute(40f, 40f);
+                ColumnText columnLeft = new ColumnText(canvas);
+                ColumnText columnRight = new ColumnText(canvas);
+                int side_of_the_page = 0;
+                int side_of_the_page2 = 1;
 
-            ByteArrayOutputStream streamEdu = new ByteArrayOutputStream();
-            Bitmap bitmapEdu;
-            bitmapEdu = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.edu);
-            bitmapEdu.compress(Bitmap.CompressFormat.JPEG, 100 , streamEdu);
-            Image myImgEdu = Image.getInstance(streamEdu.toByteArray());
-            myImgEdu.setAlignment(Image.MIDDLE);
-
-            myImgEdu.scaleAbsolute(40f, 40f);
-
-            if(bitmapAva!= null){
-               ByteArrayOutputStream streamAva = new ByteArrayOutputStream();
-               bitmapAva.compress(Bitmap.CompressFormat.JPEG, 100 , streamAva);
-               Image myImgAva = Image.getInstance(streamAva.toByteArray());
-               myImgAva.setAlignment(Image.MIDDLE);
-               myImgAva.scaleAbsolute(100f, 100f);
-               myImgAva.setSpacingBefore(30f);
-               columnRight.addElement(myImgAva);
+                COLUMNS[1].setBackgroundColor(hr24blue);
+                canvas.rectangle(COLUMNS[1]);
 
 
-            }else {
-               Toast.makeText(getContext(), "Резюме без фото, пока Вы не добавите его из галереи или не сфотографируетесь.", Toast.LENGTH_LONG).show();
-           }
+                columnLeft.setSimpleColumn(COLUMNS[side_of_the_page]);
+                columnRight.setSimpleColumn(COLUMNS[side_of_the_page2]);
+
+                columnLeft.setAlignment(Paragraph.ALIGN_CENTER);
+                columnRight.setAlignment(Paragraph.ALIGN_CENTER);
+
+                BaseFont droidSans = BaseFont.createFont("/system/fonts/DroidSans.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+
+                Font headersLeftFont = new Font(droidSans, 16.0f, 1, hr24blue);
+                Font headersSmallLeftFont = new Font(droidSans, 14.0f, 1, BaseColor.BLACK);
+                Font textLeftFont = new Font(droidSans, 12.0f, 0, BaseColor.BLACK);
+                Font textLeftFontGray = new Font(droidSans, 12.0f, 0, BaseColor.GRAY);
+
+                Font nameFont = new Font(droidSans, 18.0f, 0, CMYKColor.BLACK);
+                Font nickFont = new Font(droidSans, 14.0f, 0, CMYKColor.WHITE);
+                Font contactsFont = new Font(droidSans, 10.0f, 1, CMYKColor.WHITE);
+                Font contactsHeaderFont = new Font(droidSans, 10.0f, 1, CMYKColor.BLACK);
+                Font headersRightFont = new Font(droidSans, 16.0f, 1, BaseColor.BLACK);
+                Font skillsFont = new Font(droidSans, 12.0f, 1, BaseColor.WHITE);
+                Font skillsBlankRatingFont = new Font(droidSans, 20.0f, 1, BaseColor.WHITE);
+                Font skillsRatingFont = new Font(droidSans, 20.0f, 1, BaseColor.BLACK);
+
+                ByteArrayOutputStream streamExp = new ByteArrayOutputStream();
+                Bitmap bitmapExp;
+                bitmapExp = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.exp);
+                bitmapExp.compress(Bitmap.CompressFormat.JPEG, 100, streamExp);
+                Image myImgExp = Image.getInstance(streamExp.toByteArray());
+                myImgExp.setAlignment(Image.MIDDLE);
+
+                myImgExp.scaleAbsolute(40f, 40f);
+
+                ByteArrayOutputStream streamEdu = new ByteArrayOutputStream();
+                Bitmap bitmapEdu;
+                bitmapEdu = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.edu);
+                bitmapEdu.compress(Bitmap.CompressFormat.JPEG, 100, streamEdu);
+                Image myImgEdu = Image.getInstance(streamEdu.toByteArray());
+                myImgEdu.setAlignment(Image.MIDDLE);
+
+                myImgEdu.scaleAbsolute(40f, 40f);
+
+                if (bitmapAva != null) {
+                    ByteArrayOutputStream streamAva = new ByteArrayOutputStream();
+                    bitmapAva.compress(Bitmap.CompressFormat.JPEG, 100, streamAva);
+                    Image myImgAva = Image.getInstance(streamAva.toByteArray());
+                    myImgAva.setAlignment(Image.MIDDLE);
+                    myImgAva.scaleAbsolute(100f, 100f);
+                    myImgAva.setSpacingBefore(30f);
+                    columnRight.addElement(myImgAva);
 
 
-
-            columnLeft.addElement(myImgExp);
-
-            Paragraph header1 = new Paragraph("Опыт работы");
-            header1.setFont(headersLeftFont);
-            header1.setAlignment(Element.ALIGN_CENTER);
-            header1.setSpacingAfter(8f);
-            columnLeft.addElement(header1);
+                } else {
+                    Toast.makeText(getContext(), "Резюме без фото, пока Вы не добавите его из галереи или не сфотографируетесь.", Toast.LENGTH_LONG).show();
+                }
 
 
+                columnLeft.addElement(myImgExp);
+
+                Paragraph header1 = new Paragraph("Опыт работы");
+                header1.setFont(headersLeftFont);
+                header1.setAlignment(Element.ALIGN_CENTER);
+                header1.setSpacingAfter(8f);
+                columnLeft.addElement(header1);
 
 
                 Paragraph companyTitleParagraph = new Paragraph("\u2022" + this.companyTitle.getText().toString());
                 companyTitleParagraph.setAlignment(Paragraph.ALIGN_LEFT);
                 companyTitleParagraph.setFont(headersSmallLeftFont);
                 columnLeft.addElement(companyTitleParagraph);
-
-
 
 
                 Paragraph jobPeriodParagraph = new Paragraph(this.jobPeriod.getText().toString());
@@ -971,370 +968,368 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 columnLeft.addElement(jobPeriodParagraph);
 
 
-            Paragraph jobTitleParagraph = new Paragraph(this.jobTitle.getText().toString());
-            jobTitleParagraph.setAlignment(Paragraph.ALIGN_LEFT);
-            jobTitleParagraph.setFont(textLeftFont);
-            jobTitleParagraph.setSpacingAfter(4f);
-            columnLeft.addElement(jobTitleParagraph);
+                Paragraph jobTitleParagraph = new Paragraph(this.jobTitle.getText().toString());
+                jobTitleParagraph.setAlignment(Paragraph.ALIGN_LEFT);
+                jobTitleParagraph.setFont(textLeftFont);
+                jobTitleParagraph.setSpacingAfter(4f);
+                columnLeft.addElement(jobTitleParagraph);
 
 
-            Paragraph jobDutyParagraph = new Paragraph();
-            String [] jobDutyProcessed = stringProcessor(dutyString);
-            for (String aJobDutyProcessed : jobDutyProcessed) {
+                Paragraph jobDutyParagraph = new Paragraph();
+                String[] jobDutyProcessed = stringProcessor(dutyString);
+                for (String aJobDutyProcessed : jobDutyProcessed) {
 
-                Chunk jobDuty = new Chunk(aJobDutyProcessed.trim());
-                jobDutyParagraph.add(jobDuty+"\n");
-            }
-
-            jobDutyParagraph.setAlignment(Paragraph.ALIGN_LEFT);
-            jobDutyParagraph.setFont(textLeftFont);
-            columnLeft.addElement(jobDutyParagraph);
-
-            if (mJobCount ==2){
-
-                Paragraph companyTitleParagraph1 = new Paragraph("\u2022" + companyTitle2.getText().toString());
-                companyTitleParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
-                companyTitleParagraph1.setFont(headersSmallLeftFont);
-
-                Paragraph jobPeriodParagraph1 = new Paragraph(jobPeriod2.getText().toString());
-                jobPeriodParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
-                jobPeriodParagraph1.setFont(textLeftFontGray);
-
-
-                Paragraph jobTitleParagraph1 = new Paragraph(jobTitle2.getText().toString());
-                jobTitleParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
-                jobTitleParagraph1.setFont(textLeftFont);
-
-                columnLeft.addElement(companyTitleParagraph1);
-
-                jobPeriodParagraph1.setSpacingAfter(4f);
-                columnLeft.addElement(jobPeriodParagraph1);
-
-                jobTitleParagraph1.setSpacingAfter(4f);
-                columnLeft.addElement(jobTitleParagraph1);
-
-
-                dutyString1 = jobDuty2.getText().toString();
-
-                Paragraph jobDutyParagraph1 = new Paragraph();
-                String [] jobDutyProcessed1 = stringProcessor(dutyString1);
-                for (String aJobDutyProcessed1 : jobDutyProcessed1) {
-
-                    Chunk jobDuty1 = new Chunk(aJobDutyProcessed1.trim());
-                    jobDutyParagraph1.add(jobDuty1+"\n");
+                    Chunk jobDuty = new Chunk(aJobDutyProcessed.trim());
+                    jobDutyParagraph.add(jobDuty + "\n");
                 }
 
-                jobDutyParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
-                jobDutyParagraph1.setFont(textLeftFont);
-                columnLeft.addElement(jobDutyParagraph1);
-            }
+                jobDutyParagraph.setAlignment(Paragraph.ALIGN_LEFT);
+                jobDutyParagraph.setFont(textLeftFont);
+                columnLeft.addElement(jobDutyParagraph);
 
-            if (mJobCount ==3){
-                Paragraph companyTitleParagraph1 = new Paragraph("\u2022" + companyTitle2.getText().toString());
-                companyTitleParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
-                companyTitleParagraph1.setFont(headersSmallLeftFont);
+                if (mJobCount == 2) {
 
-                Paragraph jobPeriodParagraph1 = new Paragraph(jobPeriod2.getText().toString());
-                jobPeriodParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
-                jobPeriodParagraph1.setFont(textLeftFontGray);
+                    Paragraph companyTitleParagraph1 = new Paragraph("\u2022" + companyTitle2.getText().toString());
+                    companyTitleParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
+                    companyTitleParagraph1.setFont(headersSmallLeftFont);
 
-
-                Paragraph jobTitleParagraph1 = new Paragraph(jobTitle2.getText().toString());
-                jobTitleParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
-                jobTitleParagraph1.setFont(textLeftFont);
-
-                columnLeft.addElement(companyTitleParagraph1);
-
-                jobPeriodParagraph1.setSpacingAfter(4f);
-                columnLeft.addElement(jobPeriodParagraph1);
-
-                jobTitleParagraph1.setSpacingAfter(4f);
-                columnLeft.addElement(jobTitleParagraph1);
+                    Paragraph jobPeriodParagraph1 = new Paragraph(jobPeriod2.getText().toString());
+                    jobPeriodParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
+                    jobPeriodParagraph1.setFont(textLeftFontGray);
 
 
-                dutyString1 = jobDuty2.getText().toString();
+                    Paragraph jobTitleParagraph1 = new Paragraph(jobTitle2.getText().toString());
+                    jobTitleParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
+                    jobTitleParagraph1.setFont(textLeftFont);
 
-                Paragraph jobDutyParagraph1 = new Paragraph();
-                String [] jobDutyProcessed1 = stringProcessor(dutyString1);
-                for (String aJobDutyProcessed1 : jobDutyProcessed1) {
+                    columnLeft.addElement(companyTitleParagraph1);
 
-                    Chunk jobDuty1 = new Chunk(aJobDutyProcessed1.trim());
-                    jobDutyParagraph1.add(jobDuty1+"\n");
-                }
+                    jobPeriodParagraph1.setSpacingAfter(4f);
+                    columnLeft.addElement(jobPeriodParagraph1);
 
-                jobDutyParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
-                jobDutyParagraph1.setFont(textLeftFont);
-                columnLeft.addElement(jobDutyParagraph1);
+                    jobTitleParagraph1.setSpacingAfter(4f);
+                    columnLeft.addElement(jobTitleParagraph1);
 
 
+                    dutyString1 = jobDuty2.getText().toString();
 
+                    Paragraph jobDutyParagraph1 = new Paragraph();
+                    String[] jobDutyProcessed1 = stringProcessor(dutyString1);
+                    for (String aJobDutyProcessed1 : jobDutyProcessed1) {
 
-                Paragraph companyTitleParagraph2 = new Paragraph("\u2022" + companyTitle3.getText().toString());
-                companyTitleParagraph2.setAlignment(Paragraph.ALIGN_LEFT);
-                companyTitleParagraph2.setFont(headersSmallLeftFont);
-
-                Paragraph jobPeriodParagraph2 = new Paragraph(jobPeriod3.getText().toString());
-                jobPeriodParagraph2.setAlignment(Paragraph.ALIGN_LEFT);
-                jobPeriodParagraph2.setFont(textLeftFontGray);
-
-
-                Paragraph jobTitleParagraph2 = new Paragraph(jobTitle3.getText().toString());
-                jobTitleParagraph2.setAlignment(Paragraph.ALIGN_LEFT);
-                jobTitleParagraph2.setFont(textLeftFont);
-
-                columnLeft.addElement(companyTitleParagraph2);
-
-                jobPeriodParagraph2.setSpacingAfter(4f);
-                columnLeft.addElement(jobPeriodParagraph2);
-
-                jobTitleParagraph2.setSpacingAfter(4f);
-                columnLeft.addElement(jobTitleParagraph2);
-
-
-                dutyString2 = jobDuty3.getText().toString();
-
-                Paragraph jobDutyParagraph2 = new Paragraph();
-                String [] jobDutyProcessed2 = stringProcessor(dutyString2);
-                for (String aJobDutyProcessed2 : jobDutyProcessed2) {
-
-                    Chunk jobDuty2 = new Chunk(aJobDutyProcessed2.trim());
-                    jobDutyParagraph2.add(jobDuty2+"\n");
-                }
-
-                jobDutyParagraph2.setAlignment(Paragraph.ALIGN_LEFT);
-                jobDutyParagraph2.setFont(textLeftFont);
-                columnLeft.addElement(jobDutyParagraph2);
-            }
-
-
-            myImgEdu.setSpacingBefore(20f);
-            columnLeft.addElement(myImgEdu);
-
-
-            Paragraph header2 = new Paragraph("Образование");
-            header2.setFont(headersLeftFont);
-            header2.setAlignment(Element.ALIGN_CENTER);
-            header2.setSpacingAfter(8f);
-            columnLeft.addElement(header2);
-
-
-            Paragraph studyTitleParagraph = new Paragraph("\u2022" + this.studyTitle.getText().toString());
-            studyTitleParagraph.setAlignment(Paragraph.ALIGN_LEFT);
-            studyTitleParagraph.setFont(headersSmallLeftFont);
-
-            Paragraph studyDescriptionParagraph = new Paragraph(this.studyDescription.getText().toString());
-            studyDescriptionParagraph.setAlignment(Paragraph.ALIGN_LEFT);
-            studyDescriptionParagraph.setFont(textLeftFont);
-
-            Paragraph studyRatingParagraph = new Paragraph(rating.getText().toString());
-            studyRatingParagraph.setAlignment(Paragraph.ALIGN_LEFT);
-            studyRatingParagraph.setFont(textLeftFont);
-
-            studyTitleParagraph.setSpacingAfter(4f);
-            columnLeft.addElement(studyTitleParagraph);
-
-            studyDescriptionParagraph.setSpacingAfter(4f);
-            columnLeft.addElement(studyDescriptionParagraph);
-
-            studyRatingParagraph.setSpacingAfter(4f);
-            columnLeft.addElement(studyRatingParagraph);
-
-            if (mStudyCount==2){
-                Paragraph studyTitleParagraph1 = new Paragraph("\u2022" + studyTitle2.getText().toString());
-                studyTitleParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
-                studyTitleParagraph1.setFont(headersSmallLeftFont);
-
-                Paragraph studyDescriptionParagraph1 = new Paragraph(studyDescription2.getText().toString());
-                studyDescriptionParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
-                studyDescriptionParagraph1.setFont(textLeftFont);
-
-                Paragraph studyRatingParagraph1 = new Paragraph(rating2.getText().toString());
-                studyRatingParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
-                studyRatingParagraph1.setFont(textLeftFont);
-
-                studyTitleParagraph1.setSpacingAfter(4f);
-                columnLeft.addElement(studyTitleParagraph1);
-
-                studyDescriptionParagraph1.setSpacingAfter(4f);
-                columnLeft.addElement(studyDescriptionParagraph1);
-
-                studyRatingParagraph1.setSpacingAfter(4f);
-                columnLeft.addElement(studyRatingParagraph1);
-
-            }
-
-
-            Paragraph header3 = new Paragraph("Достижения");
-            header3.setFont(headersLeftFont);
-            header3.setAlignment(Element.ALIGN_CENTER);
-            header3.setSpacingBefore(20f);
-            header3.setSpacingAfter(8f);
-            columnLeft.addElement(header3);
-
-
-            Paragraph achievementsParagraph = new Paragraph();
-            String [] achievementsProcessed = stringProcessor(achievementString);
-            for (String achievement : achievementsProcessed) {
-
-                Chunk achieved = new Chunk(achievement.trim());
-                achievementsParagraph.add(achieved+"\n");
-            }
-            achievementsParagraph.setAlignment(Paragraph.ALIGN_LEFT);
-            achievementsParagraph.setFont(textLeftFont);
-            columnLeft.addElement(achievementsParagraph);
-
-
-
-
-            Paragraph nameParagraph = new Paragraph(this.name.getText().toString());
-            nameParagraph.setAlignment(Paragraph.ALIGN_CENTER);
-            nameParagraph.setFont(nameFont);
-            nameParagraph.setSpacingBefore(8f);
-            nameParagraph.setSpacingAfter(4f);
-            columnRight.addElement(nameParagraph);
-
-            Paragraph nick = new Paragraph(this.nick.getText().toString());
-            nick.setAlignment(Paragraph.ALIGN_CENTER);
-            nick.setFont(nickFont);
-            nick.setSpacingAfter(20f);
-            columnRight.addElement(nick);
-
-            Paragraph telephoneParagraph = new Paragraph();
-            Chunk tChunk = new Chunk("T");
-            tChunk.setFont(contactsHeaderFont);
-            String tel1 = tel.getText().toString();
-            Chunk telChunk = new Chunk("    "+ tel1);
-            telChunk.setFont(contactsFont);
-            telephoneParagraph.add(tChunk);
-            telephoneParagraph.add(telChunk);
-            telephoneParagraph.setIndentationLeft(10);
-            telephoneParagraph.setAlignment(Paragraph.ALIGN_LEFT);
-            columnRight.addElement(telephoneParagraph);
-
-            Paragraph emailParagraph = new Paragraph();
-            Chunk eChunk = new Chunk("E");
-            eChunk.setFont(contactsHeaderFont);
-            String email1 = email.getText().toString();
-            Chunk emailChunk = new Chunk("    "+ email1);
-            emailChunk.setFont(contactsFont);
-            emailParagraph.add(eChunk);
-            emailParagraph.add(emailChunk);
-            emailParagraph.setIndentationLeft(10);
-            emailParagraph.setAlignment(Paragraph.ALIGN_LEFT);
-            columnRight.addElement(emailParagraph);
-
-            Paragraph header4 = new Paragraph("О себе");
-            header4.setAlignment(Paragraph.ALIGN_LEFT);
-            header4.setIndentationLeft(20);
-            header4.setFont(headersRightFont);
-            header4.setSpacingBefore(40f);
-            header4.setSpacingAfter(8f);
-
-            Paragraph bioParagraph = new Paragraph(this.bio.getText().toString());
-            bioParagraph.setAlignment(Paragraph.ALIGN_LEFT);
-            bioParagraph.setIndentationLeft(10);
-            bioParagraph.setFont(textLeftFont);
-            columnRight.addElement(header4);
-            columnRight.addElement(bioParagraph);
-
-            Paragraph header5 = new Paragraph("Навыки");
-            header5.setAlignment(Paragraph.ALIGN_LEFT);
-            header5.setFont(headersRightFont);
-            header5.setIndentationLeft(20);
-            header5.setSpacingBefore(30f);
-            header5.setSpacingAfter(8f);
-            columnRight.addElement(header5);
-
-            Paragraph skillsParagraph = new Paragraph();
-            Chunk skillChunk = new Chunk();
-
-
-            String [] skillsProcessed = stringProcessor(skillString.trim());
-            for (String skill : skillsProcessed) {
-                String [] currentSkill = skillsStringProcessor(skill.trim());
-                skillChunk = new Chunk(currentSkill[0]+"   ");
-                skillChunk.setFont(skillsFont);
-                Chunk skillRatingChunk = new Chunk();
-                Chunk skillBlankRatingChunk = new Chunk();
-                if (currentSkill.length>1) {
-                    int skillRating = Integer.parseInt(currentSkill[1]);
-                    int skillBlankRating = 5 - skillRating;
-                    skillRatingChunk.setFont(skillsRatingFont);
-                    for (int i = 0; i < skillRating; i++) {
-                        skillRatingChunk.append("\u2022");
-                    }
-                    skillBlankRatingChunk.setFont(skillsBlankRatingFont);
-                    while (skillBlankRating > 0) {
-                        skillBlankRatingChunk.append("\u2022");
-                        skillBlankRating--;
+                        Chunk jobDuty1 = new Chunk(aJobDutyProcessed1.trim());
+                        jobDutyParagraph1.add(jobDuty1 + "\n");
                     }
 
+                    jobDutyParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
+                    jobDutyParagraph1.setFont(textLeftFont);
+                    columnLeft.addElement(jobDutyParagraph1);
                 }
-                skillsParagraph.add(skillChunk);
-                if (currentSkill.length>1)
-                    skillsParagraph.add(skillRatingChunk);
-                if (currentSkill.length>1)
-                    skillsParagraph.add(skillBlankRatingChunk);
-                skillsParagraph.add("\n");
+
+                if (mJobCount == 3) {
+                    Paragraph companyTitleParagraph1 = new Paragraph("\u2022" + companyTitle2.getText().toString());
+                    companyTitleParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
+                    companyTitleParagraph1.setFont(headersSmallLeftFont);
+
+                    Paragraph jobPeriodParagraph1 = new Paragraph(jobPeriod2.getText().toString());
+                    jobPeriodParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
+                    jobPeriodParagraph1.setFont(textLeftFontGray);
+
+
+                    Paragraph jobTitleParagraph1 = new Paragraph(jobTitle2.getText().toString());
+                    jobTitleParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
+                    jobTitleParagraph1.setFont(textLeftFont);
+
+                    columnLeft.addElement(companyTitleParagraph1);
+
+                    jobPeriodParagraph1.setSpacingAfter(4f);
+                    columnLeft.addElement(jobPeriodParagraph1);
+
+                    jobTitleParagraph1.setSpacingAfter(4f);
+                    columnLeft.addElement(jobTitleParagraph1);
+
+
+                    dutyString1 = jobDuty2.getText().toString();
+
+                    Paragraph jobDutyParagraph1 = new Paragraph();
+                    String[] jobDutyProcessed1 = stringProcessor(dutyString1);
+                    for (String aJobDutyProcessed1 : jobDutyProcessed1) {
+
+                        Chunk jobDuty1 = new Chunk(aJobDutyProcessed1.trim());
+                        jobDutyParagraph1.add(jobDuty1 + "\n");
+                    }
+
+                    jobDutyParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
+                    jobDutyParagraph1.setFont(textLeftFont);
+                    columnLeft.addElement(jobDutyParagraph1);
+
+
+                    Paragraph companyTitleParagraph2 = new Paragraph("\u2022" + companyTitle3.getText().toString());
+                    companyTitleParagraph2.setAlignment(Paragraph.ALIGN_LEFT);
+                    companyTitleParagraph2.setFont(headersSmallLeftFont);
+
+                    Paragraph jobPeriodParagraph2 = new Paragraph(jobPeriod3.getText().toString());
+                    jobPeriodParagraph2.setAlignment(Paragraph.ALIGN_LEFT);
+                    jobPeriodParagraph2.setFont(textLeftFontGray);
+
+
+                    Paragraph jobTitleParagraph2 = new Paragraph(jobTitle3.getText().toString());
+                    jobTitleParagraph2.setAlignment(Paragraph.ALIGN_LEFT);
+                    jobTitleParagraph2.setFont(textLeftFont);
+
+                    columnLeft.addElement(companyTitleParagraph2);
+
+                    jobPeriodParagraph2.setSpacingAfter(4f);
+                    columnLeft.addElement(jobPeriodParagraph2);
+
+                    jobTitleParagraph2.setSpacingAfter(4f);
+                    columnLeft.addElement(jobTitleParagraph2);
+
+
+                    dutyString2 = jobDuty3.getText().toString();
+
+                    Paragraph jobDutyParagraph2 = new Paragraph();
+                    String[] jobDutyProcessed2 = stringProcessor(dutyString2);
+                    for (String aJobDutyProcessed2 : jobDutyProcessed2) {
+
+                        Chunk jobDuty2 = new Chunk(aJobDutyProcessed2.trim());
+                        jobDutyParagraph2.add(jobDuty2 + "\n");
+                    }
+
+                    jobDutyParagraph2.setAlignment(Paragraph.ALIGN_LEFT);
+                    jobDutyParagraph2.setFont(textLeftFont);
+                    columnLeft.addElement(jobDutyParagraph2);
+                }
+
+
+                myImgEdu.setSpacingBefore(20f);
+                columnLeft.addElement(myImgEdu);
+
+
+                Paragraph header2 = new Paragraph("Образование");
+                header2.setFont(headersLeftFont);
+                header2.setAlignment(Element.ALIGN_CENTER);
+                header2.setSpacingAfter(8f);
+                columnLeft.addElement(header2);
+
+
+                Paragraph studyTitleParagraph = new Paragraph("\u2022" + this.studyTitle.getText().toString());
+                studyTitleParagraph.setAlignment(Paragraph.ALIGN_LEFT);
+                studyTitleParagraph.setFont(headersSmallLeftFont);
+
+                Paragraph studyDescriptionParagraph = new Paragraph(this.studyDescription.getText().toString());
+                studyDescriptionParagraph.setAlignment(Paragraph.ALIGN_LEFT);
+                studyDescriptionParagraph.setFont(textLeftFont);
+
+                Paragraph studyRatingParagraph = new Paragraph(rating.getText().toString());
+                studyRatingParagraph.setAlignment(Paragraph.ALIGN_LEFT);
+                studyRatingParagraph.setFont(textLeftFont);
+
+                studyTitleParagraph.setSpacingAfter(4f);
+                columnLeft.addElement(studyTitleParagraph);
+
+                studyDescriptionParagraph.setSpacingAfter(4f);
+                columnLeft.addElement(studyDescriptionParagraph);
+
+                studyRatingParagraph.setSpacingAfter(4f);
+                columnLeft.addElement(studyRatingParagraph);
+
+                if (mStudyCount == 2) {
+                    Paragraph studyTitleParagraph1 = new Paragraph("\u2022" + studyTitle2.getText().toString());
+                    studyTitleParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
+                    studyTitleParagraph1.setFont(headersSmallLeftFont);
+
+                    Paragraph studyDescriptionParagraph1 = new Paragraph(studyDescription2.getText().toString());
+                    studyDescriptionParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
+                    studyDescriptionParagraph1.setFont(textLeftFont);
+
+                    Paragraph studyRatingParagraph1 = new Paragraph(rating2.getText().toString());
+                    studyRatingParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
+                    studyRatingParagraph1.setFont(textLeftFont);
+
+                    studyTitleParagraph1.setSpacingAfter(4f);
+                    columnLeft.addElement(studyTitleParagraph1);
+
+                    studyDescriptionParagraph1.setSpacingAfter(4f);
+                    columnLeft.addElement(studyDescriptionParagraph1);
+
+                    studyRatingParagraph1.setSpacingAfter(4f);
+                    columnLeft.addElement(studyRatingParagraph1);
+
+                }
+
+
+                Paragraph header3 = new Paragraph("Достижения");
+                header3.setFont(headersLeftFont);
+                header3.setAlignment(Element.ALIGN_CENTER);
+                header3.setSpacingBefore(20f);
+                header3.setSpacingAfter(8f);
+                columnLeft.addElement(header3);
+
+
+                Paragraph achievementsParagraph = new Paragraph();
+                String[] achievementsProcessed = stringProcessor(achievementString);
+                for (String achievement : achievementsProcessed) {
+
+                    Chunk achieved = new Chunk(achievement.trim());
+                    achievementsParagraph.add(achieved + "\n");
+                }
+                achievementsParagraph.setAlignment(Paragraph.ALIGN_LEFT);
+                achievementsParagraph.setFont(textLeftFont);
+                columnLeft.addElement(achievementsParagraph);
+
+
+                Paragraph nameParagraph = new Paragraph(this.name.getText().toString());
+                nameParagraph.setAlignment(Paragraph.ALIGN_CENTER);
+                nameParagraph.setFont(nameFont);
+                nameParagraph.setSpacingBefore(8f);
+                nameParagraph.setSpacingAfter(4f);
+                columnRight.addElement(nameParagraph);
+
+                Paragraph nick = new Paragraph(this.nick.getText().toString());
+                nick.setAlignment(Paragraph.ALIGN_CENTER);
+                nick.setFont(nickFont);
+                nick.setSpacingAfter(20f);
+                columnRight.addElement(nick);
+
+                Paragraph telephoneParagraph = new Paragraph();
+                Chunk tChunk = new Chunk("T");
+                tChunk.setFont(contactsHeaderFont);
+                String tel1 = tel.getText().toString();
+                Chunk telChunk = new Chunk("    " + tel1);
+                telChunk.setFont(contactsFont);
+                telephoneParagraph.add(tChunk);
+                telephoneParagraph.add(telChunk);
+                telephoneParagraph.setIndentationLeft(10);
+                telephoneParagraph.setAlignment(Paragraph.ALIGN_LEFT);
+                columnRight.addElement(telephoneParagraph);
+
+                Paragraph emailParagraph = new Paragraph();
+                Chunk eChunk = new Chunk("E");
+                eChunk.setFont(contactsHeaderFont);
+                String email1 = email.getText().toString();
+                Chunk emailChunk = new Chunk("    " + email1);
+                emailChunk.setFont(contactsFont);
+                emailParagraph.add(eChunk);
+                emailParagraph.add(emailChunk);
+                emailParagraph.setIndentationLeft(10);
+                emailParagraph.setAlignment(Paragraph.ALIGN_LEFT);
+                columnRight.addElement(emailParagraph);
+
+                Paragraph header4 = new Paragraph("О себе");
+                header4.setAlignment(Paragraph.ALIGN_LEFT);
+                header4.setIndentationLeft(20);
+                header4.setFont(headersRightFont);
+                header4.setSpacingBefore(40f);
+                header4.setSpacingAfter(8f);
+
+                Paragraph bioParagraph = new Paragraph(this.bio.getText().toString());
+                bioParagraph.setAlignment(Paragraph.ALIGN_LEFT);
+                bioParagraph.setIndentationLeft(10);
+                bioParagraph.setFont(textLeftFont);
+                columnRight.addElement(header4);
+                columnRight.addElement(bioParagraph);
+
+                Paragraph header5 = new Paragraph("Навыки");
+                header5.setAlignment(Paragraph.ALIGN_LEFT);
+                header5.setFont(headersRightFont);
+                header5.setIndentationLeft(20);
+                header5.setSpacingBefore(30f);
+                header5.setSpacingAfter(8f);
+                columnRight.addElement(header5);
+
+                Paragraph skillsParagraph = new Paragraph();
+                Chunk skillChunk = new Chunk();
+
+
+                String[] skillsProcessed = stringProcessor(skillString.trim());
+                for (String skill : skillsProcessed) {
+                    String[] currentSkill = skillsStringProcessor(skill.trim());
+                    skillChunk = new Chunk(currentSkill[0] + "   ");
+                    skillChunk.setFont(skillsFont);
+                    Chunk skillRatingChunk = new Chunk();
+                    Chunk skillBlankRatingChunk = new Chunk();
+                    if (currentSkill.length > 1) {
+                        int skillRating = Integer.parseInt(currentSkill[1]);
+                        int skillBlankRating = 5 - skillRating;
+                        skillRatingChunk.setFont(skillsRatingFont);
+                        for (int i = 0; i < skillRating; i++) {
+                            skillRatingChunk.append("\u2022");
+                        }
+                        skillBlankRatingChunk.setFont(skillsBlankRatingFont);
+                        while (skillBlankRating > 0) {
+                            skillBlankRatingChunk.append("\u2022");
+                            skillBlankRating--;
+                        }
+
+                    }
+                    skillsParagraph.add(skillChunk);
+                    if (currentSkill.length > 1)
+                        skillsParagraph.add(skillRatingChunk);
+                    if (currentSkill.length > 1)
+                        skillsParagraph.add(skillBlankRatingChunk);
+                    skillsParagraph.add("\n");
+                }
+                skillsParagraph.setAlignment(Paragraph.ALIGN_LEFT);
+                skillsParagraph.setIndentationLeft(10);
+                columnRight.addElement(skillsParagraph);
+
+
+                Paragraph header6 = new Paragraph("Другая информация");
+                header6.setAlignment(Paragraph.ALIGN_LEFT);
+                header6.setFont(headersRightFont);
+                header6.setIndentationLeft(20);
+                header6.setSpacingBefore(30f);
+                header6.setSpacingAfter(8f);
+                columnRight.addElement(header6);
+
+                Paragraph subHeader1 = new Paragraph("Языки");
+                subHeader1.setAlignment(Paragraph.ALIGN_LEFT);
+                subHeader1.setFont(skillsFont);
+                subHeader1.setIndentationLeft(15);
+                subHeader1.setSpacingAfter(4f);
+                columnRight.addElement(subHeader1);
+
+
+                Paragraph languagesParagraph = new Paragraph();
+                String[] languagesProcessed = stringProcessor(languageString);
+                for (String language : languagesProcessed) {
+                    Chunk languageChunk = new Chunk(language.trim());
+                    languagesParagraph.add(languageChunk + "\n");
+                }
+                languagesParagraph.setAlignment(Paragraph.ALIGN_LEFT);
+                languagesParagraph.setFont(textLeftFont);
+                languagesParagraph.setSpacingAfter(8f);
+                languagesParagraph.setIndentationLeft(10);
+                columnRight.addElement(languagesParagraph);
+
+                Paragraph subHeader2 = new Paragraph("Хобби");
+                subHeader2.setAlignment(Paragraph.ALIGN_LEFT);
+                subHeader2.setFont(skillsFont);
+                subHeader2.setIndentationLeft(15);
+                subHeader2.setSpacingAfter(4f);
+                columnRight.addElement(subHeader2);
+
+                Paragraph hobbyParagraph = new Paragraph();
+                String[] hobbyProcessed = stringProcessor(hobbyString);
+                for (String hobby : hobbyProcessed) {
+                    Chunk hobbyChunk = new Chunk(hobby.trim());
+                    hobbyParagraph.add(hobbyChunk + "\n");
+                }
+                hobbyParagraph.setAlignment(Paragraph.ALIGN_LEFT);
+                hobbyParagraph.setFont(textLeftFont);
+                hobbyParagraph.setIndentationLeft(10);
+                columnRight.addElement(hobbyParagraph);
+
+
+                columnLeft.go();
+                columnRight.go();
+
+                showSnackbar("Документ создан");
             }
-            skillsParagraph.setAlignment(Paragraph.ALIGN_LEFT);
-            skillsParagraph.setIndentationLeft(10);
-            columnRight.addElement(skillsParagraph);
-
-
-            Paragraph header6 = new Paragraph("Другая информация");
-            header6.setAlignment(Paragraph.ALIGN_LEFT);
-            header6.setFont(headersRightFont);
-            header6.setIndentationLeft(20);header6.setSpacingBefore(30f);
-            header6.setSpacingAfter(8f);
-            columnRight.addElement(header6);
-
-            Paragraph subHeader1 = new Paragraph("Языки");
-            subHeader1.setAlignment(Paragraph.ALIGN_LEFT);
-            subHeader1.setFont(skillsFont);
-            subHeader1.setIndentationLeft(15);
-            subHeader1.setSpacingAfter(4f);
-            columnRight.addElement(subHeader1);
-
-
-            Paragraph languagesParagraph = new Paragraph();
-            String [] languagesProcessed = stringProcessor(languageString);
-            for (String language : languagesProcessed) {
-                Chunk languageChunk = new Chunk(language.trim());
-                languagesParagraph.add(languageChunk+"\n");
+            else {
+                showSnackbar("Вставьте карту памяти ");
             }
-            languagesParagraph.setAlignment(Paragraph.ALIGN_LEFT);
-            languagesParagraph.setFont(textLeftFont);
-            languagesParagraph.setSpacingAfter(8f);
-            languagesParagraph.setIndentationLeft(10);
-            columnRight.addElement(languagesParagraph);
-
-            Paragraph subHeader2 = new Paragraph("Хобби");
-            subHeader2.setAlignment(Paragraph.ALIGN_LEFT);
-            subHeader2.setFont(skillsFont);
-            subHeader2.setIndentationLeft(15);
-            subHeader2.setSpacingAfter(4f);
-            columnRight.addElement(subHeader2);
-
-            Paragraph hobbyParagraph = new Paragraph();
-            String [] hobbyProcessed = stringProcessor(hobbyString);
-            for (String hobby : hobbyProcessed) {
-                Chunk hobbyChunk = new Chunk(hobby.trim());
-                hobbyParagraph.add(hobbyChunk+"\n");
-            }
-            hobbyParagraph.setAlignment(Paragraph.ALIGN_LEFT);
-            hobbyParagraph.setFont(textLeftFont);
-            hobbyParagraph.setIndentationLeft(10);
-            columnRight.addElement(hobbyParagraph);
-
-
-
-
-
-            columnLeft.go();
-            columnRight.go();
-
-            showSnackbar("Документ создан");
 
 
 
@@ -1700,6 +1695,11 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         Canvas canvas = new Canvas(destBitmap);
         canvas.drawBitmap(source, new Rect(0, 0, source.getWidth(), source.getHeight()), new Rect(0, 0, destWidth, destHeight), new Paint(Paint.ANTI_ALIAS_FLAG));
         return destBitmap;
+    }
+
+    public boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        return Environment.MEDIA_MOUNTED.equals(state);
     }
 
 
