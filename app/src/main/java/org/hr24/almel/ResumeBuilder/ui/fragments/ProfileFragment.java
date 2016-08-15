@@ -51,7 +51,6 @@ import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
-import com.itextpdf.text.ExceptionConverter;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
@@ -90,10 +89,11 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     private int mStudyCount = 1;
 
     private ImageView photoImgV;
-    private EditText name, nick,tel, email, bio, skills, languages, hobby,
-            jobPeriod, jobTitle, companyTitle, jobDuty, studyTitle, studyDescription, rating, achievements,
-            jobPeriod2, jobTitle2, companyTitle2, jobDuty2, studyTitle2, studyDescription2, rating2,
-            jobPeriod3, jobTitle3, companyTitle3, jobDuty3;
+    private EditText nameEt, nickEt, telEt, emailEt, bioEt, skillsEt, languagesEt, hobbyEt,
+            jobPeriodEt, jobTitleEt, companyTitleEt, jobDutyEt, studyTitleEt, studyDescriptionEt, ratingEt, achievementsEt,
+            jobPeriod2Et, jobTitle2Et, companyTitle2Et, jobDuty2Et,
+            studyTitle2Et, studyDescription2Et, rating2Et,
+            jobPeriod3Et, jobTitle3Et, companyTitle3Et, jobDuty3Et;
     private Button savePdfButton;
     private Button shareButton;
     private Button viewPdfButton;
@@ -155,22 +155,22 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
         mAddPhototv  = (TextView) rootView.findViewById(R.id.add_photo);
 
-        name = (EditText) rootView.findViewById(R.id.name);
-        nick = (EditText) rootView.findViewById(R.id.nick);
-        tel = (EditText) rootView.findViewById(R.id.tel);
-        email = (EditText) rootView.findViewById(R.id.email);
-        bio = (EditText) rootView.findViewById(R.id.bio);
-        skills = (EditText) rootView.findViewById(R.id.skills);
-        languages = (EditText) rootView.findViewById(R.id.languages);
-        hobby = (EditText) rootView.findViewById(R.id.hobby);
-        jobPeriod = (EditText) rootView.findViewById(R.id.job_period);
-        companyTitle = (EditText) rootView.findViewById(R.id.company_title);
-        jobTitle = (EditText) rootView.findViewById(R.id.job_title);
-        jobDuty=(EditText) rootView.findViewById(R.id.job_duty);
-        studyTitle =(EditText) rootView.findViewById(R.id.study_title);
-        studyDescription =(EditText) rootView.findViewById(R.id.study_decription);
-        rating =(EditText) rootView.findViewById(R.id.rating);
-        achievements=(EditText) rootView.findViewById(R.id.achievements);
+        nameEt = (EditText) rootView.findViewById(R.id.name);
+        nickEt = (EditText) rootView.findViewById(R.id.nick);
+        telEt = (EditText) rootView.findViewById(R.id.tel);
+        emailEt = (EditText) rootView.findViewById(R.id.email);
+        bioEt = (EditText) rootView.findViewById(R.id.bio);
+        skillsEt = (EditText) rootView.findViewById(R.id.skills);
+        languagesEt = (EditText) rootView.findViewById(R.id.languages);
+        hobbyEt = (EditText) rootView.findViewById(R.id.hobby);
+        jobPeriodEt = (EditText) rootView.findViewById(R.id.job_period);
+        companyTitleEt = (EditText) rootView.findViewById(R.id.company_title);
+        jobTitleEt = (EditText) rootView.findViewById(R.id.job_title);
+        jobDutyEt =(EditText) rootView.findViewById(R.id.job_duty);
+        studyTitleEt =(EditText) rootView.findViewById(R.id.study_title);
+        studyDescriptionEt =(EditText) rootView.findViewById(R.id.study_decription);
+        ratingEt =(EditText) rootView.findViewById(R.id.rating);
+        achievementsEt =(EditText) rootView.findViewById(R.id.achievements);
 
         mCoordinatorFrame = (CoordinatorLayout) rootView.findViewById(R.id.frame);
 
@@ -220,34 +220,36 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
 
         mUserInfoViews = new ArrayList<>();
-        mUserInfoViews.add(name);
-        mUserInfoViews.add(nick);
-        mUserInfoViews.add(tel);
-        mUserInfoViews.add(email);
-        mUserInfoViews.add(bio);
-        mUserInfoViews.add(skills);
-        mUserInfoViews.add(languages);
-        mUserInfoViews.add(hobby);
-        mUserInfoViews.add(jobPeriod);
-        mUserInfoViews.add(companyTitle);
-        mUserInfoViews.add(jobTitle);
-        mUserInfoViews.add(jobDuty);
-        mUserInfoViews.add(studyTitle);
-        mUserInfoViews.add(studyDescription);
-        mUserInfoViews.add(rating);
-        mUserInfoViews.add(achievements);
+        mUserInfoViews.add(nameEt);
+        mUserInfoViews.add(nickEt);
+        mUserInfoViews.add(telEt);
+        mUserInfoViews.add(emailEt);
+        mUserInfoViews.add(bioEt);
+        mUserInfoViews.add(skillsEt);
+        mUserInfoViews.add(languagesEt);
+        mUserInfoViews.add(hobbyEt);
+        mUserInfoViews.add(jobPeriodEt);
+        mUserInfoViews.add(companyTitleEt);
+        mUserInfoViews.add(jobTitleEt);
+        mUserInfoViews.add(jobDutyEt);
+        mUserInfoViews.add(studyTitleEt);
+        mUserInfoViews.add(studyDescriptionEt);
+        mUserInfoViews.add(ratingEt);
+        mUserInfoViews.add(achievementsEt);
 
 
 
 
-        if(NetworkStatusChecker.isNetworkAvailable(getContext()) && MainFragment.AUTHORIZATION_STATUS && !POST_STATUS){
-        socialNetwork = MainFragment.mSocialNetworkManager.getSocialNetwork(networkId);
-        socialNetwork.setOnRequestCurrentPersonCompleteListener(this);
-        socialNetwork.requestCurrentPerson();
+        if(NetworkStatusChecker.isNetworkAvailable(getContext()) && MainFragment.AUTHORIZATION_STATUS && !POST_STATUS && !MainFragment.PREMIUM_STATUS){
+                   try {
+                       socialNetwork = MainFragment.mSocialNetworkManager.getSocialNetwork(networkId);
+                       socialNetwork.setOnRequestCurrentPersonCompleteListener(this);
+                       socialNetwork.requestCurrentPerson();
+                   } catch (Exception e){
+                       Crashlytics.logException(e);
+                   }
 
 
-        } else if (!NetworkStatusChecker.isNetworkAvailable(getContext()) && MainFragment.AUTHORIZATION_STATUS){
-            showSnackbar("Сеть недоступна, не удалось загрузить Ваш профиль");
         }
 
         initUserFields();
@@ -314,9 +316,6 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             mAddPhototv.setVisibility(View.VISIBLE);
         }
 
-        if (MainFragment.AUTHORIZATION_STATUS && !POST_STATUS && !MainFragment.PREMIUM_STATUS){
-            sharePost();
-        }
 
 
 
@@ -436,15 +435,17 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
     @Override
     public void onRequestSocialPersonSuccess(int i, SocialPerson socialPerson) {
-        if (name.getText() == null) {
-            name.setText(socialPerson.name);
-        }
+            nameEt.setText(socialPerson.name);
+
+
+
+
+        sharePost();
 
     }
 
     @Override
     public void onError(int networkId, String requestID, String errorMessage, Object data) {
-        StartActivity.hideProgress();
 
     }
 
@@ -598,14 +599,14 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
         removeStudy2Button = (Button) rootView.findViewById(R.id.study_2_remove_button);
         removeStudy2Button.setOnClickListener(this);
-        studyTitle2 = (EditText) rootView.findViewById(R.id.study_title1);
-        studyDescription2 = (EditText) rootView.findViewById(R.id.study_decription1);
-        rating2 = (EditText) rootView.findViewById(R.id.rating1);
+        studyTitle2Et = (EditText) rootView.findViewById(R.id.study_title1);
+        studyDescription2Et = (EditText) rootView.findViewById(R.id.study_decription1);
+        rating2Et = (EditText) rootView.findViewById(R.id.rating1);
 
         mUserInfoViewsStudy2= new ArrayList<>();
-        mUserInfoViewsStudy2.add(studyTitle2);
-        mUserInfoViewsStudy2.add(studyDescription2);
-        mUserInfoViewsStudy2.add(rating2);
+        mUserInfoViewsStudy2.add(studyTitle2Et);
+        mUserInfoViewsStudy2.add(studyDescription2Et);
+        mUserInfoViewsStudy2.add(rating2Et);
 
         initUserFieldsStudy2();
     }
@@ -616,10 +617,10 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         LayoutInflater ltInflaterJob2 = getActivity().getLayoutInflater();
         ltInflaterJob2.inflate(R.layout.job2, mJobLinLay, true);
 
-        jobPeriod2 = (EditText) rootView.findViewById(R.id.job_period1);
-        companyTitle2 = (EditText) rootView.findViewById(R.id.company_title1);
-        jobTitle2 = (EditText) rootView.findViewById(R.id.job_title1);
-        jobDuty2 =(EditText) rootView.findViewById(R.id.job_duty1);
+        jobPeriod2Et = (EditText) rootView.findViewById(R.id.job_period1);
+        companyTitle2Et = (EditText) rootView.findViewById(R.id.company_title1);
+        jobTitle2Et = (EditText) rootView.findViewById(R.id.job_title1);
+        jobDuty2Et =(EditText) rootView.findViewById(R.id.job_duty1);
 
         job3AddButton = (Button) rootView.findViewById(R.id.job_3_add_btn);
         removeJob2Button = (Button) rootView.findViewById(R.id.job_2_remove_button);
@@ -628,10 +629,10 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         removeJob2Button.setOnClickListener(this);
 
         mUserInfoViewsJob2= new ArrayList<>();
-        mUserInfoViewsJob2.add(jobPeriod2);
-        mUserInfoViewsJob2.add(companyTitle2);
-        mUserInfoViewsJob2.add(jobTitle2);
-        mUserInfoViewsJob2.add(jobDuty2);
+        mUserInfoViewsJob2.add(jobPeriod2Et);
+        mUserInfoViewsJob2.add(companyTitle2Et);
+        mUserInfoViewsJob2.add(jobTitle2Et);
+        mUserInfoViewsJob2.add(jobDuty2Et);
 
         initUserFieldsJob2();
 
@@ -644,19 +645,19 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         LayoutInflater ltInflaterJob3 = getActivity().getLayoutInflater();
         ltInflaterJob3.inflate(R.layout.job3, mJobLinLay, true);
 
-        jobPeriod3 = (EditText) rootView.findViewById(R.id.job_period2);
-        companyTitle3 = (EditText) rootView.findViewById(R.id.company_title2);
-        jobTitle3 = (EditText) rootView.findViewById(R.id.job_title2);
-        jobDuty3 =(EditText) rootView.findViewById(R.id.job_duty2);
+        jobPeriod3Et = (EditText) rootView.findViewById(R.id.job_period2);
+        companyTitle3Et = (EditText) rootView.findViewById(R.id.company_title2);
+        jobTitle3Et = (EditText) rootView.findViewById(R.id.job_title2);
+        jobDuty3Et =(EditText) rootView.findViewById(R.id.job_duty2);
         removeJob3Button = (Button) rootView.findViewById(R.id.job_3_remove_button);
 
         removeJob3Button.setOnClickListener(this);
 
         mUserInfoViewsJob3= new ArrayList<>();
-        mUserInfoViewsJob3.add(jobPeriod3);
-        mUserInfoViewsJob3.add(companyTitle3);
-        mUserInfoViewsJob3.add(jobTitle3);
-        mUserInfoViewsJob3.add(jobDuty3);
+        mUserInfoViewsJob3.add(jobPeriod3Et);
+        mUserInfoViewsJob3.add(companyTitle3Et);
+        mUserInfoViewsJob3.add(jobTitle3Et);
+        mUserInfoViewsJob3.add(jobDuty3Et);
 
         initUserFieldsJob3();
 
@@ -863,11 +864,11 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
 
 
-        skillString = skills.getText().toString();
-        languageString = languages.getText().toString();
-        hobbyString = hobby.getText().toString();
-        dutyString = jobDuty.getText().toString();
-        achievementString = achievements.getText().toString();
+        skillString = skillsEt.getText().toString();
+        languageString = languagesEt.getText().toString();
+        hobbyString = hobbyEt.getText().toString();
+        dutyString = jobDutyEt.getText().toString();
+        achievementString = achievementsEt.getText().toString();
 
         final Rectangle[] COLUMNS = {
                 new Rectangle(36, 36, 290, 806),
@@ -970,20 +971,20 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 columnLeft.addElement(header1);
 
 
-                Paragraph companyTitleParagraph = new Paragraph("\u2022" + this.companyTitle.getText().toString());
+                Paragraph companyTitleParagraph = new Paragraph("\u2022" + this.companyTitleEt.getText().toString());
                 companyTitleParagraph.setAlignment(Paragraph.ALIGN_LEFT);
                 companyTitleParagraph.setFont(headersSmallLeftFont);
                 columnLeft.addElement(companyTitleParagraph);
 
 
-                Paragraph jobPeriodParagraph = new Paragraph(this.jobPeriod.getText().toString());
+                Paragraph jobPeriodParagraph = new Paragraph(this.jobPeriodEt.getText().toString());
                 jobPeriodParagraph.setAlignment(Paragraph.ALIGN_LEFT);
                 jobPeriodParagraph.setFont(textLeftFontGray);
                 jobPeriodParagraph.setSpacingAfter(4f);
                 columnLeft.addElement(jobPeriodParagraph);
 
 
-                Paragraph jobTitleParagraph = new Paragraph(this.jobTitle.getText().toString());
+                Paragraph jobTitleParagraph = new Paragraph(this.jobTitleEt.getText().toString());
                 jobTitleParagraph.setAlignment(Paragraph.ALIGN_LEFT);
                 jobTitleParagraph.setFont(textLeftFont);
                 jobTitleParagraph.setSpacingAfter(4f);
@@ -1004,16 +1005,16 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
                 if (mJobCount == 2) {
 
-                    Paragraph companyTitleParagraph1 = new Paragraph("\u2022" + companyTitle2.getText().toString());
+                    Paragraph companyTitleParagraph1 = new Paragraph("\u2022" + companyTitle2Et.getText().toString());
                     companyTitleParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
                     companyTitleParagraph1.setFont(headersSmallLeftFont);
 
-                    Paragraph jobPeriodParagraph1 = new Paragraph(jobPeriod2.getText().toString());
+                    Paragraph jobPeriodParagraph1 = new Paragraph(jobPeriod2Et.getText().toString());
                     jobPeriodParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
                     jobPeriodParagraph1.setFont(textLeftFontGray);
 
 
-                    Paragraph jobTitleParagraph1 = new Paragraph(jobTitle2.getText().toString());
+                    Paragraph jobTitleParagraph1 = new Paragraph(jobTitle2Et.getText().toString());
                     jobTitleParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
                     jobTitleParagraph1.setFont(textLeftFont);
 
@@ -1026,7 +1027,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                     columnLeft.addElement(jobTitleParagraph1);
 
 
-                    dutyString1 = jobDuty2.getText().toString();
+                    dutyString1 = jobDuty2Et.getText().toString();
 
                     Paragraph jobDutyParagraph1 = new Paragraph();
                     String[] jobDutyProcessed1 = stringProcessor(dutyString1);
@@ -1042,16 +1043,16 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 }
 
                 if (mJobCount == 3) {
-                    Paragraph companyTitleParagraph1 = new Paragraph("\u2022" + companyTitle2.getText().toString());
+                    Paragraph companyTitleParagraph1 = new Paragraph("\u2022" + companyTitle2Et.getText().toString());
                     companyTitleParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
                     companyTitleParagraph1.setFont(headersSmallLeftFont);
 
-                    Paragraph jobPeriodParagraph1 = new Paragraph(jobPeriod2.getText().toString());
+                    Paragraph jobPeriodParagraph1 = new Paragraph(jobPeriod2Et.getText().toString());
                     jobPeriodParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
                     jobPeriodParagraph1.setFont(textLeftFontGray);
 
 
-                    Paragraph jobTitleParagraph1 = new Paragraph(jobTitle2.getText().toString());
+                    Paragraph jobTitleParagraph1 = new Paragraph(jobTitle2Et.getText().toString());
                     jobTitleParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
                     jobTitleParagraph1.setFont(textLeftFont);
 
@@ -1064,7 +1065,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                     columnLeft.addElement(jobTitleParagraph1);
 
 
-                    dutyString1 = jobDuty2.getText().toString();
+                    dutyString1 = jobDuty2Et.getText().toString();
 
                     Paragraph jobDutyParagraph1 = new Paragraph();
                     String[] jobDutyProcessed1 = stringProcessor(dutyString1);
@@ -1079,16 +1080,16 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                     columnLeft.addElement(jobDutyParagraph1);
 
 
-                    Paragraph companyTitleParagraph2 = new Paragraph("\u2022" + companyTitle3.getText().toString());
+                    Paragraph companyTitleParagraph2 = new Paragraph("\u2022" + companyTitle3Et.getText().toString());
                     companyTitleParagraph2.setAlignment(Paragraph.ALIGN_LEFT);
                     companyTitleParagraph2.setFont(headersSmallLeftFont);
 
-                    Paragraph jobPeriodParagraph2 = new Paragraph(jobPeriod3.getText().toString());
+                    Paragraph jobPeriodParagraph2 = new Paragraph(jobPeriod3Et.getText().toString());
                     jobPeriodParagraph2.setAlignment(Paragraph.ALIGN_LEFT);
                     jobPeriodParagraph2.setFont(textLeftFontGray);
 
 
-                    Paragraph jobTitleParagraph2 = new Paragraph(jobTitle3.getText().toString());
+                    Paragraph jobTitleParagraph2 = new Paragraph(jobTitle3Et.getText().toString());
                     jobTitleParagraph2.setAlignment(Paragraph.ALIGN_LEFT);
                     jobTitleParagraph2.setFont(textLeftFont);
 
@@ -1101,7 +1102,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                     columnLeft.addElement(jobTitleParagraph2);
 
 
-                    dutyString2 = jobDuty3.getText().toString();
+                    dutyString2 = jobDuty3Et.getText().toString();
 
                     Paragraph jobDutyParagraph2 = new Paragraph();
                     String[] jobDutyProcessed2 = stringProcessor(dutyString2);
@@ -1128,15 +1129,15 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 columnLeft.addElement(header2);
 
 
-                Paragraph studyTitleParagraph = new Paragraph("\u2022" + this.studyTitle.getText().toString());
+                Paragraph studyTitleParagraph = new Paragraph("\u2022" + this.studyTitleEt.getText().toString());
                 studyTitleParagraph.setAlignment(Paragraph.ALIGN_LEFT);
                 studyTitleParagraph.setFont(headersSmallLeftFont);
 
-                Paragraph studyDescriptionParagraph = new Paragraph(this.studyDescription.getText().toString());
+                Paragraph studyDescriptionParagraph = new Paragraph(this.studyDescriptionEt.getText().toString());
                 studyDescriptionParagraph.setAlignment(Paragraph.ALIGN_LEFT);
                 studyDescriptionParagraph.setFont(textLeftFont);
 
-                Paragraph studyRatingParagraph = new Paragraph(rating.getText().toString());
+                Paragraph studyRatingParagraph = new Paragraph(ratingEt.getText().toString());
                 studyRatingParagraph.setAlignment(Paragraph.ALIGN_LEFT);
                 studyRatingParagraph.setFont(textLeftFont);
 
@@ -1150,15 +1151,15 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 columnLeft.addElement(studyRatingParagraph);
 
                 if (mStudyCount == 2) {
-                    Paragraph studyTitleParagraph1 = new Paragraph("\u2022" + studyTitle2.getText().toString());
+                    Paragraph studyTitleParagraph1 = new Paragraph("\u2022" + studyTitle2Et.getText().toString());
                     studyTitleParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
                     studyTitleParagraph1.setFont(headersSmallLeftFont);
 
-                    Paragraph studyDescriptionParagraph1 = new Paragraph(studyDescription2.getText().toString());
+                    Paragraph studyDescriptionParagraph1 = new Paragraph(studyDescription2Et.getText().toString());
                     studyDescriptionParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
                     studyDescriptionParagraph1.setFont(textLeftFont);
 
-                    Paragraph studyRatingParagraph1 = new Paragraph(rating2.getText().toString());
+                    Paragraph studyRatingParagraph1 = new Paragraph(rating2Et.getText().toString());
                     studyRatingParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
                     studyRatingParagraph1.setFont(textLeftFont);
 
@@ -1194,14 +1195,14 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 columnLeft.addElement(achievementsParagraph);
 
 
-                Paragraph nameParagraph = new Paragraph(this.name.getText().toString());
+                Paragraph nameParagraph = new Paragraph(this.nameEt.getText().toString());
                 nameParagraph.setAlignment(Paragraph.ALIGN_CENTER);
                 nameParagraph.setFont(nameFont);
                 nameParagraph.setSpacingBefore(8f);
                 nameParagraph.setSpacingAfter(4f);
                 columnRight.addElement(nameParagraph);
 
-                Paragraph nick = new Paragraph(this.nick.getText().toString());
+                Paragraph nick = new Paragraph(this.nickEt.getText().toString());
                 nick.setAlignment(Paragraph.ALIGN_CENTER);
                 nick.setFont(nickFont);
                 nick.setSpacingAfter(20f);
@@ -1210,7 +1211,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 Paragraph telephoneParagraph = new Paragraph();
                 Chunk tChunk = new Chunk("T");
                 tChunk.setFont(contactsHeaderFont);
-                String tel1 = tel.getText().toString();
+                String tel1 = telEt.getText().toString();
                 Chunk telChunk = new Chunk("    " + tel1);
                 telChunk.setFont(contactsFont);
                 telephoneParagraph.add(tChunk);
@@ -1222,7 +1223,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 Paragraph emailParagraph = new Paragraph();
                 Chunk eChunk = new Chunk("E");
                 eChunk.setFont(contactsHeaderFont);
-                String email1 = email.getText().toString();
+                String email1 = emailEt.getText().toString();
                 Chunk emailChunk = new Chunk("    " + email1);
                 emailChunk.setFont(contactsFont);
                 emailParagraph.add(eChunk);
@@ -1238,7 +1239,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 header4.setSpacingBefore(40f);
                 header4.setSpacingAfter(8f);
 
-                Paragraph bioParagraph = new Paragraph(this.bio.getText().toString());
+                Paragraph bioParagraph = new Paragraph(this.bioEt.getText().toString());
                 bioParagraph.setAlignment(Paragraph.ALIGN_LEFT);
                 bioParagraph.setIndentationLeft(10);
                 bioParagraph.setFont(textLeftFont);
@@ -1254,8 +1255,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 columnRight.addElement(header5);
 
                 Paragraph skillsParagraph = new Paragraph();
-                Chunk skillChunk = new Chunk();
-
+                Chunk skillChunk;
 
                 String[] skillsProcessed = stringProcessor(skillString.trim());
                 for (String skill : skillsProcessed) {
@@ -1460,12 +1460,12 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
     private String[] stringProcessor(String string){
 
-        return string.split("//");
+        return string.trim().split(",");
     }
 
     private String[] skillsStringProcessor(String string){
 
-        return string.split("@");
+        return string.trim().split("@");
     }
 
     private void initUserFields() {
@@ -1550,9 +1550,9 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
     private void saveUserFieldsStudy2() {
         List<String> userData = new ArrayList<>();
-        userData.add(studyTitle2.getText().toString());
-        userData.add(studyDescription2.getText().toString());
-        userData.add(rating2.getText().toString());
+        userData.add(studyTitle2Et.getText().toString());
+        userData.add(studyDescription2Et.getText().toString());
+        userData.add(rating2Et.getText().toString());
         SharedPreferences.Editor editor = StartActivity.getSharedPref().edit();
         final String[] USER_FIELDS = {
                 ConstantManager.USER_STUDY_2_TITLE_KEY,
@@ -1582,10 +1582,10 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
     private void saveUserFieldsJob2() {
         List<String> userData = new ArrayList<>();
-        userData.add(jobPeriod2.getText().toString());
-        userData.add(companyTitle2.getText().toString());
-        userData.add(jobTitle2.getText().toString());
-        userData.add(jobDuty2.getText().toString());
+        userData.add(jobPeriod2Et.getText().toString());
+        userData.add(companyTitle2Et.getText().toString());
+        userData.add(jobTitle2Et.getText().toString());
+        userData.add(jobDuty2Et.getText().toString());
         SharedPreferences.Editor editor = StartActivity.getSharedPref().edit();
         final String[] USER_FIELDS = {
                 ConstantManager.USER_JOB_2_PERIOD_KEY,
@@ -1619,10 +1619,10 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
     private void saveUserFieldsJob3() {
         List<String> userData = new ArrayList<>();
-        userData.add(jobPeriod3.getText().toString());
-        userData.add(companyTitle3.getText().toString());
-        userData.add(jobTitle3.getText().toString());
-        userData.add(jobDuty3.getText().toString());
+        userData.add(jobPeriod3Et.getText().toString());
+        userData.add(companyTitle3Et.getText().toString());
+        userData.add(jobTitle3Et.getText().toString());
+        userData.add(jobDuty3Et.getText().toString());
         SharedPreferences.Editor editor = StartActivity.getSharedPref().edit();
         final String[] USER_FIELDS = {
                 ConstantManager.USER_JOB_3_PERIOD_KEY,

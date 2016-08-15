@@ -203,25 +203,7 @@
                     android:maxLength="200"/>
 
             </android.support.design.widget.TextInputLayout>
-            <TextView
-                style="@style/profile_edittext"
-                android:text="@string/skills_hint"/>
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_normal_16">
-
-                <EditText
-                    android:id="@+id/skills"
-                    style="@style/profile_edittext"
-                    android:hint="@string/skills"
-                    android:maxLength="100"
-                    android:fontFamily="sans-serif-condensed"
-                    android:textColor="@color/gray_light"
-                    android:textColorHint="@color/gray" />
-
-            </android.support.design.widget.TextInputLayout>
 
             <TextView
             style="@style/profile_edittext"
@@ -242,6 +224,26 @@
                     android:textColorHint="@color/gray" />
 
             </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            style="@style/profile_edittext"
+            android:text="@string/skills_hint"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_normal_16">
+
+            <EditText
+                android:id="@+id/skills"
+                style="@style/profile_edittext"
+                android:hint="@string/skills"
+                android:maxLength="100"
+                android:fontFamily="sans-serif-condensed"
+                android:textColor="@color/gray_light"
+                android:textColorHint="@color/gray" />
+
+        </android.support.design.widget.TextInputLayout>
 
             <TextView
                 style="@style/profile_edittext"
