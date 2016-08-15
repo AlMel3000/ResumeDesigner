@@ -51,6 +51,7 @@ import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
+import com.itextpdf.text.ExceptionConverter;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
@@ -239,7 +240,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
 
 
-        if(NetworkStatusChecker.isNetworkAvailable(getContext()) && MainFragment.AUTHORIZATION_STATUS){
+        if(NetworkStatusChecker.isNetworkAvailable(getContext()) && MainFragment.AUTHORIZATION_STATUS && !POST_STATUS){
         socialNetwork = MainFragment.mSocialNetworkManager.getSocialNetwork(networkId);
         socialNetwork.setOnRequestCurrentPersonCompleteListener(this);
         socialNetwork.requestCurrentPerson();
@@ -663,7 +664,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
     private void viewPdf() {
 
-        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/cv/Resume.pdf");
+        File file = new File(Environment.getExternalStorageDirectory()+"/cv/Resume.pdf");
         if(!file.exists()){
             Toast.makeText(getContext(),
                     "Сначала создайте pdf",
@@ -685,7 +686,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
     private void sendPdf() {
 
-        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/cv/Resume.pdf");
+        File file = new File(Environment.getExternalStorageDirectory()+"/cv/Resume.pdf");
         if(!file.exists()){
             Toast.makeText(getContext(),
                     "Сначала создайте pdf",
@@ -881,7 +882,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             if (isExternalStorageWritable()) {
 
 
-                String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/cv";
+                String path = Environment.getExternalStorageDirectory() + "/cv";
 
                 File dir = new File(path);
                 if (!dir.exists())
@@ -1259,30 +1260,37 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 String[] skillsProcessed = stringProcessor(skillString.trim());
                 for (String skill : skillsProcessed) {
                     String[] currentSkill = skillsStringProcessor(skill.trim());
-                    skillChunk = new Chunk(currentSkill[0] + "   ");
+                    skillChunk = new Chunk(currentSkill[0].trim() + "   ");
                     skillChunk.setFont(skillsFont);
+                    skillsParagraph.add(skillChunk);
                     Chunk skillRatingChunk = new Chunk();
                     Chunk skillBlankRatingChunk = new Chunk();
-                    if (currentSkill.length > 1) {
-                        int skillRating = Integer.parseInt(currentSkill[1]);
-                        int skillBlankRating = 5 - skillRating;
-                        skillRatingChunk.setFont(skillsRatingFont);
-                        for (int i = 0; i < skillRating; i++) {
-                            skillRatingChunk.append("\u2022");
-                        }
-                        skillBlankRatingChunk.setFont(skillsBlankRatingFont);
-                        while (skillBlankRating > 0) {
-                            skillBlankRatingChunk.append("\u2022");
-                            skillBlankRating--;
+                    try {
+                        if (currentSkill.length == 2) {
+                            int skillRating = Integer.valueOf(currentSkill[1].trim());
+                            int skillBlankRating = 5 - skillRating;
+                            skillRatingChunk.setFont(skillsRatingFont);
+                            for (int i = 0; i < skillRating; i++) {
+                                skillRatingChunk.append("\u2022");
+                            }
+                            skillBlankRatingChunk.setFont(skillsBlankRatingFont);
+                            while (skillBlankRating > 0) {
+                                skillBlankRatingChunk.append("\u2022");
+                                skillBlankRating--;
+                            }
+
                         }
 
+                        if (currentSkill.length == 2)
+                            skillsParagraph.add(skillRatingChunk);
+                        if (currentSkill.length == 2)
+                            skillsParagraph.add(skillBlankRatingChunk);
+                        skillsParagraph.add("\n");
+                    } catch (Exception e){
+                        Crashlytics.logException(e);
+                        showSnackbar("Проверьте правильность ввода навыков");
+
                     }
-                    skillsParagraph.add(skillChunk);
-                    if (currentSkill.length > 1)
-                        skillsParagraph.add(skillRatingChunk);
-                    if (currentSkill.length > 1)
-                        skillsParagraph.add(skillBlankRatingChunk);
-                    skillsParagraph.add("\n");
                 }
                 skillsParagraph.setAlignment(Paragraph.ALIGN_LEFT);
                 skillsParagraph.setIndentationLeft(10);

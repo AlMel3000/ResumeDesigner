@@ -182,7 +182,7 @@
                     android:id="@+id/email"
                     style="@style/profile_edittext"
                     android:hint="@string/e_mail_hint"
-                    android:maxLength="20"
+                    android:maxLength="50"
                     android:inputType="textEmailAddress"
                     android:fontFamily="sans-serif-condensed"
                     android:textColor="@color/gray_light"
