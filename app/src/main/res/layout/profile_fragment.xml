@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<android.support.design.widget.CoordinatorLayout xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="1dp"
@@ -65,28 +65,42 @@
                             android:text="@string/add_photo"
                             android:textSize="20sp"
                             android:textColor="@color/white"
-                            android:layout_marginLeft="@dimen/spacing_medial_24"/>
+                            android:layout_marginLeft="@dimen/spacing_medial_24"
+                            android:visibility="gone"/>
                         <LinearLayout
                             android:id="@+id/add_photo_ll"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:visibility="gone"
+                            android:visibility="visible"
                             android:layout_marginLeft="@dimen/spacing_medial_24">
+
                             <Button
                                 android:id="@+id/cam_btn"
                                 android:text="@string/from_cam"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:paddingRight="4dp"
+                                android:paddingLeft="4dp"
                                 android:textSize="20sp"
-                                android:textColor="@color/hr24_blue"/>
+                                android:textColor="@color/white"
+                                android:background="@drawable/transparent_button_white_borders"
+                                android:elevation="10dp"
+                                tools:targetApi="lollipop" />
+
                             <Button
                                 android:id="@+id/gal_btn"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
                                 android:text="@string/form_gallery"
                                 android:textSize="20sp"
-                                android:textColor="@color/hr24_blue" />
+                                android:paddingRight="4dp"
+                                android:paddingLeft="4dp"
+                                android:textColor="@color/white"
+                                android:background="@drawable/transparent_button_white_borders"
+                                android:elevation="10dp"
+                                tools:targetApi="lollipop" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
