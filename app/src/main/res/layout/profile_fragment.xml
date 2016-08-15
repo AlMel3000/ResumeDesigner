@@ -66,13 +66,13 @@
                             android:textSize="20sp"
                             android:textColor="@color/white"
                             android:layout_marginLeft="@dimen/spacing_medial_24"
-                            android:visibility="gone"/>
+                            android:visibility="visible"/>
                         <LinearLayout
                             android:id="@+id/add_photo_ll"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:visibility="visible"
+                            android:visibility="gone"
                             android:layout_marginLeft="@dimen/spacing_medial_24">
 
                             <Button
@@ -100,7 +100,7 @@
                                 android:textColor="@color/white"
                                 android:background="@drawable/transparent_button_white_borders"
                                 android:elevation="10dp"
-                                tools:targetApi="lollipop" />
+                                tools:targetApi="lollipop"/>
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>

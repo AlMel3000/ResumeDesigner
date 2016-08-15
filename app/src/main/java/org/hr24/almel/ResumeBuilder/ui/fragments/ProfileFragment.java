@@ -260,6 +260,8 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                     .into(photoImgV);
 
 
+
+
         Bitmap sourceBitmap = null;
         try {
             sourceBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), loadUserPhoto());
@@ -278,6 +280,8 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 bitmapAva = getCircleMaskedBitmapUsingPorterDuff(sourceForCircleMaskingBitmap, 480);
             }
         }
+
+
 
 
 
@@ -303,8 +307,10 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
         }
 
-        if(PHOTO_SET){
+        if(PHOTO_SET && loadUserPhoto()!=null){
             mAddPhototv.setText("Изменить фото");
+            mAddPhotoLinLay.setVisibility(View.GONE);
+            mAddPhototv.setVisibility(View.VISIBLE);
         }
 
         if (MainFragment.AUTHORIZATION_STATUS && !POST_STATUS && !MainFragment.PREMIUM_STATUS){
@@ -400,7 +406,6 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                     bitmapAva = getCircleMaskedBitmapUsingPorterDuff(sourceForCircleMaskingBitmap, 480);
 
                     mAddPhototv.setText("Изменить фото");
-                    mAddPhotoLinLay.setVisibility(View.GONE);
                     mAddPhototv.setVisibility(View.VISIBLE);
                 }
 
