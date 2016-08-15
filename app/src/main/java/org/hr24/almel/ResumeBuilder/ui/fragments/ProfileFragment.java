@@ -268,13 +268,15 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
             Crashlytics.logException(e);
         }
 
-        try {
-            sourceForCircleMaskingBitmap = rotatePhoto(loadUserPhoto(), sourceBitmap);
-        } catch (IOException e) {
-            Log.e("BitMapError", e.getMessage());
-            Crashlytics.logException(e);
-        }
-            bitmapAva = getCircleMaskedBitmapUsingPorterDuff(sourceForCircleMaskingBitmap, 480);
+            if (sourceBitmap!=null) {
+                try {
+                    sourceForCircleMaskingBitmap = rotatePhoto(loadUserPhoto(), sourceBitmap);
+                } catch (IOException e) {
+                    Log.e("BitMapError", e.getMessage());
+                    Crashlytics.logException(e);
+                }
+                bitmapAva = getCircleMaskedBitmapUsingPorterDuff(sourceForCircleMaskingBitmap, 480);
+            }
         }
 
 
