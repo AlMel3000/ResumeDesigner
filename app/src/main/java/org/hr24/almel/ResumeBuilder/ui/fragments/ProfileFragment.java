@@ -406,6 +406,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                     bitmapAva = getCircleMaskedBitmapUsingPorterDuff(sourceForCircleMaskingBitmap, 480);
 
                     mAddPhototv.setText("Изменить фото");
+                    mAddPhotoLinLay.setVisibility(View.GONE);
                     mAddPhototv.setVisibility(View.VISIBLE);
                 }
 
