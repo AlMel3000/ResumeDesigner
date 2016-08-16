@@ -204,6 +204,26 @@
                     android:maxLength="200"/>
 
             </android.support.design.widget.TextInputLayout>
+        <TextView
+            style="@style/profile_edittext"
+            android:text="@string/hobby_hint"
+            android:layout_marginTop="@dimen/spacing_normal_16"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <EditText
+                android:id="@+id/hobby"
+                style="@style/profile_edittext"
+                android:maxLength="100"
+                android:hint="@string/hob_hint"
+                android:fontFamily="sans-serif-condensed"
+                android:textColor="@color/gray_light"
+                android:textColorHint="@color/gray"/>
+
+        </android.support.design.widget.TextInputLayout>
 
 
             <TextView
@@ -246,26 +266,7 @@
 
         </android.support.design.widget.TextInputLayout>
 
-            <TextView
-                style="@style/profile_edittext"
-                android:text="@string/hobby_hint"
-                android:layout_marginTop="@dimen/spacing_normal_16"/>
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
-
-                <EditText
-                    android:id="@+id/hobby"
-                    style="@style/profile_edittext"
-                    android:maxLength="100"
-                    android:hint="@string/hob_hint"
-                    android:fontFamily="sans-serif-condensed"
-                    android:textColor="@color/gray_light"
-                    android:textColorHint="@color/gray"/>
-
-            </android.support.design.widget.TextInputLayout>
     </LinearLayout>
     </android.support.v7.widget.CardView>
             <View
