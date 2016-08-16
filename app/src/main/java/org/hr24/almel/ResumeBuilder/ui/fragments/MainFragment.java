@@ -159,48 +159,50 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
         // getVkFingerprint();
         //printHashKey();
 
-        mSocialNetworkManager = (SocialNetworkManager) getFragmentManager().findFragmentByTag(StartActivity.SOCIAL_NETWORK_TAG);
-
-        String[] vkScope = new String[] {
-                VKScope.WALL,
-                VKScope.NOHTTPS
-        };
 
 
 
-
-        ArrayList<String> fbScope = new ArrayList<String>();
-        fbScope.addAll(Arrays.asList("public_profile, email, user_friends"));
+        initStatus();
 
 
+        if (!POST_STATUS && !PREMIUM_STATUS) {
+            mSocialNetworkManager = (SocialNetworkManager) getFragmentManager().findFragmentByTag(StartActivity.SOCIAL_NETWORK_TAG);
+
+            String[] vkScope = new String[]{
+                    VKScope.WALL,
+                    VKScope.NOHTTPS
+            };
 
 
-        if (mSocialNetworkManager == null) {
-            mSocialNetworkManager = new SocialNetworkManager();
+            ArrayList<String> fbScope = new ArrayList<String>();
+            fbScope.addAll(Arrays.asList("public_profile, email, user_friends"));
+            if (mSocialNetworkManager == null) {
+                mSocialNetworkManager = new SocialNetworkManager();
 
-            //Init and add to manager VkSocialNetwork
-            VkSocialNetwork vkNetwork = new VkSocialNetwork(this, VK_KEY, vkScope);
-            mSocialNetworkManager.addSocialNetwork(vkNetwork);
+                //Init and add to manager VkSocialNetwork
+                VkSocialNetwork vkNetwork = new VkSocialNetwork(this, VK_KEY, vkScope);
+                mSocialNetworkManager.addSocialNetwork(vkNetwork);
 
 
-            FacebookSocialNetwork fbNetwork = new FacebookSocialNetwork(this, fbScope);
-            mSocialNetworkManager.addSocialNetwork(fbNetwork);
+                FacebookSocialNetwork fbNetwork = new FacebookSocialNetwork(this, fbScope);
+                mSocialNetworkManager.addSocialNetwork(fbNetwork);
 
-            //Initiate every network from mSocialNetworkManager
-            getFragmentManager().beginTransaction().add(mSocialNetworkManager, StartActivity.SOCIAL_NETWORK_TAG).commit();
-            mSocialNetworkManager.setOnInitializationCompleteListener(this);
-        } else {
-            //if manager exist - get and setup login only for initialized SocialNetworks
-            if(!mSocialNetworkManager.getInitializedSocialNetworks().isEmpty()) {
-                List<SocialNetwork> socialNetworks = mSocialNetworkManager.getInitializedSocialNetworks();
-                for (SocialNetwork socialNetwork : socialNetworks) {
-                    socialNetwork.setOnLoginCompleteListener(this);
-                    initSocialNetwork(socialNetwork);
+                //Initiate every network from mSocialNetworkManager
+                getFragmentManager().beginTransaction().add(mSocialNetworkManager, StartActivity.SOCIAL_NETWORK_TAG).commit();
+                mSocialNetworkManager.setOnInitializationCompleteListener(this);
+            } else {
+                //if manager exist - get and setup login only for initialized SocialNetworks
+                if (!mSocialNetworkManager.getInitializedSocialNetworks().isEmpty()) {
+                    List<SocialNetwork> socialNetworks = mSocialNetworkManager.getInitializedSocialNetworks();
+                    for (SocialNetwork socialNetwork : socialNetworks) {
+                        socialNetwork.setOnLoginCompleteListener(this);
+                        initSocialNetwork(socialNetwork);
+                    }
                 }
             }
         }
 
-        initStatus();
+
 
         if (POST_STATUS||PREMIUM_STATUS){
            updateUi();
@@ -489,6 +491,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
             updateUi();
             POST_STATUS = true;
             saveStatus();
+            showSnackbar("Спасибо! pdf разблокирован");
         }
 
         @Override
@@ -568,7 +571,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
                 break;
             case R.id.fill_btn:
                 if (!AUTHORIZATION_STATUS) {
-                    startProfile(VkSocialNetwork.ID);
+                    startProfile(0);
                 } else {
                     startProfile(networkId);
 
@@ -628,7 +631,6 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
     @Override
     public void onLoginSuccess(int socialNetworkID) {
         StartActivity.hideProgress();
-        showSnackbar("Успешная авторизация");
 
 
         AUTHORIZATION_STATUS = true;

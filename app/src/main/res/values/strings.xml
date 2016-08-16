@@ -23,7 +23,7 @@
     <string name="skills_hint">Навыки  "\n" Запись: Photoshop/3, Другой навык "\n" \"Photoshop\" - название навыка "\n" Цифра поcле \"/\" - оценка от 1 до 5 "\n"ведите навыки через запятую</string>
     <string name="skills">Например: MS office/3, Photoshop/4</string>
     <string name="languages_hint">Языки "\n" введите языки через запятую</string>
-    <string name="lang_hint"> Например: Русский: Средний, English: intermediate</string>
+    <string name="lang_hint"> Например: Русский: Средний, English: Intermediate</string>
     <string name="hobby_hint">Хобби "\n" введите хобби через запятую</string>
     <string name="hob_hint">Например: Оригами, Хоккей</string>
     <string name="job_period_hint">Период</string>

@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -28,6 +29,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -122,6 +125,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     Bitmap bitmapAva = null;
     ScrollView scrollView;
     List<EditText> mUserInfoViewsJob2, mUserInfoViewsJob3, mUserInfoViewsStudy2;
+
 
 
 
@@ -1650,7 +1654,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         final Rect rect = new Rect(0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight());
 
-        canvas.drawARGB(0, 28, 169, 196);
+        canvas.drawColor(StartActivity.getRes().getColor(R.color.hr24_blue));
         paint.setColor(color);
 
         canvas.drawCircle(radius, radius, radius, paint);
@@ -1658,6 +1662,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         canvas.drawBitmap(scaledBitmap, rect, rect, paint);
         return targetBitmap;
     }
+
+
+
 
     public static Bitmap scaleTo(Bitmap source, int size)
     {
