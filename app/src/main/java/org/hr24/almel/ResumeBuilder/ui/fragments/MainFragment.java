@@ -491,7 +491,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
             updateUi();
             POST_STATUS = true;
             saveStatus();
-            showSnackbar("Спасибо! pdf разблокирован");
+            showSnackbar("Спасибо! PDF разблокирован!");
         }
 
         @Override
