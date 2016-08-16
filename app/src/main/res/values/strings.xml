@@ -12,6 +12,7 @@
     <string name="ok_public_key">CBACBQFLEBABABABA</string>
     <string name="ok_secret_key">4F54456B1A710F5B1FA53D20</string>
 
+    <string name="facebook_app_id">1234795546584699</string>
 
 
     <string name="username_hint">Имя и фамилия</string>
@@ -67,4 +68,5 @@
     <string name="premium">Премиум</string>
     <string name="or_lowercase_tv">или</string>
     <string name="contact_us">Свяжитесь с нами</string>
+    <string name="facebook">Facebook</string>
 </resources>

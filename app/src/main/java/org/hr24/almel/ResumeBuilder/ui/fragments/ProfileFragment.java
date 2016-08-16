@@ -75,16 +75,14 @@ import java.util.Date;
 import java.util.List;
 
 
-public class ProfileFragment extends Fragment implements OnRequestSocialPersonCompleteListener, View.OnClickListener{
+public class ProfileFragment extends Fragment implements View.OnClickListener{
 
     private int mCurrentEditMode = 1;
 
 
     private static final String NETWORK_ID = "NETWORK_ID";
     public static boolean PHOTO_SET = false;
-    public static boolean POST_STATUS = false;
-    private SocialNetwork socialNetwork;
-    private int networkId;
+
     private int mJobCount = 1;
     private int mStudyCount = 1;
 
@@ -142,7 +140,6 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        networkId = getArguments().containsKey(NETWORK_ID) ? getArguments().getInt(NETWORK_ID) : 0;
 
 
         rootView = inflater.inflate(R.layout.profile_fragment, container, false);
@@ -240,20 +237,9 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
 
 
-
-        if(NetworkStatusChecker.isNetworkAvailable(getContext()) && MainFragment.AUTHORIZATION_STATUS && !POST_STATUS && !MainFragment.PREMIUM_STATUS){
-                   try {
-                       socialNetwork = MainFragment.mSocialNetworkManager.getSocialNetwork(networkId);
-                       socialNetwork.setOnRequestCurrentPersonCompleteListener(this);
-                       socialNetwork.requestCurrentPerson();
-                   } catch (Exception e){
-                       Crashlytics.logException(e);
-                   }
-
-
-        }
-
         initUserFields();
+
+
 
         if (PHOTO_SET) {
             Picasso.with(getContext())
@@ -289,25 +275,29 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
 
 
-        /*if (savedInstanceState == null) {
+        if (savedInstanceState == null) {
             //активити запускается впервые
 
 
         } else {
 
 
-        }*/
+        }
 
         if (mJobCount==2){
             addJob2();
+            initUserFieldsJob2();
         } else if (mJobCount == 3){
             addJob2();
+            initUserFieldsJob2();
             addJob3();
+            initUserFieldsJob3();
 
         }
 
         if (mStudyCount==2){
             addStudy2();
+            initUserFieldsStudy2();
 
         }
 
@@ -357,7 +347,7 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(ConstantManager.EDIT_MODE_KEY, mCurrentEditMode);
+        //outState.putInt(ConstantManager.EDIT_MODE_KEY, mCurrentEditMode);
     }
 
 
@@ -435,53 +425,6 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
 
     @Override
-    public void onRequestSocialPersonSuccess(int i, SocialPerson socialPerson) {
-            nameEt.setText(socialPerson.name);
-
-
-
-
-        sharePost();
-
-    }
-
-    @Override
-    public void onError(int networkId, String requestID, String errorMessage, Object data) {
-
-    }
-
-
-
-    public  void sharePost() {
-        try {
-            Bundle postParams = new Bundle();
-            String link = "http://hr24.org";
-            postParams.putString(SocialNetwork.BUNDLE_LINK, link);
-            String message = "Лучший сервис трудоустройства!";
-            socialNetwork.requestPostLink(postParams, message, postingComplete);
-        } catch (Exception e) {
-
-            Crashlytics.logException(e);
-        }
-
-        }
-
-    private OnPostingCompleteListener postingComplete = new OnPostingCompleteListener() {
-        @Override
-        public void onPostSuccessfully(int socialNetworkID) {
-            POST_STATUS = true;
-        }
-
-        @Override
-        public void onError(int socialNetworkID, String requestID, String errorMessage, Object data) {
-            Log.d("PostError", "Error while sending: " + errorMessage);
-        }
-    };
-
-
-
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab:
@@ -491,6 +434,16 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
                 } else {
                     changeEditMode(0);
                     mCurrentEditMode = 0;
+                }
+                saveUserFields();
+                if (mStudyCount==2){
+                    saveUserFieldsStudy2();
+                }
+                if (mJobCount==2){
+                    saveUserFieldsJob2();
+                } else if (mJobCount==3){
+                    saveUserFieldsJob2();
+                    saveUserFieldsJob3();
                 }
                 break;
             case R.id.sharePost:
@@ -836,13 +789,13 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
 
 
             mProfilePlaceholder.setVisibility(View.GONE);
-            if (MainFragment.AUTHORIZATION_STATUS || MainFragment.PREMIUM_STATUS){
+            if (MainFragment.POST_STATUS || MainFragment.PREMIUM_STATUS){
                 viewPdfButton.setVisibility(View.VISIBLE);
                 sharePdfButton.setVisibility(View.VISIBLE);
             }
             savePdfButton.setVisibility(View.VISIBLE);
 
-            if (!MainFragment.AUTHORIZATION_STATUS && !MainFragment.PREMIUM_STATUS){
+            if (!MainFragment.POST_STATUS && !MainFragment.PREMIUM_STATUS){
                 shareButton.setVisibility(View.VISIBLE);
             } else {
                 shareButton.setVisibility(View.GONE);
@@ -1498,10 +1451,11 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         for (int i = 0; i < userFields.size(); i++) {
             mUserInfoViews.get(i).setText(userFields.get(i));
         }
+
         mJobCount = StartActivity.getSharedPref().getInt(ConstantManager.JOB_COUNT_KEY, 1);
         mStudyCount = StartActivity.getSharedPref().getInt(ConstantManager.STUDY_COUNT_KEY, 1);
         PHOTO_SET = StartActivity.getSharedPref().getBoolean(ConstantManager.PHOTO_SET_STATUS_KEY, false);
-        POST_STATUS = StartActivity.getSharedPref().getBoolean(ConstantManager.POST_STATUS_KEY, false);
+
 
     }
 
@@ -1537,7 +1491,6 @@ public class ProfileFragment extends Fragment implements OnRequestSocialPersonCo
         editor.putInt(ConstantManager.JOB_COUNT_KEY, mJobCount);
         editor.putInt(ConstantManager.STUDY_COUNT_KEY, mStudyCount);
         editor.putBoolean(ConstantManager.PHOTO_SET_STATUS_KEY, PHOTO_SET);
-        editor.putBoolean(ConstantManager.POST_STATUS_KEY, POST_STATUS );
 
         editor.apply();
     }

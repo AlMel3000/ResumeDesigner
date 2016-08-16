@@ -4,12 +4,16 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +25,8 @@ import com.crashlytics.android.Crashlytics;
 import com.github.gorbin.asne.core.SocialNetwork;
 import com.github.gorbin.asne.core.SocialNetworkManager;
 import com.github.gorbin.asne.core.listener.OnLoginCompleteListener;
+import com.github.gorbin.asne.core.listener.OnPostingCompleteListener;
+import com.github.gorbin.asne.facebook.FacebookSocialNetwork;
 import com.github.gorbin.asne.odnoklassniki.OkSocialNetwork;
 import com.github.gorbin.asne.vk.VkSocialNetwork;
 import com.vk.sdk.VKScope;
@@ -34,8 +40,15 @@ import org.hr24.almel.ResumeBuilder.billing.Inventory;
 import org.hr24.almel.ResumeBuilder.billing.Purchase;
 import org.hr24.almel.ResumeBuilder.utils.ConstantManager;
 import org.hr24.almel.ResumeBuilder.utils.NetworkStatusChecker;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import ru.ok.android.sdk.util.OkScope;
+
+import static android.content.pm.PackageManager.GET_SIGNATURES;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -62,6 +75,9 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
     int networkId = 0;
     public static boolean AUTHORIZATION_STATUS = false;
     public static boolean PREMIUM_STATUS = false;
+    public static boolean POST_STATUS = false;
+
+    private SocialNetwork currentSocialNetwork;
 
     // SKUs for our products: the premium upgrade (non-consumable)
     static final String SKU_PREMIUM = "premium";
@@ -138,11 +154,10 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
         premiumButton.setOnClickListener(this);
 
         String VK_KEY = getActivity().getString(R.string.vk_app_id);
-        String OK_APP_ID = getActivity().getString(R.string.ok_app_id);
-        String OK_PUBLIC_KEY = getActivity().getString(R.string.ok_public_key);
-        String OK_SECRET_KEY = getActivity().getString(R.string.ok_secret_key);
+
 
         // getVkFingerprint();
+        //printHashKey();
 
         mSocialNetworkManager = (SocialNetworkManager) getFragmentManager().findFragmentByTag(StartActivity.SOCIAL_NETWORK_TAG);
 
@@ -152,9 +167,11 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
         };
 
 
-        String[] okScope = new String[] {
-                OkScope.VALUABLE_ACCESS
-        };
+
+
+        ArrayList<String> fbScope = new ArrayList<String>();
+        fbScope.addAll(Arrays.asList("public_profile, email, user_friends"));
+
 
 
 
@@ -165,9 +182,9 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
             VkSocialNetwork vkNetwork = new VkSocialNetwork(this, VK_KEY, vkScope);
             mSocialNetworkManager.addSocialNetwork(vkNetwork);
 
-            //Init and add to manager OkSocialNetwork
-            OkSocialNetwork okNetwork = new OkSocialNetwork(this, OK_APP_ID, OK_PUBLIC_KEY, OK_SECRET_KEY, okScope);
-            mSocialNetworkManager.addSocialNetwork(okNetwork);
+
+            FacebookSocialNetwork fbNetwork = new FacebookSocialNetwork(this, fbScope);
+            mSocialNetworkManager.addSocialNetwork(fbNetwork);
 
             //Initiate every network from mSocialNetworkManager
             getFragmentManager().beginTransaction().add(mSocialNetworkManager, StartActivity.SOCIAL_NETWORK_TAG).commit();
@@ -185,7 +202,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
 
         initStatus();
 
-        if (AUTHORIZATION_STATUS||PREMIUM_STATUS){
+        if (POST_STATUS||PREMIUM_STATUS){
            updateUi();
         }
 
@@ -441,19 +458,50 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
                     networkId = VkSocialNetwork.ID;
 
                     break;
-                case OkSocialNetwork.ID:
-                    networkId = OkSocialNetwork.ID;
+
+                case FacebookSocialNetwork.ID:
+                    networkId = FacebookSocialNetwork.ID;
                     break;
             }
-
-            updateUi();
-
-            AUTHORIZATION_STATUS = true;
-            saveStatus();
 
 
         }
     }
+
+    public  void sharePost() {
+        try {
+            currentSocialNetwork = MainFragment.mSocialNetworkManager.getSocialNetwork(networkId);
+            Bundle postParams = new Bundle();
+            String link = "http://hr24.org";
+            postParams.putString(SocialNetwork.BUNDLE_LINK, link);
+            String message = "Лучший сервис трудоустройства!";
+            currentSocialNetwork.requestPostLink(postParams, message, postingComplete);
+        } catch (Exception e) {
+
+            Crashlytics.logException(e);
+        }
+
+    }
+
+    private OnPostingCompleteListener postingComplete = new OnPostingCompleteListener() {
+        @Override
+        public void onPostSuccessfully(int socialNetworkID) {
+            updateUi();
+            POST_STATUS = true;
+            saveStatus();
+        }
+
+        @Override
+        public void onError(int socialNetworkID, String requestID, String errorMessage, Object data) {
+            Log.d("PostError", "Error while sending: " + errorMessage);
+            if (errorMessage.trim().equals("ShareDialog canceled")){
+                showSnackbar("Вы отменили публикацию записи");
+            } else {
+                showSnackbar("Не удалось опубликовать запись");
+            }
+            currentSocialNetwork = null;
+        }
+    };
 
     private void updateUi() {
         authLinLayout.setVisibility(View.GONE);
@@ -502,15 +550,18 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
                 break;
             case R.id.ok_btn:
                 if(NetworkStatusChecker.isNetworkAvailable(getContext())){
-                networkId = OkSocialNetwork.ID;
+                networkId = FacebookSocialNetwork.ID;
                     SocialNetwork socialNetwork = mSocialNetworkManager.getSocialNetwork(networkId);
 
+                    if (AUTHORIZATION_STATUS){
+                        sharePost();
+                    } else {
                     if(networkId != 0) {
                         socialNetwork.requestLogin();
                         StartActivity.showProgress("Загружаем социальную сеть");
                     } else {
                         showSnackbar("Wrong networkId");
-                    }
+                    }}
                 } else {
                     showSnackbar("Сеть недоступна, попробуйте позже");
                 }
@@ -578,9 +629,12 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
     public void onLoginSuccess(int socialNetworkID) {
         StartActivity.hideProgress();
         showSnackbar("Успешная авторизация");
-        updateUi();
+
+
         AUTHORIZATION_STATUS = true;
         saveStatus();
+        sharePost();
+
 
 
 
@@ -624,12 +678,14 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
         SharedPreferences.Editor editor = StartActivity.getSharedPref().edit();
         editor.putBoolean(ConstantManager.AUTHORIZATION_STATUS_KEY, AUTHORIZATION_STATUS);
         editor.putBoolean(ConstantManager.PREMIUM_STATUS_KEY, PREMIUM_STATUS);
+        editor.putBoolean(ConstantManager.POST_STATUS_KEY, POST_STATUS );
         editor.apply();
     }
 
     private void initStatus() {
         AUTHORIZATION_STATUS = StartActivity.getSharedPref().getBoolean(ConstantManager.AUTHORIZATION_STATUS_KEY, false);
         PREMIUM_STATUS = StartActivity.getSharedPref().getBoolean(ConstantManager.PREMIUM_STATUS_KEY, false);
+        POST_STATUS = StartActivity.getSharedPref().getBoolean(ConstantManager.POST_STATUS_KEY, false);
 
     }
 
@@ -644,5 +700,21 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
         bld.setNeutralButton("OK", null);
         Log.d(TAG, "Showing alert dialog: " + message);
         bld.create().show();
+    }
+
+    public void printHashKey() {
+        try {
+            PackageInfo info = getActivity().getPackageManager().getPackageInfo("org.hr24.almel.ResumeBuilder",
+                    GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("HASH KEY:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.d("HASH KEY:", "NameNotFoundException "+ e.getMessage());
+        } catch (NoSuchAlgorithmException e) {
+            Log.d("HASH KEY:", "NoSuchAlgorithmException "+ e.getMessage());
+        }
     }
 }
