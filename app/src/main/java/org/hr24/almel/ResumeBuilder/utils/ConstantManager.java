@@ -5,7 +5,6 @@ package org.hr24.almel.ResumeBuilder.utils;
  */
 public interface ConstantManager {
 
-    String EDIT_MODE_KEY = "EDIT_MODE_KEY";
 
     String USER_NAME_KEY = "USER_0_KEY";
     String USER_NICK_KEY = "USER_1_KEY";

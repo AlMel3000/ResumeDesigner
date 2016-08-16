@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,7 @@ public class StartActivity extends AppCompatActivity implements MainFragment.OnF
     private static ProgressDialog pd;
     static Context context;
     private static SharedPreferences sPref;
+
 
 
 
@@ -85,4 +87,10 @@ public class StartActivity extends AppCompatActivity implements MainFragment.OnF
         return sPref;
     }
 
+    public static Resources getRes() {
+
+        Resources res = context.getResources();
+
+        return res;
+    }
 }

@@ -12,6 +12,7 @@
     <string name="ok_public_key">CBACBQFLEBABABABA</string>
     <string name="ok_secret_key">4F54456B1A710F5B1FA53D20</string>
 
+    <string name="facebook_app_id">1234795546584699</string>
 
 
     <string name="username_hint">Имя и фамилия</string>
@@ -22,7 +23,7 @@
     <string name="skills_hint">Навыки  "\n" Запись: Photoshop/3, Другой навык "\n" \"Photoshop\" - название навыка "\n" Цифра поcле \"/\" - оценка от 1 до 5 "\n"ведите навыки через запятую</string>
     <string name="skills">Например: MS office/3, Photoshop/4</string>
     <string name="languages_hint">Языки "\n" введите языки через запятую</string>
-    <string name="lang_hint"> Например: Русский: Средний, English: intermediate</string>
+    <string name="lang_hint"> Например: Русский: Средний, English: Intermediate</string>
     <string name="hobby_hint">Хобби "\n" введите хобби через запятую</string>
     <string name="hob_hint">Например: Оригами, Хоккей</string>
     <string name="job_period_hint">Период</string>
@@ -67,4 +68,5 @@
     <string name="premium">Премиум</string>
     <string name="or_lowercase_tv">или</string>
     <string name="contact_us">Свяжитесь с нами</string>
+    <string name="facebook">Facebook</string>
 </resources>
