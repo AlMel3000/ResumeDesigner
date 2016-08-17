@@ -3,14 +3,9 @@
     <string name="auth_enter_tv">Отправить запись на стену</string>
     <string name="auth_fill_tv">Заполнить резюме</string>
     <string name="fill_tv">Приступить</string>
-    <string name="vkontakte">Vkontakte</string>
-    <string name="odnoklassniki">Odnoklassniki</string>
+    <string name="vkontakte">Vk</string>
 
     <string name="vk_app_id">5568724</string>
-
-    <string name="ok_app_id">1247744256</string>
-    <string name="ok_public_key">CBACBQFLEBABABABA</string>
-    <string name="ok_secret_key">4F54456B1A710F5B1FA53D20</string>
 
     <string name="facebook_app_id">1234795546584699</string>
 
@@ -67,8 +62,10 @@
     <string name="or_tv">ИЛИ</string>
     <string name="premium">Премиум</string>
     <string name="or_lowercase_tv">или</string>
-    <string name="contact_us">Свяжитесь с нами</string>
-    <string name="facebook">Facebook</string>
+    <string name="facebook">Fb</string>
     <string name="first_work">Я ищу первую работу</string>
     <string name="jobs1">Место работы 1</string>
+    <string name="hr">Заказать резюме у"\n" HR-экспертов</string>
+    <string name="premium_snackbar">Эта фунциональность пока не работает, поэтому премиум БЕСПЛАТНО</string>
+    <string name="reedem_consultation">Получить консультацию рекрутера</string>
 </resources>

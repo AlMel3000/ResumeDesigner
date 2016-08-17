@@ -23,8 +23,8 @@ android {
         applicationId "org.hr24.almel.ResumeBuilder"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 6
-        versionName "0.921"
+        versionCode 7
+        versionName "0.93"
     }
     buildTypes {
         release {

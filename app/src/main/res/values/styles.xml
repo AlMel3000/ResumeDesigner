@@ -9,31 +9,6 @@
     </style>
 
 
-    <style name="auth_parent_linear">
-        <item name="android:orientation">vertical</item>
-        <item name="android:background">@drawable/color_gradient</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
-
-    </style>
-
-    <style name="auth_child_linear">
-        <item name="android:layout_width">256dp</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:orientation">vertical</item>
-        <item name="android:background">@color/white</item>
-        <item name="android:layout_gravity">center_horizontal</item>
-        <item name="android:paddingTop">@dimen/spacing_small_8</item>
-        <item name="android:paddingBottom">@dimen/spacing_medial_24</item>
-    </style>
-
-    <style name="button_fill">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginRight">@dimen/spacing_medial_24</item>
-        <item name="android:layout_marginLeft">@dimen/spacing_medial_24</item>
-    </style>
-
     <style name="start_screen_headers">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>

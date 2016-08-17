@@ -64,16 +64,19 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
 
     static final String TAG = "inAppBilling";
 
-    Button vkButton, okButton, fillButton, premiumButton;
+    Button vkButton, fbButton, fillButton, premiumButton;
     CoordinatorLayout mCoordinatorLayout;
     LinearLayout authLinLayout;
     CardView fillView;
-    ImageView logoImageView, mailImageView, callImageView;
+    ImageView logoImageView, ukImageView, ruImageView;
+    Button mailButton, callButton;
     public static SocialNetworkManager mSocialNetworkManager;
     int networkId = 0;
     public static boolean AUTHORIZATION_STATUS = false;
     public static boolean PREMIUM_STATUS = false;
     public static boolean POST_STATUS = false;
+
+    public static boolean RUSSIAN_LOCALE = true;
 
     private SocialNetwork currentSocialNetwork;
 
@@ -133,25 +136,30 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
 
 
         vkButton = (Button) rootView.findViewById(R.id.vk_btn);
-        okButton = (Button) rootView.findViewById(R.id.ok_btn);
+        fbButton = (Button) rootView.findViewById(R.id.fb_btn);
         fillButton = (Button) rootView.findViewById(R.id.fill_btn);
         mCoordinatorLayout = (CoordinatorLayout) rootView.findViewById(R.id.main_coordinator_container);
         authLinLayout = (LinearLayout) rootView.findViewById(R.id.auth_ll);
         fillView = (CardView) rootView.findViewById(R.id.fill_v);
         premiumButton = (Button) rootView.findViewById(R.id.premium_btn);
         logoImageView = (ImageView) rootView.findViewById(R.id.logo_iv);
-        mailImageView = (ImageView) rootView.findViewById(R.id.mail_iv);
-        callImageView = (ImageView) rootView.findViewById(R.id.call_iv);
+        mailButton = (Button) rootView.findViewById(R.id.mail_btn);
+        callButton = (Button) rootView.findViewById(R.id.call_btn);
+        ruImageView = (ImageView) rootView.findViewById(R.id.ru_iv);
+        ukImageView = (ImageView)  rootView.findViewById(R.id.uk_iv);
 
         vkButton.setOnClickListener(this);
-        okButton.setOnClickListener(this);
+        fbButton.setOnClickListener(this);
         fillButton.setOnClickListener(this);
         logoImageView.setOnClickListener(this);
-        mailImageView.setOnClickListener(this);
-        callImageView.setOnClickListener(this);
+        mailButton.setOnClickListener(this);
+        callButton.setOnClickListener(this);
         premiumButton.setOnClickListener(this);
+        ruImageView.setOnClickListener(this);
+        ukImageView.setOnClickListener(this);
 
         String VK_KEY = getActivity().getString(R.string.vk_app_id);
+
 
 
         // getVkFingerprint();
@@ -174,6 +182,8 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
 
             ArrayList<String> fbScope = new ArrayList<String>();
             fbScope.addAll(Arrays.asList("public_profile, email, user_friends"));
+
+
             if (mSocialNetworkManager == null) {
                 mSocialNetworkManager = new SocialNetworkManager();
 
@@ -184,6 +194,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
 
                 FacebookSocialNetwork fbNetwork = new FacebookSocialNetwork(this, fbScope);
                 mSocialNetworkManager.addSocialNetwork(fbNetwork);
+
 
                 //Initiate every network from mSocialNetworkManager
                 getFragmentManager().beginTransaction().add(mSocialNetworkManager, StartActivity.SOCIAL_NETWORK_TAG).commit();
@@ -549,7 +560,8 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
                 }
 
                 break;
-            case R.id.ok_btn:
+
+            case R.id.fb_btn:
                 if(NetworkStatusChecker.isNetworkAvailable(getContext())){
                 networkId = FacebookSocialNetwork.ID;
                     SocialNetwork socialNetwork = mSocialNetworkManager.getSocialNetwork(networkId);
@@ -580,7 +592,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
                 PREMIUM_STATUS = true;
                 saveStatus();
                 updateUi();
-                showSnackbar("Эта фунциональность пока не работает, поэтому премиум БЕСПЛАТНО");
+                showSnackbar(StartActivity.getRes().getString(R.string.premium_snackbar));
 
                 break;
             case R.id.logo_iv:
@@ -589,15 +601,15 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
                 startActivity(viewIntent);
                 break;
 
-            case R.id.mail_iv:
+            case R.id.mail_btn:
                 Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
-                sendIntent.setData(Uri.parse("mailto:info@hr24.org"));
-                sendIntent.putExtra(Intent.EXTRA_SUBJECT, "From ResumeBuilder app");
+                sendIntent.setData(Uri.parse("mailto:andrei@hr24.org"));
+                sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Заказ профессионального резюме");
                 startActivity(sendIntent);
 
                 break;
 
-            case R.id.call_iv:
+            case R.id.call_btn:
                 Intent callIntent = new Intent(Intent.ACTION_DIAL);
                 callIntent.setData(Uri.parse("tel:+ 7 925 721 21 68"));
                 startActivity(callIntent);
@@ -605,6 +617,15 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
 
                 break;
 
+            case R.id.uk_iv:
+                RUSSIAN_LOCALE = false;
+
+                break;
+
+            case R.id.ru_iv:
+                RUSSIAN_LOCALE = true;
+
+                break;
 
         }
 
