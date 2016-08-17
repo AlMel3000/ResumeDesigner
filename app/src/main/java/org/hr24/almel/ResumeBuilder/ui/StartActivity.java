@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import io.fabric.sdk.android.Fabric;
@@ -47,6 +48,15 @@ public class StartActivity extends AppCompatActivity implements MainFragment.OnF
 
 
 
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        try{
+            super.onRestoreInstanceState(savedInstanceState);
+        }catch (Exception e) {
+            Log.d("ViewGroupError", "Something unbelievable happens: "+e.getMessage());
+        }
     }
 
 

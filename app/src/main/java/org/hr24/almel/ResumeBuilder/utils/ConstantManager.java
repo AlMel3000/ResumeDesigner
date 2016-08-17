@@ -58,5 +58,5 @@ public interface ConstantManager {
     int CAMERA_REQUEST_PERMISSION_CODE = 102;
 
 
-
+    String FIRST_WORK_STATUS_KEY = "FIRST_WORK_STATUS_KEY";
 }

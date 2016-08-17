@@ -37,6 +37,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -78,13 +80,15 @@ import java.util.Date;
 import java.util.List;
 
 
-public class ProfileFragment extends Fragment implements View.OnClickListener{
+public class ProfileFragment extends Fragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener{
 
     private int mCurrentEditMode = 1;
 
 
     private static final String NETWORK_ID = "NETWORK_ID";
     public static boolean PHOTO_SET = false;
+
+    public static boolean FIRST_WORK = false;
 
     private int mJobCount = 1;
     private int mStudyCount = 1;
@@ -124,8 +128,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     Bitmap sourceForCircleMaskingBitmap = null;
     Bitmap bitmapAva = null;
     ScrollView scrollView;
-    List<EditText> mUserInfoViewsJob2, mUserInfoViewsJob3, mUserInfoViewsStudy2;
-
+    List<EditText> mUserInfoViewsJob2, mUserInfoViewsJob3, mUserInfoViewsStudy2, mUserInfoViewsJob;
+    private CheckBox mFirstTimeChb;
+    private LinearLayout mJobParentLinLay;
 
 
 
@@ -149,6 +154,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         rootView = inflater.inflate(R.layout.profile_fragment, container, false);
 
         photoImgV = (ImageView) rootView.findViewById(R.id.imageView);
+        mJobParentLinLay = (LinearLayout) rootView.findViewById(R.id.parent_job_ll);
         mParentLinLay = (LinearLayout) rootView.findViewById(R.id.parent_ll_in_scroll_view);
         mProfilePlaceholder = (LinearLayout) rootView.findViewById(R.id.profile_placeholder);
         mAddPhotoLinLay = (LinearLayout) rootView.findViewById(R.id.add_photo_ll);
@@ -165,14 +171,12 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         skillsEt = (EditText) rootView.findViewById(R.id.skills);
         languagesEt = (EditText) rootView.findViewById(R.id.languages);
         hobbyEt = (EditText) rootView.findViewById(R.id.hobby);
-        jobPeriodEt = (EditText) rootView.findViewById(R.id.job_period);
-        companyTitleEt = (EditText) rootView.findViewById(R.id.company_title);
-        jobTitleEt = (EditText) rootView.findViewById(R.id.job_title);
-        jobDutyEt =(EditText) rootView.findViewById(R.id.job_duty);
+
         studyTitleEt =(EditText) rootView.findViewById(R.id.study_title);
         studyDescriptionEt =(EditText) rootView.findViewById(R.id.study_decription);
         ratingEt =(EditText) rootView.findViewById(R.id.rating);
         achievementsEt =(EditText) rootView.findViewById(R.id.achievements);
+        mFirstTimeChb = (CheckBox) rootView.findViewById(R.id.firs_work_chb);
 
         mCoordinatorFrame = (CoordinatorLayout) rootView.findViewById(R.id.frame);
 
@@ -182,9 +186,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         viewPdfButton = (Button) rootView.findViewById(R.id.view);
         Button camButton = (Button) rootView.findViewById(R.id.cam_btn);
         Button galButton = (Button) rootView.findViewById(R.id.gal_btn);
-        job2AddButton = (Button) rootView.findViewById(R.id.job_2_add_btn);
+
         study2AddButton = (Button) rootView.findViewById(R.id.study_2_add_button);
         sharePdfButton = (Button) rootView.findViewById(R.id.sharePdf);
+
 
         scrollView = (ScrollView) rootView.findViewById(R.id.sv_main);
 
@@ -215,7 +220,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         mAddPhotoLinLay.setOnClickListener(this);
         camButton.setOnClickListener(this);
         galButton.setOnClickListener(this);
-        job2AddButton.setOnClickListener(this);
+
+        mFirstTimeChb.setOnCheckedChangeListener(this);
+
         study2AddButton.setOnClickListener(this);
         photoImgV.setOnClickListener(this);
         sharePdfButton.setOnClickListener(this);
@@ -230,10 +237,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         mUserInfoViews.add(skillsEt);
         mUserInfoViews.add(languagesEt);
         mUserInfoViews.add(hobbyEt);
-        mUserInfoViews.add(jobPeriodEt);
-        mUserInfoViews.add(companyTitleEt);
-        mUserInfoViews.add(jobTitleEt);
-        mUserInfoViews.add(jobDutyEt);
         mUserInfoViews.add(studyTitleEt);
         mUserInfoViews.add(studyDescriptionEt);
         mUserInfoViews.add(ratingEt);
@@ -241,7 +244,31 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
 
 
 
+        LayoutInflater ltInflaterJob = getActivity().getLayoutInflater();
+        ltInflaterJob.inflate(R.layout.job, mJobParentLinLay, true);
+        jobPeriodEt = (EditText) rootView.findViewById(R.id.job_period);
+        companyTitleEt = (EditText) rootView.findViewById(R.id.company_title);
+        jobTitleEt = (EditText) rootView.findViewById(R.id.job_title);
+        jobDutyEt =(EditText) rootView.findViewById(R.id.job_duty);
+        job2AddButton = (Button) rootView.findViewById(R.id.job_2_add_btn);
+
+        job2AddButton.setOnClickListener(this);
+
+        mUserInfoViewsJob= new ArrayList<>();
+        mUserInfoViewsJob.add(jobPeriodEt);
+        mUserInfoViewsJob.add(companyTitleEt);
+        mUserInfoViewsJob.add(jobTitleEt);
+        mUserInfoViewsJob.add(jobDutyEt);
+
+        initUserFieldsJob();
+
         initUserFields();
+
+        if (FIRST_WORK){
+            mFirstTimeChb.setChecked(true);
+        } else {
+            mFirstTimeChb.setChecked(false);
+        }
 
 
 
@@ -288,10 +315,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
 
         }
 
-        if (mJobCount==2){
+        if (mJobCount==2 && ! FIRST_WORK){
             addJob2();
             initUserFieldsJob2();
-        } else if (mJobCount == 3){
+        } else if (mJobCount == 3 && ! FIRST_WORK){
             addJob2();
             initUserFieldsJob2();
             addJob3();
@@ -323,6 +350,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     public void onPause() {
         super.onPause();
         saveUserFields();
+        if (!FIRST_WORK){
+            saveUserFieldsJob();
+        }
         if (mStudyCount==2){
             saveUserFieldsStudy2();
         }
@@ -337,6 +367,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     public void onDestroy() {
         super.onDestroy();
         saveUserFields();
+        if (!FIRST_WORK){
+            saveUserFieldsJob();
+        }
         if (mStudyCount==2){
             saveUserFieldsStudy2();
         }
@@ -353,6 +386,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         super.onSaveInstanceState(outState);
         //outState.putInt(ConstantManager.EDIT_MODE_KEY, mCurrentEditMode);
     }
+
 
 
 
@@ -440,6 +474,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                     mCurrentEditMode = 0;
                 }
                 saveUserFields();
+                if (!FIRST_WORK){
+                    saveUserFieldsJob();
+                }
                 if (mStudyCount==2){
                     saveUserFieldsStudy2();
                 }
@@ -573,7 +610,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         job2AddButton.setVisibility(View.GONE);
 
         LayoutInflater ltInflaterJob2 = getActivity().getLayoutInflater();
-        ltInflaterJob2.inflate(R.layout.job2, mJobLinLay, true);
+        ltInflaterJob2.inflate(R.layout.job2, mJobParentLinLay, true);
 
         jobPeriod2Et = (EditText) rootView.findViewById(R.id.job_period1);
         companyTitle2Et = (EditText) rootView.findViewById(R.id.company_title1);
@@ -601,7 +638,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         job2AddButton.setVisibility(View.GONE);
         removeJob2Button.setVisibility(View.GONE);
         LayoutInflater ltInflaterJob3 = getActivity().getLayoutInflater();
-        ltInflaterJob3.inflate(R.layout.job3, mJobLinLay, true);
+        ltInflaterJob3.inflate(R.layout.job3, mJobParentLinLay, true);
 
         jobPeriod3Et = (EditText) rootView.findViewById(R.id.job_period2);
         companyTitle3Et = (EditText) rootView.findViewById(R.id.company_title2);
@@ -678,6 +715,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
 
             }
 
+            if (!FIRST_WORK) {
+                for (EditText userValueJob:mUserInfoViewsJob){
+                    userValueJob.setEnabled(true);
+                    userValueJob.setFocusable(true);
+                    userValueJob.setFocusableInTouchMode(true);
+                    userValueJob.setTextColor(Color.DKGRAY);
+                }
+            }
             if (mJobCount==2){
             for (EditText userValueJob2:mUserInfoViewsJob2){
                 userValueJob2.setEnabled(true);
@@ -734,6 +779,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
 
             if (mStudyCount==1){study2AddButton.setVisibility(View.VISIBLE);}
 
+            mFirstTimeChb.setEnabled(true);
+
             View buttonView = rootView.findViewById(R.id.button_placeholder);
             ViewGroup parentButtonPlaceholderll = (ViewGroup) buttonView.getParent();
             parentButtonPlaceholderll.removeView(buttonView);
@@ -747,6 +794,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                 userValue.setTextColor(Color.BLACK);
             }
 
+            if (!FIRST_WORK){
+                for (EditText userValueJob:mUserInfoViewsJob){
+                    userValueJob.setEnabled(false);
+                    userValueJob.setFocusable(false);
+                    userValueJob.setFocusableInTouchMode(false);
+                    userValueJob.setTextColor(Color.BLACK);
+            }
+            }
             if (mJobCount==2){
                 for (EditText userValueJob2:mUserInfoViewsJob2){
                     userValueJob2.setEnabled(false);
@@ -808,6 +863,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
 
             job2AddButton.setVisibility(View.GONE);
             study2AddButton.setVisibility(View.GONE);
+            mFirstTimeChb.setEnabled(false);
 
             LayoutInflater ltInflaterButtonPlaceholder = getActivity().getLayoutInflater();
             ltInflaterButtonPlaceholder.inflate(R.layout.button_palceholder, mParentLinLay, true);
@@ -894,14 +950,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                 Font skillsBlankRatingFont = new Font(droidSans, 20.0f, 1, BaseColor.WHITE);
                 Font skillsRatingFont = new Font(droidSans, 20.0f, 1, BaseColor.BLACK);
 
-                ByteArrayOutputStream streamExp = new ByteArrayOutputStream();
-                Bitmap bitmapExp;
-                bitmapExp = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.exp);
-                bitmapExp.compress(Bitmap.CompressFormat.JPEG, 100, streamExp);
-                Image myImgExp = Image.getInstance(streamExp.toByteArray());
-                myImgExp.setAlignment(Image.MIDDLE);
 
-                myImgExp.scaleAbsolute(40f, 40f);
 
                 ByteArrayOutputStream streamEdu = new ByteArrayOutputStream();
                 Bitmap bitmapEdu;
@@ -927,159 +976,168 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                 }
 
 
-                columnLeft.addElement(myImgExp);
+                if (!FIRST_WORK) {
+                    ByteArrayOutputStream streamExp = new ByteArrayOutputStream();
+                    Bitmap bitmapExp;
+                    bitmapExp = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.exp);
+                    bitmapExp.compress(Bitmap.CompressFormat.JPEG, 100, streamExp);
+                    Image myImgExp = Image.getInstance(streamExp.toByteArray());
+                    myImgExp.setAlignment(Image.MIDDLE);
+                    myImgExp.scaleAbsolute(40f, 40f);
+                    columnLeft.addElement(myImgExp);
 
-                Paragraph header1 = new Paragraph("Опыт работы");
-                header1.setFont(headersLeftFont);
-                header1.setAlignment(Element.ALIGN_CENTER);
-                header1.setSpacingAfter(8f);
-                columnLeft.addElement(header1);
-
-
-                Paragraph companyTitleParagraph = new Paragraph("\u2022" + this.companyTitleEt.getText().toString());
-                companyTitleParagraph.setAlignment(Paragraph.ALIGN_LEFT);
-                companyTitleParagraph.setFont(headersSmallLeftFont);
-                columnLeft.addElement(companyTitleParagraph);
-
-
-                Paragraph jobPeriodParagraph = new Paragraph(this.jobPeriodEt.getText().toString());
-                jobPeriodParagraph.setAlignment(Paragraph.ALIGN_LEFT);
-                jobPeriodParagraph.setFont(textLeftFontGray);
-                jobPeriodParagraph.setSpacingAfter(4f);
-                columnLeft.addElement(jobPeriodParagraph);
+                    Paragraph header1 = new Paragraph("Опыт работы");
+                    header1.setFont(headersLeftFont);
+                    header1.setAlignment(Element.ALIGN_CENTER);
+                    header1.setSpacingAfter(8f);
+                    columnLeft.addElement(header1);
 
 
-                Paragraph jobTitleParagraph = new Paragraph(this.jobTitleEt.getText().toString());
-                jobTitleParagraph.setAlignment(Paragraph.ALIGN_LEFT);
-                jobTitleParagraph.setFont(textLeftFont);
-                jobTitleParagraph.setSpacingAfter(4f);
-                columnLeft.addElement(jobTitleParagraph);
+                    Paragraph companyTitleParagraph = new Paragraph("\u2022" + this.companyTitleEt.getText().toString());
+                    companyTitleParagraph.setAlignment(Paragraph.ALIGN_LEFT);
+                    companyTitleParagraph.setFont(headersSmallLeftFont);
+                    columnLeft.addElement(companyTitleParagraph);
 
 
-                Paragraph jobDutyParagraph = new Paragraph();
-                String[] jobDutyProcessed = stringProcessor(dutyString);
-                for (String aJobDutyProcessed : jobDutyProcessed) {
-
-                    Chunk jobDuty = new Chunk(aJobDutyProcessed.trim());
-                    jobDutyParagraph.add(jobDuty + "\n");
-                }
-
-                jobDutyParagraph.setAlignment(Paragraph.ALIGN_LEFT);
-                jobDutyParagraph.setFont(textLeftFont);
-                columnLeft.addElement(jobDutyParagraph);
-
-                if (mJobCount == 2) {
-
-                    Paragraph companyTitleParagraph1 = new Paragraph("\u2022" + companyTitle2Et.getText().toString());
-                    companyTitleParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
-                    companyTitleParagraph1.setFont(headersSmallLeftFont);
-
-                    Paragraph jobPeriodParagraph1 = new Paragraph(jobPeriod2Et.getText().toString());
-                    jobPeriodParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
-                    jobPeriodParagraph1.setFont(textLeftFontGray);
+                    Paragraph jobPeriodParagraph = new Paragraph(this.jobPeriodEt.getText().toString());
+                    jobPeriodParagraph.setAlignment(Paragraph.ALIGN_LEFT);
+                    jobPeriodParagraph.setFont(textLeftFontGray);
+                    jobPeriodParagraph.setSpacingAfter(4f);
+                    columnLeft.addElement(jobPeriodParagraph);
 
 
-                    Paragraph jobTitleParagraph1 = new Paragraph(jobTitle2Et.getText().toString());
-                    jobTitleParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
-                    jobTitleParagraph1.setFont(textLeftFont);
-
-                    columnLeft.addElement(companyTitleParagraph1);
-
-                    jobPeriodParagraph1.setSpacingAfter(4f);
-                    columnLeft.addElement(jobPeriodParagraph1);
-
-                    jobTitleParagraph1.setSpacingAfter(4f);
-                    columnLeft.addElement(jobTitleParagraph1);
+                    Paragraph jobTitleParagraph = new Paragraph(this.jobTitleEt.getText().toString());
+                    jobTitleParagraph.setAlignment(Paragraph.ALIGN_LEFT);
+                    jobTitleParagraph.setFont(textLeftFont);
+                    jobTitleParagraph.setSpacingAfter(4f);
+                    columnLeft.addElement(jobTitleParagraph);
 
 
-                    dutyString1 = jobDuty2Et.getText().toString();
+                    Paragraph jobDutyParagraph = new Paragraph();
+                    String[] jobDutyProcessed = stringProcessor(dutyString);
+                    for (String aJobDutyProcessed : jobDutyProcessed) {
 
-                    Paragraph jobDutyParagraph1 = new Paragraph();
-                    String[] jobDutyProcessed1 = stringProcessor(dutyString1);
-                    for (String aJobDutyProcessed1 : jobDutyProcessed1) {
-
-                        Chunk jobDuty1 = new Chunk(aJobDutyProcessed1.trim());
-                        jobDutyParagraph1.add(jobDuty1 + "\n");
+                        Chunk jobDuty = new Chunk(aJobDutyProcessed.trim());
+                        jobDutyParagraph.add(jobDuty + "\n");
                     }
 
-                    jobDutyParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
-                    jobDutyParagraph1.setFont(textLeftFont);
-                    columnLeft.addElement(jobDutyParagraph1);
-                }
+                    jobDutyParagraph.setAlignment(Paragraph.ALIGN_LEFT);
+                    jobDutyParagraph.setFont(textLeftFont);
+                    columnLeft.addElement(jobDutyParagraph);
 
-                if (mJobCount == 3) {
-                    Paragraph companyTitleParagraph1 = new Paragraph("\u2022" + companyTitle2Et.getText().toString());
-                    companyTitleParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
-                    companyTitleParagraph1.setFont(headersSmallLeftFont);
+                    if (mJobCount == 2) {
 
-                    Paragraph jobPeriodParagraph1 = new Paragraph(jobPeriod2Et.getText().toString());
-                    jobPeriodParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
-                    jobPeriodParagraph1.setFont(textLeftFontGray);
+                        Paragraph companyTitleParagraph1 = new Paragraph("\u2022" + companyTitle2Et.getText().toString());
+                        companyTitleParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
+                        companyTitleParagraph1.setFont(headersSmallLeftFont);
 
-
-                    Paragraph jobTitleParagraph1 = new Paragraph(jobTitle2Et.getText().toString());
-                    jobTitleParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
-                    jobTitleParagraph1.setFont(textLeftFont);
-
-                    columnLeft.addElement(companyTitleParagraph1);
-
-                    jobPeriodParagraph1.setSpacingAfter(4f);
-                    columnLeft.addElement(jobPeriodParagraph1);
-
-                    jobTitleParagraph1.setSpacingAfter(4f);
-                    columnLeft.addElement(jobTitleParagraph1);
+                        Paragraph jobPeriodParagraph1 = new Paragraph(jobPeriod2Et.getText().toString());
+                        jobPeriodParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
+                        jobPeriodParagraph1.setFont(textLeftFontGray);
 
 
-                    dutyString1 = jobDuty2Et.getText().toString();
+                        Paragraph jobTitleParagraph1 = new Paragraph(jobTitle2Et.getText().toString());
+                        jobTitleParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
+                        jobTitleParagraph1.setFont(textLeftFont);
 
-                    Paragraph jobDutyParagraph1 = new Paragraph();
-                    String[] jobDutyProcessed1 = stringProcessor(dutyString1);
-                    for (String aJobDutyProcessed1 : jobDutyProcessed1) {
+                        columnLeft.addElement(companyTitleParagraph1);
 
-                        Chunk jobDuty1 = new Chunk(aJobDutyProcessed1.trim());
-                        jobDutyParagraph1.add(jobDuty1 + "\n");
+                        jobPeriodParagraph1.setSpacingAfter(4f);
+                        columnLeft.addElement(jobPeriodParagraph1);
+
+                        jobTitleParagraph1.setSpacingAfter(4f);
+                        columnLeft.addElement(jobTitleParagraph1);
+
+
+                        dutyString1 = jobDuty2Et.getText().toString();
+
+                        Paragraph jobDutyParagraph1 = new Paragraph();
+                        String[] jobDutyProcessed1 = stringProcessor(dutyString1);
+                        for (String aJobDutyProcessed1 : jobDutyProcessed1) {
+
+                            Chunk jobDuty1 = new Chunk(aJobDutyProcessed1.trim());
+                            jobDutyParagraph1.add(jobDuty1 + "\n");
+                        }
+
+                        jobDutyParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
+                        jobDutyParagraph1.setFont(textLeftFont);
+                        columnLeft.addElement(jobDutyParagraph1);
                     }
 
-                    jobDutyParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
-                    jobDutyParagraph1.setFont(textLeftFont);
-                    columnLeft.addElement(jobDutyParagraph1);
+                    if (mJobCount == 3) {
+                        Paragraph companyTitleParagraph1 = new Paragraph("\u2022" + companyTitle2Et.getText().toString());
+                        companyTitleParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
+                        companyTitleParagraph1.setFont(headersSmallLeftFont);
+
+                        Paragraph jobPeriodParagraph1 = new Paragraph(jobPeriod2Et.getText().toString());
+                        jobPeriodParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
+                        jobPeriodParagraph1.setFont(textLeftFontGray);
 
 
-                    Paragraph companyTitleParagraph2 = new Paragraph("\u2022" + companyTitle3Et.getText().toString());
-                    companyTitleParagraph2.setAlignment(Paragraph.ALIGN_LEFT);
-                    companyTitleParagraph2.setFont(headersSmallLeftFont);
+                        Paragraph jobTitleParagraph1 = new Paragraph(jobTitle2Et.getText().toString());
+                        jobTitleParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
+                        jobTitleParagraph1.setFont(textLeftFont);
 
-                    Paragraph jobPeriodParagraph2 = new Paragraph(jobPeriod3Et.getText().toString());
-                    jobPeriodParagraph2.setAlignment(Paragraph.ALIGN_LEFT);
-                    jobPeriodParagraph2.setFont(textLeftFontGray);
+                        columnLeft.addElement(companyTitleParagraph1);
 
+                        jobPeriodParagraph1.setSpacingAfter(4f);
+                        columnLeft.addElement(jobPeriodParagraph1);
 
-                    Paragraph jobTitleParagraph2 = new Paragraph(jobTitle3Et.getText().toString());
-                    jobTitleParagraph2.setAlignment(Paragraph.ALIGN_LEFT);
-                    jobTitleParagraph2.setFont(textLeftFont);
-
-                    columnLeft.addElement(companyTitleParagraph2);
-
-                    jobPeriodParagraph2.setSpacingAfter(4f);
-                    columnLeft.addElement(jobPeriodParagraph2);
-
-                    jobTitleParagraph2.setSpacingAfter(4f);
-                    columnLeft.addElement(jobTitleParagraph2);
+                        jobTitleParagraph1.setSpacingAfter(4f);
+                        columnLeft.addElement(jobTitleParagraph1);
 
 
-                    dutyString2 = jobDuty3Et.getText().toString();
+                        dutyString1 = jobDuty2Et.getText().toString();
 
-                    Paragraph jobDutyParagraph2 = new Paragraph();
-                    String[] jobDutyProcessed2 = stringProcessor(dutyString2);
-                    for (String aJobDutyProcessed2 : jobDutyProcessed2) {
+                        Paragraph jobDutyParagraph1 = new Paragraph();
+                        String[] jobDutyProcessed1 = stringProcessor(dutyString1);
+                        for (String aJobDutyProcessed1 : jobDutyProcessed1) {
 
-                        Chunk jobDuty2 = new Chunk(aJobDutyProcessed2.trim());
-                        jobDutyParagraph2.add(jobDuty2 + "\n");
+                            Chunk jobDuty1 = new Chunk(aJobDutyProcessed1.trim());
+                            jobDutyParagraph1.add(jobDuty1 + "\n");
+                        }
+
+                        jobDutyParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
+                        jobDutyParagraph1.setFont(textLeftFont);
+                        columnLeft.addElement(jobDutyParagraph1);
+
+
+                        Paragraph companyTitleParagraph2 = new Paragraph("\u2022" + companyTitle3Et.getText().toString());
+                        companyTitleParagraph2.setAlignment(Paragraph.ALIGN_LEFT);
+                        companyTitleParagraph2.setFont(headersSmallLeftFont);
+
+                        Paragraph jobPeriodParagraph2 = new Paragraph(jobPeriod3Et.getText().toString());
+                        jobPeriodParagraph2.setAlignment(Paragraph.ALIGN_LEFT);
+                        jobPeriodParagraph2.setFont(textLeftFontGray);
+
+
+                        Paragraph jobTitleParagraph2 = new Paragraph(jobTitle3Et.getText().toString());
+                        jobTitleParagraph2.setAlignment(Paragraph.ALIGN_LEFT);
+                        jobTitleParagraph2.setFont(textLeftFont);
+
+                        columnLeft.addElement(companyTitleParagraph2);
+
+                        jobPeriodParagraph2.setSpacingAfter(4f);
+                        columnLeft.addElement(jobPeriodParagraph2);
+
+                        jobTitleParagraph2.setSpacingAfter(4f);
+                        columnLeft.addElement(jobTitleParagraph2);
+
+
+                        dutyString2 = jobDuty3Et.getText().toString();
+
+                        Paragraph jobDutyParagraph2 = new Paragraph();
+                        String[] jobDutyProcessed2 = stringProcessor(dutyString2);
+                        for (String aJobDutyProcessed2 : jobDutyProcessed2) {
+
+                            Chunk jobDuty2 = new Chunk(aJobDutyProcessed2.trim());
+                            jobDutyParagraph2.add(jobDuty2 + "\n");
+                        }
+
+                        jobDutyParagraph2.setAlignment(Paragraph.ALIGN_LEFT);
+                        jobDutyParagraph2.setFont(textLeftFont);
+                        columnLeft.addElement(jobDutyParagraph2);
                     }
-
-                    jobDutyParagraph2.setAlignment(Paragraph.ALIGN_LEFT);
-                    jobDutyParagraph2.setFont(textLeftFont);
-                    columnLeft.addElement(jobDutyParagraph2);
                 }
 
 
@@ -1443,10 +1501,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_SKILLS_KEY, null));
         userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_LANGUAGES_KEY, null));
         userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_HOBBY_KEY, null));
-        userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_JOB_PERIOD_KEY, null));
-        userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_COMPANY_TITLE_KEY, null));
-        userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_JOB_TITLE_KEY, null));
-        userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_JOB_DUTY_KEY, null));
         userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_STUDY_TITLE_KEY, null));
         userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_STUDY_DESCRIPTION_KEY, null));
         userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_RATING_KEY, null));
@@ -1459,6 +1513,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         mJobCount = StartActivity.getSharedPref().getInt(ConstantManager.JOB_COUNT_KEY, 1);
         mStudyCount = StartActivity.getSharedPref().getInt(ConstantManager.STUDY_COUNT_KEY, 1);
         PHOTO_SET = StartActivity.getSharedPref().getBoolean(ConstantManager.PHOTO_SET_STATUS_KEY, false);
+        FIRST_WORK = StartActivity.getSharedPref().getBoolean(ConstantManager.FIRST_WORK_STATUS_KEY, false);
 
 
     }
@@ -1479,10 +1534,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                 ConstantManager.USER_SKILLS_KEY,
                 ConstantManager.USER_LANGUAGES_KEY,
                 ConstantManager.USER_HOBBY_KEY,
-                ConstantManager.USER_JOB_PERIOD_KEY,
-                ConstantManager.USER_COMPANY_TITLE_KEY,
-                ConstantManager.USER_JOB_TITLE_KEY,
-                ConstantManager.USER_JOB_DUTY_KEY,
                 ConstantManager.USER_STUDY_TITLE_KEY,
                 ConstantManager.USER_STUDY_DESCRIPTION_KEY,
                 ConstantManager.USER_RATING_KEY,
@@ -1495,6 +1546,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         editor.putInt(ConstantManager.JOB_COUNT_KEY, mJobCount);
         editor.putInt(ConstantManager.STUDY_COUNT_KEY, mStudyCount);
         editor.putBoolean(ConstantManager.PHOTO_SET_STATUS_KEY, PHOTO_SET);
+        editor.putBoolean(ConstantManager.FIRST_WORK_STATUS_KEY, FIRST_WORK);
 
         editor.apply();
     }
@@ -1693,6 +1745,97 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     }
 
 
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (isChecked){
+            FIRST_WORK = true;
+            saveUserFields();
+            View firstJobView = rootView.findViewById(R.id.job_ll);
+            ViewGroup parentJobll = (ViewGroup) firstJobView.getParent();
+            parentJobll.removeView(firstJobView);
+
+            if (mJobCount==2){
+                mJobCount = 1;
+                saveUserFieldsJob2();
+                View job2View = rootView.findViewById(R.id.job1_ll);
+                ViewGroup parentJobll2 = (ViewGroup) job2View.getParent();
+                parentJobll2.removeView(job2View);
+
+            }else if (mJobCount==3){
+
+                mJobCount = 1;
+
+
+
+                saveUserFieldsJob3();
+
+                View job3View = rootView.findViewById(R.id.job2_ll);
+                ViewGroup parentJobll3 = (ViewGroup) job3View.getParent();
+                parentJobll3.removeView(job3View);
+
+                saveUserFieldsJob2();
+                View job2View = rootView.findViewById(R.id.job1_ll);
+                ViewGroup parentJobll2 = (ViewGroup) job2View.getParent();
+                parentJobll2.removeView(job2View);
+
+
+            }
+        } else {
+            FIRST_WORK = false;
+            LayoutInflater ltInflaterJob = getActivity().getLayoutInflater();
+            ltInflaterJob.inflate(R.layout.job, mJobParentLinLay, true);
+
+            jobPeriodEt = (EditText) rootView.findViewById(R.id.job_period);
+            companyTitleEt = (EditText) rootView.findViewById(R.id.company_title);
+            jobTitleEt = (EditText) rootView.findViewById(R.id.job_title);
+            jobDutyEt =(EditText) rootView.findViewById(R.id.job_duty);
+            job2AddButton = (Button) rootView.findViewById(R.id.job_2_add_btn);
+
+            job2AddButton.setOnClickListener(this);
+
+            mUserInfoViewsJob= new ArrayList<>();
+            mUserInfoViewsJob.add(jobPeriodEt);
+            mUserInfoViewsJob.add(companyTitleEt);
+            mUserInfoViewsJob.add(jobTitleEt);
+            mUserInfoViewsJob.add(jobDutyEt);
+
+            initUserFieldsJob();
+
+        }
+    }
+    private void saveUserFieldsJob() {
+        List<String> userData = new ArrayList<>();
+        userData.add(jobPeriodEt.getText().toString());
+        userData.add(companyTitleEt.getText().toString());
+        userData.add(jobTitleEt.getText().toString());
+        userData.add(jobDutyEt.getText().toString());
+        SharedPreferences.Editor editor = StartActivity.getSharedPref().edit();
+        final String[] USER_FIELDS = {
+                ConstantManager.USER_JOB_PERIOD_KEY,
+                ConstantManager.USER_COMPANY_TITLE_KEY,
+                ConstantManager.USER_JOB_TITLE_KEY,
+                ConstantManager.USER_JOB_DUTY_KEY
+        };
+
+        for (int i =0; i<USER_FIELDS.length; i++){
+            editor.putString(USER_FIELDS[i], userData.get(i));
+        }
+        editor.apply();
+    }
+
+    private void initUserFieldsJob() {
+        List<String> userFields = new ArrayList<>();
+        userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_JOB_PERIOD_KEY, null));
+        userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_COMPANY_TITLE_KEY, null));
+        userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_JOB_TITLE_KEY, null));
+        userFields.add(StartActivity.getSharedPref().getString(ConstantManager.USER_JOB_DUTY_KEY, null));
+
+
+        for (int i = 0; i < userFields.size(); i++) {
+            mUserInfoViewsJob.get(i).setText(userFields.get(i));
+        }
+
+    }
 }
 
 

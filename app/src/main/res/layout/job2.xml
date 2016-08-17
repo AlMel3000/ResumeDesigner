@@ -114,11 +114,5 @@
         android:layout_height="wrap_content"
         android:text="@string/job_remove" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/hr24_blue"
-        android:layout_margin="@dimen/spacing_small_8"
-        />
 
 </LinearLayout>
