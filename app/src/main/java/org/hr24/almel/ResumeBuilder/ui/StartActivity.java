@@ -55,7 +55,8 @@ public class StartActivity extends AppCompatActivity implements MainFragment.OnF
         try{
             super.onRestoreInstanceState(savedInstanceState);
         }catch (Exception e) {
-            Log.d("ViewGroupError", "Something unbelievable happens: "+e.getMessage());
+
+            Crashlytics.log("onRestoreInstanceState ViewGroup Error" + e.getMessage());
         }
     }
 

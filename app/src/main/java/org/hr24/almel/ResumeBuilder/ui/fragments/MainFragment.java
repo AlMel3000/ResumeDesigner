@@ -580,7 +580,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
                 PREMIUM_STATUS = true;
                 saveStatus();
                 updateUi();
-                showSnackbar("Эта функиональность пока не работает, поэтому премиум БЕСПЛАТНО");
+                showSnackbar("Эта фунциональность пока не работает, поэтому премиум БЕСПЛАТНО");
 
                 break;
             case R.id.logo_iv:
@@ -643,7 +643,6 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
     @Override
     public void onError(int socialNetworkID, String requestID, String errorMessage, Object data) {
         StartActivity.hideProgress();
-        showSnackbar("Ошибка: " + errorMessage);
 
     }
 
