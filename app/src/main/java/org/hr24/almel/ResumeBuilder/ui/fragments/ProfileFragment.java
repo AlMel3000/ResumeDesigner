@@ -333,7 +333,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
         }
 
         if(PHOTO_SET && loadUserPhoto()!=null){
-            mAddPhototv.setText("Изменить фото");
+            mAddPhototv.setText(R.string.change_photo);
             mAddPhotoLinLay.setVisibility(View.GONE);
             mAddPhototv.setVisibility(View.VISIBLE);
         }
@@ -406,7 +406,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
                         Crashlytics.logException(e);
                     }
                     bitmapAva = getCircleMaskedBitmapUsingPorterDuff(sourceForCircleMaskingBitmap, 480);
-                    mAddPhototv.setText("Изменить фото");
+                    mAddPhototv.setText(R.string.change_photo);
                     mAddPhotoLinLay.setVisibility(View.GONE);
                     mAddPhototv.setVisibility(View.VISIBLE);
 
@@ -434,7 +434,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
                     }
                     bitmapAva = getCircleMaskedBitmapUsingPorterDuff(sourceForCircleMaskingBitmap, 480);
 
-                    mAddPhototv.setText("Изменить фото");
+                    mAddPhototv.setText(R.string.change_photo);
                     mAddPhotoLinLay.setVisibility(View.GONE);
                     mAddPhototv.setVisibility(View.VISIBLE);
                 }
@@ -500,7 +500,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
                 } else {
 
                     Snackbar.make(mCoordinatorFrame, R.string.load_authorization_request, Snackbar.LENGTH_LONG)
-                            .setAction("Разблокировать функиональность", new View.OnClickListener() {
+                            .setAction(R.string.unblock_functionality, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     getActivity().getSupportFragmentManager().beginTransaction()
@@ -663,7 +663,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
         File file = new File(Environment.getExternalStorageDirectory()+"/cv/Resume.pdf");
         if(!file.exists()){
             Toast.makeText(getContext(),
-                    "Сначала создайте pdf",
+                    R.string.create_pdf_first,
                     Toast.LENGTH_SHORT).show();
         } else{
         Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -674,7 +674,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
         }
         catch (ActivityNotFoundException e) {
             Toast.makeText(getContext(),
-                    "Не установлено приложений для просмотра pdf",
+                    R.string.apps_are_not_installed,
                     Toast.LENGTH_SHORT).show();
         }
         }
@@ -685,7 +685,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
         File file = new File(Environment.getExternalStorageDirectory()+"/cv/Resume.pdf");
         if(!file.exists()){
             Toast.makeText(getContext(),
-                    "Сначала создайте pdf",
+                    R.string.create_pdf_first,
                     Toast.LENGTH_SHORT).show();
         } else{
             Intent intent = new Intent(Intent.ACTION_SEND);
@@ -693,11 +693,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
             intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
 
             try {
-                startActivity(Intent.createChooser(intent, "Выберите куда отправить файл резюме:"));
+                startActivity(Intent.createChooser(intent, StartActivity.getRes().getString(R.string.share_dialogue)));
             }
             catch (ActivityNotFoundException e) {
                 Toast.makeText(getContext(),
-                        "Не установлено приложений для отправки файлов. Попробуйте Dropbox например.",
+                        R.string.sharing_app_are_not_installed,
                         Toast.LENGTH_SHORT).show();
                 Crashlytics.logException(e);
             }
@@ -764,7 +764,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
 
             mProfilePlaceholder.setVisibility(View.VISIBLE);
             if(PHOTO_SET) {
-                mAddPhototv.setText("Изменить фото");
+                mAddPhototv.setText(R.string.change_photo);
                 mAddPhotoLinLay.setVisibility(View.GONE);
                 mAddPhototv.setVisibility(View.VISIBLE);
             }
@@ -972,7 +972,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
 
 
                 } else {
-                    Toast.makeText(getContext(), "Резюме без фото, пока Вы не добавите его из галереи или не сфотографируетесь.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), R.string.cv_wihout_photo, Toast.LENGTH_LONG).show();
                 }
 
 
@@ -986,7 +986,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
                     myImgExp.scaleAbsolute(40f, 40f);
                     columnLeft.addElement(myImgExp);
 
-                    Paragraph header1 = new Paragraph("Опыт работы");
+                    Paragraph header1 = new Paragraph(StartActivity.getRes().getString(R.string.job_experience));
                     header1.setFont(headersLeftFont);
                     header1.setAlignment(Element.ALIGN_CENTER);
                     header1.setSpacingAfter(8f);
@@ -1145,7 +1145,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
                 columnLeft.addElement(myImgEdu);
 
 
-                Paragraph header2 = new Paragraph("Образование");
+                Paragraph header2 = new Paragraph(StartActivity.getRes().getString(R.string.education));
                 header2.setFont(headersLeftFont);
                 header2.setAlignment(Element.ALIGN_CENTER);
                 header2.setSpacingAfter(8f);
@@ -1198,7 +1198,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
                 }
 
 
-                Paragraph header3 = new Paragraph("Достижения");
+                Paragraph header3 = new Paragraph(StartActivity.getRes().getString(R.string.achievements_header));
                 header3.setFont(headersLeftFont);
                 header3.setAlignment(Element.ALIGN_CENTER);
                 header3.setSpacingBefore(20f);
@@ -1255,7 +1255,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
                 emailParagraph.setAlignment(Paragraph.ALIGN_LEFT);
                 columnRight.addElement(emailParagraph);
 
-                Paragraph header4 = new Paragraph("О себе");
+                Paragraph header4 = new Paragraph(StartActivity.getRes().getString(R.string.bio_header));
                 header4.setAlignment(Paragraph.ALIGN_LEFT);
                 header4.setIndentationLeft(20);
                 header4.setFont(headersRightFont);
@@ -1269,7 +1269,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
                 columnRight.addElement(header4);
                 columnRight.addElement(bioParagraph);
 
-                Paragraph header5 = new Paragraph("Навыки");
+                Paragraph header5 = new Paragraph(StartActivity.getRes().getString(R.string.skills_header));
                 header5.setAlignment(Paragraph.ALIGN_LEFT);
                 header5.setFont(headersRightFont);
                 header5.setIndentationLeft(20);
@@ -1311,7 +1311,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
                         skillsParagraph.add("\n");
                     } catch (Exception e){
                         Crashlytics.logException(e);
-                        showSnackbar("Проверьте правильность ввода навыков");
+                        showSnackbar(StartActivity.getRes().getString(R.string.check_if_the_skills_is_correct));
 
                     }
                 }
@@ -1320,7 +1320,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
                 columnRight.addElement(skillsParagraph);
 
 
-                Paragraph header6 = new Paragraph("Другая информация");
+                Paragraph header6 = new Paragraph(StartActivity.getRes().getString(R.string.another_info));
                 header6.setAlignment(Paragraph.ALIGN_LEFT);
                 header6.setFont(headersRightFont);
                 header6.setIndentationLeft(20);
@@ -1328,7 +1328,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
                 header6.setSpacingAfter(8f);
                 columnRight.addElement(header6);
 
-                Paragraph subHeader1 = new Paragraph("Языки");
+                Paragraph subHeader1 = new Paragraph(StartActivity.getRes().getString(R.string.languages));
                 subHeader1.setAlignment(Paragraph.ALIGN_LEFT);
                 subHeader1.setFont(skillsFont);
                 subHeader1.setIndentationLeft(15);
@@ -1348,7 +1348,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
                 languagesParagraph.setIndentationLeft(10);
                 columnRight.addElement(languagesParagraph);
 
-                Paragraph subHeader2 = new Paragraph("Хобби");
+                Paragraph subHeader2 = new Paragraph(StartActivity.getRes().getString(R.string.hobby_header));
                 subHeader2.setAlignment(Paragraph.ALIGN_LEFT);
                 subHeader2.setFont(skillsFont);
                 subHeader2.setIndentationLeft(15);
@@ -1370,10 +1370,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
                 columnLeft.go();
                 columnRight.go();
 
-                showSnackbar("Документ создан");
+                showSnackbar(StartActivity.getRes().getString(R.string.document_created));
             }
             else {
-                showSnackbar("Вставьте карту памяти ");
+                showSnackbar(StartActivity.getRes().getString(R.string.insert_sd));
             }
 
 
@@ -1397,7 +1397,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
             }, ConstantManager.CAMERA_REQUEST_PERMISSION_CODE);
 
             Snackbar.make(mCoordinatorFrame, R.string.load_from_camera_permissions_request, Snackbar.LENGTH_LONG)
-                    .setAction("Разрешить", new View.OnClickListener() {
+                    .setAction(R.string.allow, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             openApplicationSettings();
@@ -1431,7 +1431,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
                 mPhotoFile = createImageFile();
             } catch (IOException e) {
                 e.printStackTrace();
-                showSnackbar("Ошибка получения фото" + e);
+                showSnackbar(StartActivity.getRes().getString(R.string.error_capturing_photo) + e);
                 Crashlytics.logException(e);
             }
             if (mPhotoFile != null) {
@@ -1445,7 +1445,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
             }, ConstantManager.CAMERA_REQUEST_PERMISSION_CODE);
 
             Snackbar.make(mCoordinatorFrame, R.string.load_from_camera_permissions_request, Snackbar.LENGTH_LONG)
-                    .setAction("Разрешить", new View.OnClickListener() {
+                    .setAction(R.string.allow, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             openApplicationSettings();
@@ -1458,11 +1458,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == ConstantManager.CAMERA_REQUEST_PERMISSION_CODE && grantResults.length == 2) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                showSnackbar("Разрешение получено");
+                showSnackbar(StartActivity.getRes().getString(R.string.granted));
             }
         }
         if (grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-            showSnackbar("Разрешение получено");
+            showSnackbar(StartActivity.getRes().getString(R.string.granted));
         }
     }
 

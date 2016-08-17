@@ -287,14 +287,14 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
     // Listener that's called when we finish querying the items and subscriptions we own
     IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
         public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
-            Log.d(TAG, "Query inventory finished.");
+            Log.d(TAG, StartActivity.getRes().getString(R.string.query_inventory_finished));
 
             // Have we been disposed of in the meantime? If so, quit.
             if (mHelper == null) return;
 
             // Is it a failure?
             if (result.isFailure()) {
-                complain("Failed to query inventory: " + result);
+                complain(StartActivity.getRes().getString(R.string.query_inventory_failed) + result);
                 return;
             }
 
@@ -323,7 +323,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
         try {
             mHelper.queryInventoryAsync(mGotInventoryListener);
         } catch (IabHelper.IabAsyncInProgressException e) {
-            complain("Error querying inventory. Another async operation in progress.");
+            complain(StartActivity.getRes().getString(R.string.another_async_task));
             Crashlytics.logException(e);
         }
     }
@@ -341,7 +341,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
             mHelper.launchPurchaseFlow(getActivity(), SKU_PREMIUM, RC_REQUEST,
                     mPurchaseFinishedListener, payload);
         } catch (IabHelper.IabAsyncInProgressException e) {
-            complain("Error launching purchase flow. Another async operation in progress.");
+            complain(StartActivity.getRes().getString(R.string.error_launching));
             Crashlytics.logException(e);
         }
     }
@@ -403,11 +403,11 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
             if (mHelper == null) return;
 
             if (result.isFailure()) {
-                complain("Error purchasing: " + result);
+                complain(StartActivity.getRes().getString(R.string.error_purchasing) + result);
                 return;
             }
             if (!verifyDeveloperPayload(purchase)) {
-                complain("Error purchasing. Authenticity verification failed.");
+                complain(StartActivity.getRes().getString(R.string.authentity_failed));
                 return;
             }
 
@@ -416,7 +416,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
            if (purchase.getSku().equals(SKU_PREMIUM)) {
                 // bought the premium upgrade!
                 Log.d(TAG, "Purchase is premium upgrade. Congratulating user.");
-                alert("Спасибо за получение премиум-статуса!");
+                alert(StartActivity.getRes().getString(R.string.thanks_for_premium));
                 PREMIUM_STATUS = true;
                 updateUi();
 
@@ -457,8 +457,8 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
 
     private void getVkFingerprint() {
         String[] fingerprints = VKUtil.getCertificateFingerprint(getContext(), getActivity().getPackageName());
-        for (int i =0; i<fingerprints.length; i++){
-            Log.d("Fingerprint", fingerprints[i]);
+        for (String fingerprint : fingerprints) {
+            Log.d("Fingerprint", fingerprint);
         }
     }
 
@@ -485,7 +485,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
             Bundle postParams = new Bundle();
             String link = "http://hr24.org";
             postParams.putString(SocialNetwork.BUNDLE_LINK, link);
-            String message = "Лучший сервис трудоустройства!";
+            String message = StartActivity.getRes().getString(R.string.best_service);
             currentSocialNetwork.requestPostLink(postParams, message, postingComplete);
         } catch (Exception e) {
 
@@ -500,16 +500,16 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
             updateUi();
             POST_STATUS = true;
             saveStatus();
-            showSnackbar("Спасибо! PDF разблокирован!");
+            showSnackbar(StartActivity.getRes().getString(R.string.thanks));
         }
 
         @Override
         public void onError(int socialNetworkID, String requestID, String errorMessage, Object data) {
             Log.d("PostError", "Error while sending: " + errorMessage);
             if (errorMessage.trim().equals("ShareDialog canceled")){
-                showSnackbar("Вы отменили публикацию записи");
+                showSnackbar(StartActivity.getRes().getString(R.string.cancelled));
             } else {
-                showSnackbar("Не удалось опубликовать запись");
+                showSnackbar(StartActivity.getRes().getString(R.string.posting_error));
             }
             currentSocialNetwork = null;
         }
@@ -550,13 +550,13 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
 
                     if(networkId != 0) {
                         socialNetwork.requestLogin();
-                        StartActivity.showProgress("Загружаем социальную сеть");
+                        StartActivity.showProgress(StartActivity.getRes().getString(R.string.loading_social));
                     } else {
-                        showSnackbar("Wrong networkId");
+                        showSnackbar(StartActivity.getRes().getString(R.string.wrong_id));
                     }
 
                 } else {
-                    showSnackbar("Сеть недоступна, попробуйте позже");
+                    showSnackbar(StartActivity.getRes().getString(R.string.network_unreachable));
                 }
 
                 break;
@@ -571,12 +571,12 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
                     } else {
                     if(networkId != 0) {
                         socialNetwork.requestLogin();
-                        StartActivity.showProgress("Загружаем социальную сеть");
+                        StartActivity.showProgress(StartActivity.getRes().getString(R.string.loading_social));
                     } else {
-                        showSnackbar("Wrong networkId");
+                        showSnackbar(StartActivity.getRes().getString(R.string.wrong_id));
                     }}
                 } else {
-                    showSnackbar("Сеть недоступна, попробуйте позже");
+                    showSnackbar(StartActivity.getRes().getString(R.string.network_unreachable));
                 }
                 break;
             case R.id.fill_btn:
@@ -604,7 +604,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
             case R.id.mail_btn:
                 Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
                 sendIntent.setData(Uri.parse("mailto:andrei@hr24.org"));
-                sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Заказ профессионального резюме");
+                sendIntent.putExtra(Intent.EXTRA_SUBJECT, StartActivity.getRes().getString(R.string.professional_resume));
                 startActivity(sendIntent);
 
                 break;
@@ -711,7 +711,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
 
     void complain(String message) {
         Log.e(TAG,  message);
-        alert("Ошибка: " + message);
+        alert(StartActivity.getRes().getString(R.string.error) + message);
     }
 
     void alert(String message) {
@@ -737,4 +737,6 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
             Log.d("HASH KEY:", "NoSuchAlgorithmException "+ e.getMessage());
         }
     }
+
+
 }

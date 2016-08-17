@@ -21,12 +21,6 @@ public class StartActivity extends AppCompatActivity implements MainFragment.OnF
     public static final String SOCIAL_NETWORK_TAG = "SocialIntegrationMain.SOCIAL_NETWORK_TAG";
     private static ProgressDialog pd;
     static Context context;
-    private static SharedPreferences sPref;
-
-
-
-
-
 
 
     @Override
@@ -94,14 +88,11 @@ public class StartActivity extends AppCompatActivity implements MainFragment.OnF
 
     public static SharedPreferences getSharedPref() {
 
-        sPref = context.getSharedPreferences("ResumeSharedPref", MODE_PRIVATE);
-        return sPref;
+        return context.getSharedPreferences("ResumeSharedPref", MODE_PRIVATE);
     }
 
     public static Resources getRes() {
 
-        Resources res = context.getResources();
-
-        return res;
+        return context.getResources();
     }
 }
