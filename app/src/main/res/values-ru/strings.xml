@@ -107,7 +107,9 @@
     <string name="error_launching">Error launching purchase flow. Another async operation in progress.</string>
     <string name="error_purchasing">"Error purchasing: "</string>
     <string name="authentity_failed">Error purchasing. Authenticity verification failed.</string>
-    <string name="chose_an_app_to_call">Выберите приложение для звонка:</string>
+
+
+
 
 
 </resources>

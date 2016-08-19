@@ -3,6 +3,7 @@ package org.hr24.almel.ResumeBuilder.ui.fragments;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -12,6 +13,7 @@ import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.CardView;
 import android.util.Base64;
 import android.util.Log;
@@ -21,6 +23,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
 import com.crashlytics.android.Crashlytics;
 import com.github.gorbin.asne.core.SocialNetwork;
 import com.github.gorbin.asne.core.SocialNetworkManager;
@@ -45,6 +49,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import static android.content.pm.PackageManager.GET_SIGNATURES;
 
@@ -64,24 +69,28 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
 
     static final String TAG = "inAppBilling";
 
-    Button vkButton, fbButton, fillButton, premiumButton;
+    Button vkButton, fbButton, fillButton, premiumButton ,mailButton, callButton;
+    TextView fillResumeTv, unblockPdfTv,sharePostTv, orLowerCaseTv, orUpperCaseTv, purchasePremiumTv;
+
+
     CoordinatorLayout mCoordinatorLayout;
     LinearLayout authLinLayout;
     CardView fillView;
     ImageView logoImageView, ukImageView, ruImageView;
-    Button mailButton, callButton;
     public static SocialNetworkManager mSocialNetworkManager;
     int networkId = 0;
     public static boolean AUTHORIZATION_STATUS = false;
     public static boolean PREMIUM_STATUS = false;
     public static boolean POST_STATUS = false;
+    StartActivity startActivity =(StartActivity) getActivity();
 
-    public static boolean RUSSIAN_LOCALE = true;
+    public static String APP_LOCALE;
+    private Locale mNewLocale;
 
     private SocialNetwork currentSocialNetwork;
 
     // SKUs for our products: the premium upgrade (non-consumable)
-    static final String SKU_PREMIUM = "premium";
+    static final String SKU_PREMIUM = "premiumtest3";
 
     static final int RC_REQUEST = 10001;
 
@@ -137,16 +146,28 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
 
         vkButton = (Button) rootView.findViewById(R.id.vk_btn);
         fbButton = (Button) rootView.findViewById(R.id.fb_btn);
+
         fillButton = (Button) rootView.findViewById(R.id.fill_btn);
+        mailButton = (Button) rootView.findViewById(R.id.mail_btn);
+        callButton = (Button) rootView.findViewById(R.id.call_btn);
+        premiumButton = (Button) rootView.findViewById(R.id.premium_btn);
+        fillResumeTv = (TextView) rootView.findViewById(R.id.fill_resume_tv);
+        unblockPdfTv = (TextView) rootView.findViewById(R.id.unblock_pdf_tv);
+        sharePostTv = (TextView) rootView.findViewById(R.id.share_post_tv);
+        orLowerCaseTv = (TextView) rootView.findViewById(R.id.or_lower_case_tv);
+        orUpperCaseTv = (TextView) rootView.findViewById(R.id.or_upper_case_tv);
+        purchasePremiumTv = (TextView) rootView.findViewById(R.id.purchase_premium_tv);
+
         mCoordinatorLayout = (CoordinatorLayout) rootView.findViewById(R.id.main_coordinator_container);
         authLinLayout = (LinearLayout) rootView.findViewById(R.id.auth_ll);
         fillView = (CardView) rootView.findViewById(R.id.fill_v);
-        premiumButton = (Button) rootView.findViewById(R.id.premium_btn);
         logoImageView = (ImageView) rootView.findViewById(R.id.logo_iv);
-        mailButton = (Button) rootView.findViewById(R.id.mail_btn);
-        callButton = (Button) rootView.findViewById(R.id.call_btn);
         ruImageView = (ImageView) rootView.findViewById(R.id.ru_iv);
         ukImageView = (ImageView)  rootView.findViewById(R.id.uk_iv);
+
+
+
+
 
         vkButton.setOnClickListener(this);
         fbButton.setOnClickListener(this);
@@ -213,14 +234,14 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
 
 
 
-        if (POST_STATUS||PREMIUM_STATUS){
+        if (POST_STATUS||PREMIUM_STATUS||ProfileFragment.FIRST_LAUNCH){
            updateUi();
         }
 
         //region ============ inAppBilling ===========
 
 
-     /*   *//* base64EncodedPublicKey should be YOUR APPLICATION'S PUBLIC KEY
+        /* base64EncodedPublicKey should be YOUR APPLICATION'S PUBLIC KEY
          * (that you got from the Google Play developer console). This is not your
          * developer public key, it's the *app-specific* public key.
          *
@@ -229,9 +250,9 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
          * use bit manipulation (for example, XOR with some other string) to hide
          * the actual key.  The key itself is not secret information, but we don't
          * want to make it easy for an attacker to replace the public key with one
-         * of their own and then fake messages from the server.
-         *//*
-        String base64EncodedPublicKey = "CONSTRUCT_YOUR_KEY_AND_PLACE_IT_HERE";
+         * of their own and then fake messages from the server.*/
+
+        String base64EncodedPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoJaltMApkN2GUBQc5HWUYslVHHsxDcvyJQ5fFjPw8oXyuWFchDoe+rt9QXSqBGMLBU3drM2hK+ZSS1hzl2rkmKU6VCzgcvSFTLgsfzrGjsHjEWVAkPUmjUJOkzsFDe58phE9DWMuBEPz5yxF8+C/fR/pxjKZl5VIinvmBBqtDN4xGDwI4aLNkDriamQVQQ3+yuiSvagOrdGB2zMR2E+PvrWzISiIwx+IK4e1MrZp3EhTntR13kQHsEf4jMD3MkaCJt+2XD+aD/v/9GSEWRv7IVz1knUKqz/Stqpb7C3O4Sh474ds58z3MLfB8GddTDYzgFWYLJ8S1/UQMehvET/5rQIDAQAB";
 
 
         Log.d(TAG, "Creating IAB helper.");
@@ -239,7 +260,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
 
 
         //// TODO: 14.08.16  enable debug logging (for a production application, you should set this to false).
-        mHelper.enableDebugLogging(true);
+        mHelper.enableDebugLogging(false);
 
         // Start setup. This is asynchronous and the specified listener
         // will be called once setup completes.
@@ -277,7 +298,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
                     Crashlytics.logException(e);
                 }
             }
-        });*/
+        });
 
         //endregion
 
@@ -338,7 +359,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
         String payload = "";
 
         try {
-            mHelper.launchPurchaseFlow(getActivity(), SKU_PREMIUM, RC_REQUEST,
+                    mHelper.launchPurchaseFlow(getActivity(), SKU_PREMIUM, RC_REQUEST,
                     mPurchaseFinishedListener, payload);
         } catch (IabHelper.IabAsyncInProgressException e) {
             complain(StartActivity.getRes().getString(R.string.error_launching));
@@ -362,7 +383,10 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
         else {
             Log.d(TAG, "onActivityResult handled by IABUtil.");
         }
+
     }
+
+
 
     /** Verifies the developer payload of a purchase. */
     boolean verifyDeveloperPayload(Purchase p) {
@@ -404,10 +428,12 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
 
             if (result.isFailure()) {
                 complain(StartActivity.getRes().getString(R.string.error_purchasing) + result);
+                showSnackbar(StartActivity.getRes().getString(R.string.error_purchasing) + result);
                 return;
             }
             if (!verifyDeveloperPayload(purchase)) {
                 complain(StartActivity.getRes().getString(R.string.authentity_failed));
+                showSnackbar(StartActivity.getRes().getString(R.string.error_purchasing) + result);
                 return;
             }
 
@@ -417,8 +443,9 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
                 // bought the premium upgrade!
                 Log.d(TAG, "Purchase is premium upgrade. Congratulating user.");
                 alert(StartActivity.getRes().getString(R.string.thanks_for_premium));
-                PREMIUM_STATUS = true;
-                updateUi();
+               PREMIUM_STATUS = true;
+               saveStatus();
+               updateUi();
 
             }
 
@@ -431,27 +458,34 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
     public void onPause() {
         super.onPause();
         saveStatus();
-        //region ============ inAppBilling ===========
 
-       /* // very important:
-        if (mBroadcastReceiver != null) {
-            getContext().unregisterReceiver(mBroadcastReceiver);
-        }
-
-        // very important:
-        Log.d(TAG, "Destroying helper.");
-        if (mHelper != null) {
-            mHelper.disposeWhenFinished();
-            mHelper = null;
-        }*/
-
-        //endregion
 
 
     }
 
     public void onDestroy() {
         super.onDestroy();
+        //region ============ inAppBilling ===========
+
+        // very important:
+        try {
+            if (mBroadcastReceiver != null) {
+                getContext().unregisterReceiver(mBroadcastReceiver);
+            }
+
+
+            // very important:
+            Log.d(TAG, "Destroying helper.");
+            if (mHelper != null) {
+                mHelper.disposeWhenFinished();
+                mHelper = null;
+            }
+        }catch (Exception e){
+            Crashlytics.logException(e);
+            Log.d("Disposing billing error" , e.getMessage());
+        }
+
+        //endregion
         saveStatus();
     }
 
@@ -511,7 +545,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
             } else {
                 showSnackbar(StartActivity.getRes().getString(R.string.posting_error));
             }
-            currentSocialNetwork = null;
+
         }
     };
 
@@ -588,11 +622,16 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
                 }
                 break;
             case R.id.premium_btn:
-                // onUpgradeAppButtonClicked();
-                PREMIUM_STATUS = true;
-                saveStatus();
-                updateUi();
-                showSnackbar(StartActivity.getRes().getString(R.string.premium_snackbar));
+                if(NetworkStatusChecker.isNetworkAvailable(getContext())){
+
+                    onUpgradeAppButtonClicked();
+
+                } else {
+                    showSnackbar(StartActivity.getRes().getString(R.string.network_unreachable));
+                }
+
+
+
 
                 break;
             case R.id.logo_iv:
@@ -612,18 +651,22 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
             case R.id.call_btn:
                 Intent callIntent = new Intent(Intent.ACTION_DIAL);
                 callIntent.setData(Uri.parse("tel:+ 7 925 721 21 68"));
-                startActivity(callIntent);
+                startActivity(Intent.createChooser(callIntent, getString(R.string.chose_an_app_to_call)));
 
 
                 break;
 
             case R.id.uk_iv:
-                RUSSIAN_LOCALE = false;
+                setLocale("en");
+                APP_LOCALE = StartActivity.getRes().getConfiguration().locale.getDisplayName();
+                Log.d("LOCALE", APP_LOCALE);
 
                 break;
 
             case R.id.ru_iv:
-                RUSSIAN_LOCALE = true;
+                setLocale("ru");
+                APP_LOCALE = StartActivity.getRes().getConfiguration().locale.getDisplayName();
+                Log.d("LOCALE", APP_LOCALE);
 
                 break;
 
@@ -736,6 +779,30 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
         } catch (NoSuchAlgorithmException e) {
             Log.d("HASH KEY:", "NoSuchAlgorithmException "+ e.getMessage());
         }
+    }
+
+    void setLocale(String mLang) {
+        mNewLocale = new Locale(mLang);
+        Locale.setDefault(mNewLocale);
+        android.content.res.Configuration config = new android.content.res.Configuration();
+        config.locale = mNewLocale;
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+        updateLocale();
+    }
+
+    private void updateLocale(){
+
+        fillButton.setText(StartActivity.getRes().getString(R.string.fill_tv ));
+        mailButton.setText(StartActivity.getRes().getString(R.string.hr ));
+        callButton.setText(StartActivity.getRes().getString(R.string.reedem_consultation ));
+        premiumButton.setText(StartActivity.getRes().getString(R.string.premium ));
+        fillResumeTv.setText(StartActivity.getRes().getString(R.string.auth_fill_tv ));
+        unblockPdfTv.setText(StartActivity.getRes().getString(R.string.auth_full_func_tv ));
+        sharePostTv.setText(StartActivity.getRes().getString(R.string.auth_enter_tv ));
+        orLowerCaseTv.setText(StartActivity.getRes().getString(R.string.or_lowercase_tv ));
+        orUpperCaseTv.setText(StartActivity.getRes().getString(R.string.or_tv ));
+        purchasePremiumTv.setText(StartActivity.getRes().getString(R.string.auth_premium_tv ));
+
     }
 
 
