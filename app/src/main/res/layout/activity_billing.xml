@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="1dp"
+    android:id="@+id/frame"
+    android:background="@color/hr24_blue"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+
+
+
+
+        <LinearLayout
+            android:id="@+id/parent_ll_in_scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_margin="1dp"
+            android:background="@color/hr24_blue">
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#fafafa">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:background="#fafafa">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="36dp"
+                        android:textSize="20sp"
+                        android:text="Прочтите внимательно"
+                        android:textColor="@color/vk_black"
+                        android:gravity="center_horizontal"
+                        android:layout_marginBottom="@dimen/spacing_medial_24"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_medial_24"
+                        android:textSize="18sp"
+                        android:text="При первой покупке в Google Play происходит списание контрольной суммы, которая потом возвращается на Ваш счет. Поэтому если Вы покупаете впервые - сумма может быть несколько больше. "
+                        android:textColor="@color/vk_black"
+                        android:gravity="center_horizontal"
+                        android:layout_marginBottom="36dp"/>
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal">
+                    <Button
+                        android:id="@+id/purchase_premium_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/premium"
+                        android:textColor="@color/white"
+                        android:padding="8dp"
+                        android:drawableLeft="@drawable/ic_shopping_basket_white_24dp"
+                        android:background="@color/colorPrimaryDark"/>
+                    </android.support.v7.widget.CardView>
+
+                </LinearLayout>
+
+
+                </android.support.v7.widget.CardView>
+
+            </LinearLayout>
+
+
+    </android.support.design.widget.CoordinatorLayout>

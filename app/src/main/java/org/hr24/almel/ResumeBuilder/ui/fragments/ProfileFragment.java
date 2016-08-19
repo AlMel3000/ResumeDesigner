@@ -90,7 +90,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
 
     public static boolean FIRST_WORK = false;
 
-    public static boolean FIRST_LAUNCH= true;
 
     private int mJobCount = 1;
     private int mStudyCount = 1;
@@ -340,8 +339,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
             mAddPhototv.setVisibility(View.VISIBLE);
         }
 
-
-        FIRST_LAUNCH = false;
         return rootView;
     }
 

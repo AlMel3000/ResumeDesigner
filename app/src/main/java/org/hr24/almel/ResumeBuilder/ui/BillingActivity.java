@@ -1,24 +1,14 @@
 package org.hr24.almel.ResumeBuilder.ui;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.net.Uri;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
-import com.crashlytics.android.Crashlytics;
-import io.fabric.sdk.android.Fabric;
 import org.hr24.almel.ResumeBuilder.R;
 import org.hr24.almel.ResumeBuilder.billing.IabBroadcastReceiver;
 import org.hr24.almel.ResumeBuilder.billing.IabHelper;
@@ -26,13 +16,13 @@ import org.hr24.almel.ResumeBuilder.billing.IabResult;
 import org.hr24.almel.ResumeBuilder.billing.Inventory;
 import org.hr24.almel.ResumeBuilder.billing.Purchase;
 import org.hr24.almel.ResumeBuilder.ui.fragments.MainFragment;
+import org.hr24.almel.ResumeBuilder.utils.NetworkStatusChecker;
 
-import java.util.List;
+import android.app.AlertDialog;
 
-public class StartActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener, IabBroadcastReceiver.IabBroadcastListener {
+public class BillingActivity extends AppCompatActivity implements View.OnClickListener, IabBroadcastReceiver.IabBroadcastListener {
 
-    public static final String SOCIAL_NETWORK_TAG = "SocialIntegrationMain.SOCIAL_NETWORK_TAG";
-    private static ProgressDialog pd;
+    Button purchasePremiumButton;
     static Context context;
 
     // Debug tag, for logging
@@ -46,27 +36,16 @@ public class StartActivity extends AppCompatActivity implements MainFragment.OnF
     IabBroadcastReceiver mBroadcastReceiver;
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Fabric.with(this, new Crashlytics());
-        setContentView(R.layout.activity_start);
+        setContentView(R.layout.activity_billing);
 
+        purchasePremiumButton = (Button) findViewById(R.id.purchase_premium_btn);
 
-        context = this;
+        purchasePremiumButton.setOnClickListener(this);
 
-
-
-
-
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new MainFragment())
-                    .commit();
-
-            /* base64EncodedPublicKey should be YOUR APPLICATION'S PUBLIC KEY
+        /* base64EncodedPublicKey should be YOUR APPLICATION'S PUBLIC KEY
          * (that you got from the Google Play developer console). This is not your
          * developer public key, it's the *app-specific* public key.
          *
@@ -77,63 +56,60 @@ public class StartActivity extends AppCompatActivity implements MainFragment.OnF
          * want to make it easy for an attacker to replace the public key with one
          * of their own and then fake messages from the server.
          */
-            String base64EncodedPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoJaltMApkN2GUBQc5HWUYslVHHsxDcvyJQ5fFjPw8oXyuWFchDoe+rt9QXSqBGMLBU3drM2hK+ZSS1hzl2rkmKU6VCzgcvSFTLgsfzrGjsHjEWVAkPUmjUJOkzsFDe58phE9DWMuBEPz5yxF8+C/fR/pxjKZl5VIinvmBBqtDN4xGDwI4aLNkDriamQVQQ3+yuiSvagOrdGB2zMR2E+PvrWzISiIwx+IK4e1MrZp3EhTntR13kQHsEf4jMD3MkaCJt+2XD+aD/v/9GSEWRv7IVz1knUKqz/Stqpb7C3O4Sh474ds58z3MLfB8GddTDYzgFWYLJ8S1/UQMehvET/5rQIDAQAB";
+        String base64EncodedPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoJaltMApkN2GUBQc5HWUYslVHHsxDcvyJQ5fFjPw8oXyuWFchDoe+rt9QXSqBGMLBU3drM2hK+ZSS1hzl2rkmKU6VCzgcvSFTLgsfzrGjsHjEWVAkPUmjUJOkzsFDe58phE9DWMuBEPz5yxF8+C/fR/pxjKZl5VIinvmBBqtDN4xGDwI4aLNkDriamQVQQ3+yuiSvagOrdGB2zMR2E+PvrWzISiIwx+IK4e1MrZp3EhTntR13kQHsEf4jMD3MkaCJt+2XD+aD/v/9GSEWRv7IVz1knUKqz/Stqpb7C3O4Sh474ds58z3MLfB8GddTDYzgFWYLJ8S1/UQMehvET/5rQIDAQAB";
 
-            // Some sanity checks to see if the developer (that's you!) really followed the
-            // instructions to run this sample (don't put these checks on your app!)
-            if (base64EncodedPublicKey.contains("CONSTRUCT_YOUR")) {
-                throw new RuntimeException("Please put your app's public key in MainActivity.java. See README.");
-            }
-            if (getPackageName().startsWith("com.example")) {
-                throw new RuntimeException("Please change the sample's package name! See README.");
-            }
-
-            // Create the helper, passing it our context and the public key to verify signatures with
-            Log.d(TAG, "Creating IAB helper.");
-            mHelper = new IabHelper(this, base64EncodedPublicKey);
-
-            // enable debug logging (for a production application, you should set this to false).
-            mHelper.enableDebugLogging(true);
-
-            // Start setup. This is asynchronous and the specified listener
-            // will be called once setup completes.
-            Log.d(TAG, "Starting setup.");
-            mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
-                public void onIabSetupFinished(IabResult result) {
-                    Log.d(TAG, "Setup finished.");
-
-                    if (!result.isSuccess()) {
-                        // Oh noes, there was a problem.
-                        return;
-                    }
-
-                    // Have we been disposed of in the meantime? If so, quit.
-                    if (mHelper == null) return;
-
-                    // Important: Dynamically register for broadcast messages about updated purchases.
-                    // We register the receiver here instead of as a <receiver> in the Manifest
-                    // because we always call getPurchases() at startup, so therefore we can ignore
-                    // any broadcasts sent while the app isn't running.
-                    // Note: registering this listener in an Activity is a bad idea, but is done here
-                    // because this is a SAMPLE. Regardless, the receiver must be registered after
-                    // IabHelper is setup, but before first call to getPurchases().
-                    mBroadcastReceiver = new IabBroadcastReceiver(StartActivity.this);
-                    IntentFilter broadcastFilter = new IntentFilter(IabBroadcastReceiver.ACTION);
-                    registerReceiver(mBroadcastReceiver, broadcastFilter);
-
-                    // IAB is fully set up. Now, let's get an inventory of stuff we own.
-                    Log.d(TAG, "Setup successful. Querying inventory.");
-                    try {
-                        mHelper.queryInventoryAsync(mGotInventoryListener);
-                    } catch (IabHelper.IabAsyncInProgressException e) {
-                        Log.d(TAG, e.getMessage());
-                    }
-                }
-            });
+        // Some sanity checks to see if the developer (that's you!) really followed the
+        // instructions to run this sample (don't put these checks on your app!)
+        if (base64EncodedPublicKey.contains("CONSTRUCT_YOUR")) {
+            throw new RuntimeException("Please put your app's public key in MainActivity.java. See README.");
+        }
+        if (getPackageName().startsWith("com.example")) {
+            throw new RuntimeException("Please change the sample's package name! See README.");
         }
 
+        // Create the helper, passing it our context and the public key to verify signatures with
+        Log.d(TAG, "Creating IAB helper.");
+        mHelper = new IabHelper(this, base64EncodedPublicKey);
 
+        // enable debug logging (for a production application, you should set this to false).
+        mHelper.enableDebugLogging(true);
 
+        // Start setup. This is asynchronous and the specified listener
+        // will be called once setup completes.
+        Log.d(TAG, "Starting setup.");
+        mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+            public void onIabSetupFinished(IabResult result) {
+                Log.d(TAG, "Setup finished.");
+
+                if (!result.isSuccess()) {
+                    // Oh noes, there was a problem.
+                    complain("Problem setting up in-app billing: " + result);
+                    return;
+                }
+
+                // Have we been disposed of in the meantime? If so, quit.
+                if (mHelper == null) return;
+
+                // Important: Dynamically register for broadcast messages about updated purchases.
+                // We register the receiver here instead of as a <receiver> in the Manifest
+                // because we always call getPurchases() at startup, so therefore we can ignore
+                // any broadcasts sent while the app isn't running.
+                // Note: registering this listener in an Activity is a bad idea, but is done here
+                // because this is a SAMPLE. Regardless, the receiver must be registered after
+                // IabHelper is setup, but before first call to getPurchases().
+                mBroadcastReceiver = new IabBroadcastReceiver(BillingActivity.this);
+                IntentFilter broadcastFilter = new IntentFilter(IabBroadcastReceiver.ACTION);
+                registerReceiver(mBroadcastReceiver, broadcastFilter);
+
+                // IAB is fully set up. Now, let's get an inventory of stuff we own.
+                Log.d(TAG, "Setup successful. Querying inventory.");
+                try {
+                    mHelper.queryInventoryAsync(mGotInventoryListener);
+                } catch (IabHelper.IabAsyncInProgressException e) {
+                    complain("Error querying inventory. Another async operation in progress.");
+                }
+            }
+        });
     }
 
     // Listener that's called when we finish querying the items and subscriptions we own
@@ -146,7 +122,7 @@ public class StartActivity extends AppCompatActivity implements MainFragment.OnF
 
             // Is it a failure?
             if (result.isFailure()) {
-
+                complain("Failed to query inventory: " + result);
                 return;
             }
 
@@ -176,14 +152,13 @@ public class StartActivity extends AppCompatActivity implements MainFragment.OnF
         try {
             mHelper.queryInventoryAsync(mGotInventoryListener);
         } catch (IabHelper.IabAsyncInProgressException e) {
-            Log.d(TAG, e.getMessage());
+            complain("Error querying inventory. Another async operation in progress.");
         }
     }
 
     // User clicked the "Upgrade to Premium" button.
-    public void onUpgradeAppButtonClicked(View arg0) {
+    public void onUpgradeAppButtonClicked() {
         Log.d(TAG, "Upgrade button clicked; launching purchase flow for upgrade.");
-
 
         /* TODO: for security, generate your payload here for verification. See the comments on
          *        verifyDeveloperPayload() for more info. Since this is a SAMPLE, we just use
@@ -194,10 +169,9 @@ public class StartActivity extends AppCompatActivity implements MainFragment.OnF
             mHelper.launchPurchaseFlow(this, SKU_PREMIUM, RC_REQUEST,
                     mPurchaseFinishedListener, payload);
         } catch (IabHelper.IabAsyncInProgressException e) {
-            Log.d(TAG, e.getMessage());
+            complain("Error launching purchase flow. Another async operation in progress.");
         }
     }
-
 
     boolean verifyDeveloperPayload(Purchase p) {
         String payload = p.getDeveloperPayload();
@@ -237,26 +211,44 @@ public class StartActivity extends AppCompatActivity implements MainFragment.OnF
             if (mHelper == null) return;
 
             if (result.isFailure()) {
-                Log.d(TAG, "failure");
+                complain("Error purchasing: " + result);
                 return;
             }
             if (!verifyDeveloperPayload(purchase)) {
-
+                complain("Error purchasing. Authenticity verification failed.");
                 return;
             }
 
             Log.d(TAG, "Purchase successful.");
 
 
-            if (purchase.getSku().equals(SKU_PREMIUM)) {
+             if (purchase.getSku().equals(SKU_PREMIUM)) {
                 // bought the premium upgrade!
                 Log.d(TAG, "Purchase is premium upgrade. Congratulating user.");
+                alert("Thank you for upgrading to premium!");
                 MainFragment.PREMIUM_STATUS = true;
 
             }
 
         }
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "onActivityResult(" + requestCode + "," + resultCode + "," + data);
+        if (mHelper == null) return;
+
+        // Pass on the activity result to the helper for handling
+        if (!mHelper.handleActivityResult(requestCode, resultCode, data)) {
+            // not handled, so handle it ourselves (here's where you'd
+            // perform any handling of activity results not related to in-app
+            // billing...
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+        else {
+            Log.d(TAG, "onActivityResult handled by IABUtil.");
+        }
+    }
 
     @Override
     public void onDestroy() {
@@ -275,69 +267,28 @@ public class StartActivity extends AppCompatActivity implements MainFragment.OnF
         }
     }
 
-
-
-
-
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        try{
-            super.onRestoreInstanceState(savedInstanceState);
-        }catch (Exception e) {
-
-            Crashlytics.log("onRestoreInstanceState ViewGroup Error" + e.getMessage());
-        }
+    void complain(String message) {
+        Log.e(TAG, "**** TrivialDrive Error: " + message);
+        alert("Error: " + message);
     }
 
-
-
-
-
-    public static void showProgress(String message) {
-        pd = new ProgressDialog(context);
-        pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        pd.setMessage(message);
-        pd.setCancelable(true);
-        pd.setCanceledOnTouchOutside(true);
-        pd.show();
-    }
-
-    public static void hideProgress() {
-        pd.dismiss();
+    void alert(String message) {
+        AlertDialog.Builder bld = new AlertDialog.Builder(this);
+        bld.setMessage(message);
+        bld.setNeutralButton("OK", null);
+        Log.d(TAG, "Showing alert dialog: " + message);
+        bld.create().show();
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    public void onClick(View v) {
+        if(NetworkStatusChecker.isNetworkAvailable(context)){
 
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(SOCIAL_NETWORK_TAG);
-        if (fragment != null) {
-            fragment.onActivityResult(requestCode, resultCode, data);
+            onUpgradeAppButtonClicked();
+
+        } else {
+            complain(StartActivity.getRes().getString(R.string.network_unreachable));
         }
 
-
-
     }
-
-
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
-
-    public static SharedPreferences getSharedPref() {
-
-        return context.getSharedPreferences("ResumeSharedPref", MODE_PRIVATE);
-    }
-
-    public static Resources getRes() {
-
-        return context.getResources();
-    }
-
-
-
-
 }

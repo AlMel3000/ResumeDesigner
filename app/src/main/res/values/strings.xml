@@ -100,7 +100,6 @@
     <string name="granted">Разрешение получено</string>
 
 
-
     <string name="query_inventory_finished">Query inventory finished.</string>
     <string name="query_inventory_failed">"Failed to query inventory: "</string>
     <string name="another_async_task">Error querying inventory. Another async operation in progress.</string>
