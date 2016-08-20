@@ -1,9 +1,7 @@
 package org.hr24.almel.ResumeBuilder.ui.fragments;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -13,7 +11,6 @@ import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.CardView;
 import android.util.Base64;
 import android.util.Log;
@@ -35,13 +32,8 @@ import com.github.gorbin.asne.vk.VkSocialNetwork;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.util.VKUtil;
 import org.hr24.almel.ResumeBuilder.R;
-import org.hr24.almel.ResumeBuilder.ui.BillingActivity;
-import org.hr24.almel.ResumeBuilder.ui.StartActivity;
-import org.hr24.almel.ResumeBuilder.billing.IabBroadcastReceiver;
-import org.hr24.almel.ResumeBuilder.billing.IabHelper;
-import org.hr24.almel.ResumeBuilder.billing.IabResult;
-import org.hr24.almel.ResumeBuilder.billing.Inventory;
-import org.hr24.almel.ResumeBuilder.billing.Purchase;
+import org.hr24.almel.ResumeBuilder.Activities.BillingActivity;
+import org.hr24.almel.ResumeBuilder.Activities.StartActivity;
 import org.hr24.almel.ResumeBuilder.utils.ConstantManager;
 import org.hr24.almel.ResumeBuilder.utils.NetworkStatusChecker;
 
@@ -56,7 +48,7 @@ import static android.content.pm.PackageManager.GET_SIGNATURES;
 
 /**
  * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
+ * ui.Activities that contain this fragment must implement the
  * {@link MainFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link MainFragment#newInstance} factory method to
@@ -175,7 +167,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
 
 
 
-        // getVkFingerprint();
+        //getVkFingerprint();
         //printHashKey();
 
 
@@ -573,6 +565,10 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
         purchasePremiumTv.setText(StartActivity.getRes().getString(R.string.auth_premium_tv ));
 
     }
+
+
+
+
 
 
 }

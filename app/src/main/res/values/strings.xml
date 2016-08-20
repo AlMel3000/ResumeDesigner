@@ -109,4 +109,11 @@
     <string name="chose_an_app_to_call">Выберите приложение для звонка:</string>
 
 
+    <string name="google_play_purchasing">При первой покупке в Google Play происходит списание контрольной суммы, которая потом возвращается на Ваш счет."\n" Поэтому если Вы покупаете впервые - сумма может быть несколько больше. "\n"Это политика Google, которая не зависит от нас</string>
+    <string name="read_carefully">Прочтите внимательно</string>
+    <string name="thank_yuo">Спасибо!</string>
+    <string name="pdf_unblocked">Мы благодарим Вас за получение премиум статуса! "\n" PDF разблокирован</string>
+    <string name="return_back">Вернуться</string>
+
+
 </resources>

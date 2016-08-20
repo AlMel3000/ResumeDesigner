@@ -1,8 +1,9 @@
-package org.hr24.almel.ResumeBuilder.ui;
+package org.hr24.almel.ResumeBuilder.Activities;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,19 +16,23 @@ import org.hr24.almel.ResumeBuilder.billing.IabHelper;
 import org.hr24.almel.ResumeBuilder.billing.IabResult;
 import org.hr24.almel.ResumeBuilder.billing.Inventory;
 import org.hr24.almel.ResumeBuilder.billing.Purchase;
-import org.hr24.almel.ResumeBuilder.ui.fragments.MainFragment;
+import org.hr24.almel.ResumeBuilder.utils.ConstantManager;
 import org.hr24.almel.ResumeBuilder.utils.NetworkStatusChecker;
 
 import android.app.AlertDialog;
+import android.widget.TextView;
 
 public class BillingActivity extends AppCompatActivity implements View.OnClickListener, IabBroadcastReceiver.IabBroadcastListener {
 
     Button purchasePremiumButton;
+    TextView headerTv, disclaimerTv;
     static Context context;
+
+    Boolean PREMIUM_STATUS = false;
 
     // Debug tag, for logging
     static final String TAG = "Billing";
-    static final String SKU_PREMIUM = "premium4";
+    static final String SKU_PREMIUM = "42";
     static final int RC_REQUEST = 10001;
     // The helper object
     IabHelper mHelper;
@@ -41,7 +46,12 @@ public class BillingActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_billing);
 
+        context = this;
+        initStatus();
+
         purchasePremiumButton = (Button) findViewById(R.id.purchase_premium_btn);
+        headerTv = (TextView) findViewById(R.id.billing_header);
+        disclaimerTv = (TextView) findViewById(R.id.disclaimer_tv);
 
         purchasePremiumButton.setOnClickListener(this);
 
@@ -72,7 +82,7 @@ public class BillingActivity extends AppCompatActivity implements View.OnClickLi
         mHelper = new IabHelper(this, base64EncodedPublicKey);
 
         // enable debug logging (for a production application, you should set this to false).
-        mHelper.enableDebugLogging(true);
+        mHelper.enableDebugLogging(false);
 
         // Start setup. This is asynchronous and the specified listener
         // will be called once setup completes.
@@ -84,6 +94,7 @@ public class BillingActivity extends AppCompatActivity implements View.OnClickLi
                 if (!result.isSuccess()) {
                     // Oh noes, there was a problem.
                     complain("Problem setting up in-app billing: " + result);
+
                     return;
                 }
 
@@ -136,8 +147,10 @@ public class BillingActivity extends AppCompatActivity implements View.OnClickLi
 
             // Do we have the premium upgrade?
             Purchase premiumPurchase = inventory.getPurchase(SKU_PREMIUM);
-            MainFragment.PREMIUM_STATUS = (premiumPurchase != null && verifyDeveloperPayload(premiumPurchase));
-            Log.d(TAG, "User is " + (MainFragment.PREMIUM_STATUS ? "PREMIUM" : "NOT PREMIUM"));
+            PREMIUM_STATUS = (premiumPurchase != null && verifyDeveloperPayload(premiumPurchase));
+            Log.d(TAG, "User is " + (PREMIUM_STATUS ? "PREMIUM" : "NOT PREMIUM"));
+            saveStatus();
+            if (PREMIUM_STATUS) updateUi();
 
 
 
@@ -226,7 +239,9 @@ public class BillingActivity extends AppCompatActivity implements View.OnClickLi
                 // bought the premium upgrade!
                 Log.d(TAG, "Purchase is premium upgrade. Congratulating user.");
                 alert("Thank you for upgrading to premium!");
-                MainFragment.PREMIUM_STATUS = true;
+                PREMIUM_STATUS = true;
+                saveStatus();
+                 updateUi();
 
             }
 
@@ -282,13 +297,50 @@ public class BillingActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        if(NetworkStatusChecker.isNetworkAvailable(context)){
+        if (!PREMIUM_STATUS){
+            if(NetworkStatusChecker.isNetworkAvailable(context.getApplicationContext()) && mHelper != null){
 
-            onUpgradeAppButtonClicked();
+                onUpgradeAppButtonClicked();
 
+            } else {
+                complain(StartActivity.getRes().getString(R.string.network_unreachable));
+            }
         } else {
-            complain(StartActivity.getRes().getString(R.string.network_unreachable));
+            Intent startIntent = new Intent(context, StartActivity.class);
+            startActivity(startIntent);
         }
 
+    }
+
+    private void saveStatus(){
+        SharedPreferences.Editor editor = getSharedPref().edit();
+        editor.putBoolean(ConstantManager.PREMIUM_STATUS_KEY, PREMIUM_STATUS);
+
+        editor.apply();
+    }
+
+    private void initStatus() {
+        PREMIUM_STATUS = getSharedPref().getBoolean(ConstantManager.PREMIUM_STATUS_KEY, false);
+
+    }
+
+    public static SharedPreferences getSharedPref() {
+
+        return context.getSharedPreferences("ResumeSharedPref", MODE_PRIVATE);
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        Intent startIntent = new Intent(context, StartActivity.class);
+        startActivity(startIntent);
+        BillingActivity.super.onBackPressed();
+
+    }
+
+    private void updateUi(){
+        headerTv.setText(R.string.thank_yuo);
+        disclaimerTv.setText(R.string.pdf_unblocked);
+        purchasePremiumButton.setText(R.string.return_back);
     }
 }

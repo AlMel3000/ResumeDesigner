@@ -59,4 +59,5 @@ public interface ConstantManager {
 
 
     String FIRST_WORK_STATUS_KEY = "FIRST_WORK_STATUS_KEY";
+    String PREMIUM_ALREADY_OWNED_STATUS_KEY = "PREMIUM_ALREADY_OWNED_STATUS_KEY";
 }

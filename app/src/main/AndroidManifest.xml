@@ -23,14 +23,9 @@
         android:supportsRtl="false"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.StartActivity"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:name=".Activities.StartActivity"
+            android:screenOrientation="portrait"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
 
         <meta-data
             android:name="io.fabric.ApiKey"
@@ -39,7 +34,17 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <activity android:name=".ui.BillingActivity"></activity>
+        <activity android:name=".Activities.BillingActivity"
+                  android:screenOrientation="portrait"/>
+
+        <activity android:name=".Activities.SplashActivity"
+                  android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
