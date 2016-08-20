@@ -22,6 +22,8 @@ import org.hr24.almel.ResumeBuilder.utils.NetworkStatusChecker;
 import android.app.AlertDialog;
 import android.widget.TextView;
 
+import com.vk.sdk.util.VKUtil;
+
 public class BillingActivity extends AppCompatActivity implements View.OnClickListener, IabBroadcastReceiver.IabBroadcastListener {
 
     Button purchasePremiumButton;
@@ -32,7 +34,7 @@ public class BillingActivity extends AppCompatActivity implements View.OnClickLi
 
     // Debug tag, for logging
     static final String TAG = "Billing";
-    static final String SKU_PREMIUM = "42";
+    static final String SKU_PREMIUM = "premium42";
     static final int RC_REQUEST = 10001;
     // The helper object
     IabHelper mHelper;
@@ -48,7 +50,6 @@ public class BillingActivity extends AppCompatActivity implements View.OnClickLi
 
         context = this;
         initStatus();
-
         purchasePremiumButton = (Button) findViewById(R.id.purchase_premium_btn);
         headerTv = (TextView) findViewById(R.id.billing_header);
         disclaimerTv = (TextView) findViewById(R.id.disclaimer_tv);
@@ -68,14 +69,6 @@ public class BillingActivity extends AppCompatActivity implements View.OnClickLi
          */
         String base64EncodedPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoJaltMApkN2GUBQc5HWUYslVHHsxDcvyJQ5fFjPw8oXyuWFchDoe+rt9QXSqBGMLBU3drM2hK+ZSS1hzl2rkmKU6VCzgcvSFTLgsfzrGjsHjEWVAkPUmjUJOkzsFDe58phE9DWMuBEPz5yxF8+C/fR/pxjKZl5VIinvmBBqtDN4xGDwI4aLNkDriamQVQQ3+yuiSvagOrdGB2zMR2E+PvrWzISiIwx+IK4e1MrZp3EhTntR13kQHsEf4jMD3MkaCJt+2XD+aD/v/9GSEWRv7IVz1knUKqz/Stqpb7C3O4Sh474ds58z3MLfB8GddTDYzgFWYLJ8S1/UQMehvET/5rQIDAQAB";
 
-        // Some sanity checks to see if the developer (that's you!) really followed the
-        // instructions to run this sample (don't put these checks on your app!)
-        if (base64EncodedPublicKey.contains("CONSTRUCT_YOUR")) {
-            throw new RuntimeException("Please put your app's public key in MainActivity.java. See README.");
-        }
-        if (getPackageName().startsWith("com.example")) {
-            throw new RuntimeException("Please change the sample's package name! See README.");
-        }
 
         // Create the helper, passing it our context and the public key to verify signatures with
         Log.d(TAG, "Creating IAB helper.");
@@ -93,7 +86,7 @@ public class BillingActivity extends AppCompatActivity implements View.OnClickLi
 
                 if (!result.isSuccess()) {
                     // Oh noes, there was a problem.
-                    complain("Problem setting up in-app billing: " + result);
+                    complain(getString(R.string.setting_up_problem) + result);
 
                     return;
                 }
@@ -117,7 +110,7 @@ public class BillingActivity extends AppCompatActivity implements View.OnClickLi
                 try {
                     mHelper.queryInventoryAsync(mGotInventoryListener);
                 } catch (IabHelper.IabAsyncInProgressException e) {
-                    complain("Error querying inventory. Another async operation in progress.");
+                    complain(getResources().getString(R.string.another_async_task));
                 }
             }
         });
@@ -133,7 +126,7 @@ public class BillingActivity extends AppCompatActivity implements View.OnClickLi
 
             // Is it a failure?
             if (result.isFailure()) {
-                complain("Failed to query inventory: " + result);
+                complain(getString(R.string.query_inventory_failed) + result);
                 return;
             }
 
@@ -165,7 +158,7 @@ public class BillingActivity extends AppCompatActivity implements View.OnClickLi
         try {
             mHelper.queryInventoryAsync(mGotInventoryListener);
         } catch (IabHelper.IabAsyncInProgressException e) {
-            complain("Error querying inventory. Another async operation in progress.");
+            complain(getString(R.string.another_async_task));
         }
     }
 
@@ -182,7 +175,7 @@ public class BillingActivity extends AppCompatActivity implements View.OnClickLi
             mHelper.launchPurchaseFlow(this, SKU_PREMIUM, RC_REQUEST,
                     mPurchaseFinishedListener, payload);
         } catch (IabHelper.IabAsyncInProgressException e) {
-            complain("Error launching purchase flow. Another async operation in progress.");
+            complain(getString(R.string.error_launching));
         }
     }
 
@@ -224,11 +217,11 @@ public class BillingActivity extends AppCompatActivity implements View.OnClickLi
             if (mHelper == null) return;
 
             if (result.isFailure()) {
-                complain("Error purchasing: " + result);
+                complain(getString(R.string.error_purchasing) + result);
                 return;
             }
             if (!verifyDeveloperPayload(purchase)) {
-                complain("Error purchasing. Authenticity verification failed.");
+                complain(getString(R.string.authentity_failed));
                 return;
             }
 
@@ -238,7 +231,7 @@ public class BillingActivity extends AppCompatActivity implements View.OnClickLi
              if (purchase.getSku().equals(SKU_PREMIUM)) {
                 // bought the premium upgrade!
                 Log.d(TAG, "Purchase is premium upgrade. Congratulating user.");
-                alert("Thank you for upgrading to premium!");
+                alert(getString(R.string.thanks_for_premium));
                 PREMIUM_STATUS = true;
                 saveStatus();
                  updateUi();
@@ -268,23 +261,32 @@ public class BillingActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onDestroy() {
         super.onDestroy();
-
         // very important:
         if (mBroadcastReceiver != null) {
-            unregisterReceiver(mBroadcastReceiver);
+            try {
+                unregisterReceiver(mBroadcastReceiver);
+            } catch (Exception e){
+                Log.d(TAG, e.getMessage());
+            }
+
         }
 
         // very important:
         Log.d(TAG, "Destroying helper.");
         if (mHelper != null) {
-            mHelper.disposeWhenFinished();
-            mHelper = null;
+            try {
+                mHelper.disposeWhenFinished();
+                mHelper = null;
+            } catch (Exception e){
+                Log.d(TAG, e.getMessage());
+            }
+
         }
     }
 
     void complain(String message) {
         Log.e(TAG, "**** TrivialDrive Error: " + message);
-        alert("Error: " + message);
+        alert(getString(R.string.error) + message);
     }
 
     void alert(String message) {
@@ -329,14 +331,6 @@ public class BillingActivity extends AppCompatActivity implements View.OnClickLi
         return context.getSharedPreferences("ResumeSharedPref", MODE_PRIVATE);
     }
 
-    @Override
-    public void onBackPressed() {
-
-        Intent startIntent = new Intent(context, StartActivity.class);
-        startActivity(startIntent);
-        BillingActivity.super.onBackPressed();
-
-    }
 
     private void updateUi(){
         headerTv.setText(R.string.thank_yuo);

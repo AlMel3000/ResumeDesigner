@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
+import com.vk.sdk.util.VKUtil;
+
 import io.fabric.sdk.android.Fabric;
 import org.hr24.almel.ResumeBuilder.R;
 import org.hr24.almel.ResumeBuilder.billing.IabBroadcastReceiver;
@@ -26,7 +28,7 @@ public class SplashActivity extends AppCompatActivity implements IabBroadcastRec
 
     // Debug tag, for logging
     static final String TAG = "Billing";
-    static final String SKU_PREMIUM = "42";
+    static final String SKU_PREMIUM = "premium42";
     static final int RC_REQUEST = 10001;
     // The helper object
     IabHelper mHelper;
@@ -61,14 +63,6 @@ public class SplashActivity extends AppCompatActivity implements IabBroadcastRec
          */
         String base64EncodedPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoJaltMApkN2GUBQc5HWUYslVHHsxDcvyJQ5fFjPw8oXyuWFchDoe+rt9QXSqBGMLBU3drM2hK+ZSS1hzl2rkmKU6VCzgcvSFTLgsfzrGjsHjEWVAkPUmjUJOkzsFDe58phE9DWMuBEPz5yxF8+C/fR/pxjKZl5VIinvmBBqtDN4xGDwI4aLNkDriamQVQQ3+yuiSvagOrdGB2zMR2E+PvrWzISiIwx+IK4e1MrZp3EhTntR13kQHsEf4jMD3MkaCJt+2XD+aD/v/9GSEWRv7IVz1knUKqz/Stqpb7C3O4Sh474ds58z3MLfB8GddTDYzgFWYLJ8S1/UQMehvET/5rQIDAQAB";
 
-        // Some sanity checks to see if the developer (that's you!) really followed the
-        // instructions to run this sample (don't put these checks on your app!)
-        if (base64EncodedPublicKey.contains("CONSTRUCT_YOUR")) {
-            throw new RuntimeException("Please put your app's public key in MainActivity.java. See README.");
-        }
-        if (getPackageName().startsWith("com.example")) {
-            throw new RuntimeException("Please change the sample's package name! See README.");
-        }
 
         // Create the helper, passing it our context and the public key to verify signatures with
         Log.d(TAG, "Creating IAB helper.");
@@ -260,7 +254,6 @@ public class SplashActivity extends AppCompatActivity implements IabBroadcastRec
     @Override
     public void onDestroy() {
         super.onDestroy();
-        saveStatus();
 
         // very important:
         if (mBroadcastReceiver != null) {
@@ -307,5 +300,7 @@ public class SplashActivity extends AppCompatActivity implements IabBroadcastRec
 
         return context.getSharedPreferences("ResumeSharedPref", MODE_PRIVATE);
     }
+
+
 
 }

@@ -114,6 +114,5 @@
     <string name="thank_yuo">Спасибо!</string>
     <string name="pdf_unblocked">Мы благодарим Вас за получение премиум статуса! "\n" PDF разблокирован</string>
     <string name="return_back">Вернуться</string>
-
-
+    <string name="setting_up_problem">"Problem setting up in-app billing: "</string>
 </resources>

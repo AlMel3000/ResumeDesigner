@@ -11,8 +11,11 @@ import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
+import com.vk.sdk.util.VKUtil;
+
 import io.fabric.sdk.android.Fabric;
 import org.hr24.almel.ResumeBuilder.R;
 
@@ -23,6 +26,7 @@ public class StartActivity extends AppCompatActivity implements MainFragment.OnF
     public static final String SOCIAL_NETWORK_TAG = "SocialIntegrationMain.SOCIAL_NETWORK_TAG";
     private static ProgressDialog pd;
     static Context context;
+
 
 
 
@@ -101,21 +105,6 @@ public class StartActivity extends AppCompatActivity implements MainFragment.OnF
 
         return context.getResources();
     }
-
-    @Override
-    public void onBackPressed() {
-        new AlertDialog.Builder(this)
-                .setTitle("Выйти из приложения?")
-                .setMessage("Вы действительно хотите выйти?")
-                .setNegativeButton(android.R.string.no, null)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        finish();
-                        StartActivity.super.onBackPressed();
-                    }
-                }).create().show();
-    }
-
 
 
 

@@ -167,7 +167,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
 
 
 
-        //getVkFingerprint();
+        getVkFingerprint();
         //printHashKey();
 
 
@@ -259,6 +259,8 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
         String[] fingerprints = VKUtil.getCertificateFingerprint(getContext(), getActivity().getPackageName());
         for (String fingerprint : fingerprints) {
             Log.d("Fingerprint", fingerprint);
+            Crashlytics.log(fingerprint);
+
         }
     }
 
@@ -390,18 +392,15 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
             case R.id.premium_btn:
                 if(NetworkStatusChecker.isNetworkAvailable(getContext())){
 
-                    if(NetworkStatusChecker.isNetworkAvailable(getContext())){
-
                         Intent billingIntent = new Intent(getContext(), BillingActivity.class);
+                        billingIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                         startActivity(billingIntent);
 
                     } else {
                         showSnackbar(StartActivity.getRes().getString(R.string.network_unreachable));
                     }
 
-                } else {
-                    showSnackbar(StartActivity.getRes().getString(R.string.network_unreachable));
-                }
+
 
 
 
