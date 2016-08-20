@@ -347,7 +347,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
             case R.id.vk_btn:
                 if(NetworkStatusChecker.isNetworkAvailable(getContext())){
 
-                    networkId = VkSocialNetwork.ID;
+                   try{ networkId = VkSocialNetwork.ID;
                     SocialNetwork socialNetwork = mSocialNetworkManager.getSocialNetwork(networkId);
 
                     if(networkId != 0) {
@@ -356,6 +356,9 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
                     } else {
                         showSnackbar(StartActivity.getRes().getString(R.string.wrong_id));
                     }
+                   } catch (Exception e){
+                       Crashlytics.logException(e);
+                   }
 
                 } else {
                     showSnackbar(StartActivity.getRes().getString(R.string.network_unreachable));
@@ -372,7 +375,12 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
                         sharePost();
                     } else {
                     if(networkId != 0) {
-                        socialNetwork.requestLogin();
+                        try {
+                            socialNetwork.requestLogin();
+                        } catch (Exception e){
+                            Crashlytics.logException(e);
+                        }
+
                         StartActivity.showProgress(StartActivity.getRes().getString(R.string.loading_social));
                     } else {
                         showSnackbar(StartActivity.getRes().getString(R.string.wrong_id));
