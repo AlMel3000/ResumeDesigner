@@ -33,6 +33,7 @@ public class SplashActivity extends AppCompatActivity implements IabBroadcastRec
     // The helper object
     IabHelper mHelper;
     Boolean PREMIUM_STATUS = false;
+    Boolean POST_STATUS = false;
 
     // Provides purchase notification while this app is running
     IabBroadcastReceiver mBroadcastReceiver;
@@ -49,7 +50,7 @@ public class SplashActivity extends AppCompatActivity implements IabBroadcastRec
         context = this;
         initStatus();
 
-        if (!PREMIUM_STATUS&& NetworkStatusChecker.isNetworkAvailable(context.getApplicationContext())){
+        if (!PREMIUM_STATUS &&!POST_STATUS && NetworkStatusChecker.isNetworkAvailable(context.getApplicationContext())){
             /* base64EncodedPublicKey should be YOUR APPLICATION'S PUBLIC KEY
          * (that you got from the Google Play developer console). This is not your
          * developer public key, it's the *app-specific* public key.
@@ -293,6 +294,7 @@ public class SplashActivity extends AppCompatActivity implements IabBroadcastRec
 
     private void initStatus() {
         PREMIUM_STATUS = getSharedPref().getBoolean(ConstantManager.PREMIUM_STATUS_KEY, false);
+        POST_STATUS = getSharedPref().getBoolean(ConstantManager.POST_STATUS_KEY, false);
 
     }
 

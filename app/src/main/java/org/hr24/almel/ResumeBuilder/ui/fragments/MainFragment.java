@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.github.gorbin.asne.core.SocialNetwork;
@@ -440,6 +441,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
                 setLocale("en");
                 APP_LOCALE = StartActivity.getRes().getConfiguration().locale.getDisplayName();
                 Log.d("LOCALE", APP_LOCALE);
+                Toast.makeText(getContext(), R.string.english_cv, Toast.LENGTH_LONG).show();
 
                 break;
 
@@ -447,6 +449,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
                 setLocale("ru");
                 APP_LOCALE = StartActivity.getRes().getConfiguration().locale.getDisplayName();
                 Log.d("LOCALE", APP_LOCALE);
+                Toast.makeText(getContext(), R.string.russian_cv, Toast.LENGTH_LONG).show();
 
                 break;
 

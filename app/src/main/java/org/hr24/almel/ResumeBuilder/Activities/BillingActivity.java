@@ -34,7 +34,7 @@ public class BillingActivity extends AppCompatActivity implements View.OnClickLi
 
     // Debug tag, for logging
     static final String TAG = "Billing";
-    static final String SKU_PREMIUM = "premium42";
+    static final String SKU_PREMIUM = "premium";
     static final int RC_REQUEST = 10001;
     // The helper object
     IabHelper mHelper;
@@ -110,7 +110,6 @@ public class BillingActivity extends AppCompatActivity implements View.OnClickLi
                 try {
                     mHelper.queryInventoryAsync(mGotInventoryListener);
                 } catch (IabHelper.IabAsyncInProgressException e) {
-                    complain(getResources().getString(R.string.another_async_task));
                 }
             }
         });
