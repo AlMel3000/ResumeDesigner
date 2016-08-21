@@ -28,7 +28,7 @@ public class SplashActivity extends AppCompatActivity implements IabBroadcastRec
 
     // Debug tag, for logging
     static final String TAG = "Billing";
-    static final String SKU_PREMIUM = "premium42";
+    static final String SKU_PREMIUM = "premium";
     static final int RC_REQUEST = 10001;
     // The helper object
     IabHelper mHelper;

@@ -90,7 +90,7 @@
     <string name="another_info">Other information</string>
     <string name="languages">Languages</string>
     <string name="hobby_header">Hobby</string>
-    <string name="document_created">Document is created</string>
+    <string name="document_created">Document is created.</string>
     <string name="insert_sd">Insert memory card</string>
     <string name="allow">Allow</string>
     <string name="error_capturing_photo">Getting photo error</string>
@@ -116,4 +116,5 @@
     <string name="or_lowercase_tv">or</string>
     <string name="russian_cv">Ваше резюме будет создано на русском языке</string>
     <string name="english_cv">Ваше резюме будет на английском</string>
+    <string name="more_text">Но Вам надо уменьшить количество текста</string>
 </resources>

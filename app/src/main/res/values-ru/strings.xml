@@ -88,7 +88,7 @@
     <string name="another_info">Другая информация</string>
     <string name="languages">Языки</string>
     <string name="hobby_header">Хобби</string>
-    <string name="document_created">Документ создан</string>
+    <string name="document_created">Документ создан.</string>
     <string name="insert_sd">Вставьте карту памяти</string>
     <string name="allow">Разрешить</string>
     <string name="error_capturing_photo">Ошибка получения фото</string>
@@ -113,4 +113,5 @@
     <string name="wrong_id">Неправильный ID сети</string>
     <string name="russian_cv">Ваше резюме будет создано на русском языке</string>
     <string name="english_cv">Ваше резюме будет на английском</string>
+    <string name="more_text">Но Вам надо уменьшить количество текста</string>
 </resources>

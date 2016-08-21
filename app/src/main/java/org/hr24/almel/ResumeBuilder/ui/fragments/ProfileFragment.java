@@ -895,6 +895,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
             if (isExternalStorageWritable()) {
 
 
+                Boolean morePages =false;
                 String path = Environment.getExternalStorageDirectory() + "/cv";
 
                 File dir = new File(path);
@@ -1358,10 +1359,21 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
                 columnRight.addElement(hobbyParagraph);
 
 
-                columnLeft.go();
-                columnRight.go();
+                if (ColumnText.hasMoreText(columnLeft.go())){
+                    morePages =true;
 
+                }
+
+                if (ColumnText.hasMoreText(columnRight.go())){
+                    morePages = true;
+                }
+
+
+                if (!morePages){
                 showSnackbar(StartActivity.getRes().getString(R.string.document_created));
+                } else {
+                    showSnackbar(StartActivity.getRes().getString(R.string.document_created)+ " " + StartActivity.getRes().getString(R.string.more_text));
+                }
             }
             else {
                 showSnackbar(StartActivity.getRes().getString(R.string.insert_sd));
