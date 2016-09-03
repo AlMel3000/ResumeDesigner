@@ -1,4 +1,4 @@
-package org.hr24.almel.ResumeBuilder.Activities;
+package org.hr24.almel.ResumeDesigner.Activities;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -17,9 +17,9 @@ import com.crashlytics.android.Crashlytics;
 import com.vk.sdk.util.VKUtil;
 
 import io.fabric.sdk.android.Fabric;
-import org.hr24.almel.ResumeBuilder.R;
+import org.hr24.almel.ResumeDesigner.R;
 
-import org.hr24.almel.ResumeBuilder.ui.fragments.MainFragment;
+import org.hr24.almel.ResumeDesigner.ui.fragments.MainFragment;
 
 public class StartActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener {
 

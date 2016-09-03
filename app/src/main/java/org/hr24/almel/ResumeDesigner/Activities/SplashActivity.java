@@ -1,4 +1,4 @@
-package org.hr24.almel.ResumeBuilder.Activities;
+package org.hr24.almel.ResumeDesigner.Activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,15 +12,15 @@ import com.crashlytics.android.Crashlytics;
 import com.vk.sdk.util.VKUtil;
 
 import io.fabric.sdk.android.Fabric;
-import org.hr24.almel.ResumeBuilder.R;
-import org.hr24.almel.ResumeBuilder.billing.IabBroadcastReceiver;
-import org.hr24.almel.ResumeBuilder.billing.IabHelper;
-import org.hr24.almel.ResumeBuilder.billing.IabResult;
-import org.hr24.almel.ResumeBuilder.billing.Inventory;
-import org.hr24.almel.ResumeBuilder.billing.Purchase;
-import org.hr24.almel.ResumeBuilder.ui.fragments.MainFragment;
-import org.hr24.almel.ResumeBuilder.utils.ConstantManager;
-import org.hr24.almel.ResumeBuilder.utils.NetworkStatusChecker;
+import org.hr24.almel.ResumeDesigner.R;
+import org.hr24.almel.ResumeDesigner.billing.IabBroadcastReceiver;
+import org.hr24.almel.ResumeDesigner.billing.IabHelper;
+import org.hr24.almel.ResumeDesigner.billing.IabResult;
+import org.hr24.almel.ResumeDesigner.billing.Inventory;
+import org.hr24.almel.ResumeDesigner.billing.Purchase;
+import org.hr24.almel.ResumeDesigner.ui.fragments.MainFragment;
+import org.hr24.almel.ResumeDesigner.utils.ConstantManager;
+import org.hr24.almel.ResumeDesigner.utils.NetworkStatusChecker;
 
 public class SplashActivity extends AppCompatActivity implements IabBroadcastReceiver.IabBroadcastListener{
 
@@ -62,8 +62,7 @@ public class SplashActivity extends AppCompatActivity implements IabBroadcastRec
          * want to make it easy for an attacker to replace the public key with one
          * of their own and then fake messages from the server.
          */
-        String base64EncodedPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoJaltMApkN2GUBQc5HWUYslVHHsxDcvyJQ5fFjPw8oXyuWFchDoe+rt9QXSqBGMLBU3drM2hK+ZSS1hzl2rkmKU6VCzgcvSFTLgsfzrGjsHjEWVAkPUmjUJOkzsFDe58phE9DWMuBEPz5yxF8+C/fR/pxjKZl5VIinvmBBqtDN4xGDwI4aLNkDriamQVQQ3+yuiSvagOrdGB2zMR2E+PvrWzISiIwx+IK4e1MrZp3EhTntR13kQHsEf4jMD3MkaCJt+2XD+aD/v/9GSEWRv7IVz1knUKqz/Stqpb7C3O4Sh474ds58z3MLfB8GddTDYzgFWYLJ8S1/UQMehvET/5rQIDAQAB";
-
+        String base64EncodedPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAngUEijzbMBoaY8+Si7mmEnnRMFU6/biplLOIKpodJjj8pJF8+oeF/hutFe6eFuimRm0ABXEn77jzqY2Oe9ZVUlcqxw69Kmm2zuEcxD9PZOOCHI8iCZyep2yp2TRFxDhz+0A79E9re5rWpFVy1ri1Pw3UCSlmZ4ID1Bbfkrk3thu6XL9er+4DmYVgBShmA+QQSPsI6O8y/AudBJhZKuB+KG7XMBSVACuUG2XmVA97NpmWftuhIWXS0psYIqqwh+1UoEcntrOoyN5gKvO+Mr21m63mADSRkPnkJqQqhvREr1zNNb31Eu0mAJkf7UCqLVLvN7yOelQIb4AyyOKsLLqV9wIDAQAB";
 
         // Create the helper, passing it our context and the public key to verify signatures with
         Log.d(TAG, "Creating IAB helper.");

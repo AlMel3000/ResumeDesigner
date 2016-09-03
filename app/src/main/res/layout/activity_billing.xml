@@ -1,74 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_cl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="1dp"
-    android:id="@+id/main_cl"
-    android:background="@color/hr24_blue"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:background="@color/hr24_blue">
 
 
-        <LinearLayout
-            android:id="@+id/parent_ll_in_billing"
+    <LinearLayout
+        android:id="@+id/parent_ll_in_billing"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="1dp"
+        android:background="@color/hr24_blue"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_margin="1dp"
-            android:background="@color/hr24_blue">
+            android:background="#fafafa">
 
-            <android.support.v7.widget.CardView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#fafafa">
-                <LinearLayout
+                android:background="#fafafa"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/billing_header"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:background="#fafafa">
-                    <TextView
-                        android:id="@+id/billing_header"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="36dp"
-                        android:textSize="20sp"
-                        android:text="@string/read_carefully"
-                        android:textColor="@color/vk_black"
-                        android:gravity="center_horizontal"
-                        android:layout_marginBottom="@dimen/spacing_medial_24"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_medial_24"
+                    android:layout_marginTop="36dp"
+                    android:gravity="center_horizontal"
+                    android:text="@string/read_carefully"
+                    android:textColor="@color/vk_black"
+                    android:textSize="20sp" />
 
-                    <TextView
-                        android:id="@+id/disclaimer_tv"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="2"
-                        android:layout_marginTop="@dimen/spacing_medial_24"
-                        android:textSize="18sp"
-                        android:text="@string/google_play_purchasing"
-                        android:textColor="@color/vk_black"
-                        android:gravity="center_horizontal"/>
+                <TextView
+                    android:id="@+id/disclaimer_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="@dimen/spacing_medial_24"
+                    android:layout_weight="2"
+                    android:gravity="center_horizontal"
+                    android:text="@string/google_play_purchasing"
+                    android:textColor="@color/vk_black"
+                    android:textSize="18sp" />
 
-                    <android.support.v7.widget.CardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_margin="36dp">
+                <android.support.v7.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="36dp">
+
                     <Button
                         android:id="@+id/purchase_premium_btn"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="@string/premium"
-                        android:textColor="@color/white"
-                        android:padding="8dp"
+                        android:background="@color/colorPrimaryDark"
                         android:drawableLeft="@drawable/ic_shopping_basket_white_24dp"
-                        android:background="@color/colorPrimaryDark"/>
-                    </android.support.v7.widget.CardView>
-
-                </LinearLayout>
-
-
+                        android:padding="8dp"
+                        android:text="@string/premium"
+                        android:textColor="@color/white" />
                 </android.support.v7.widget.CardView>
 
             </LinearLayout>
 
 
-    </android.support.design.widget.CoordinatorLayout>
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>

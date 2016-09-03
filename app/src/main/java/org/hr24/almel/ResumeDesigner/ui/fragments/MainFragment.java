@@ -1,5 +1,7 @@
-package org.hr24.almel.ResumeBuilder.ui.fragments;
+package org.hr24.almel.ResumeDesigner.ui.fragments;
 
+import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -32,11 +34,11 @@ import com.github.gorbin.asne.facebook.FacebookSocialNetwork;
 import com.github.gorbin.asne.vk.VkSocialNetwork;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.util.VKUtil;
-import org.hr24.almel.ResumeBuilder.R;
-import org.hr24.almel.ResumeBuilder.Activities.BillingActivity;
-import org.hr24.almel.ResumeBuilder.Activities.StartActivity;
-import org.hr24.almel.ResumeBuilder.utils.ConstantManager;
-import org.hr24.almel.ResumeBuilder.utils.NetworkStatusChecker;
+import org.hr24.almel.ResumeDesigner.R;
+import org.hr24.almel.ResumeDesigner.Activities.BillingActivity;
+import org.hr24.almel.ResumeDesigner.Activities.StartActivity;
+import org.hr24.almel.ResumeDesigner.utils.ConstantManager;
+import org.hr24.almel.ResumeDesigner.utils.NetworkStatusChecker;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -260,7 +262,11 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
         String[] fingerprints = VKUtil.getCertificateFingerprint(getContext(), getActivity().getPackageName());
         for (String fingerprint : fingerprints) {
             Log.d("Fingerprint", fingerprint);
-            Crashlytics.log(fingerprint);
+
+           /* AlertDialog.Builder bld = new AlertDialog.Builder(getContext());
+            bld.setMessage(fingerprint);
+            bld.setNeutralButton("OK", null);
+            bld.create().show();*/
 
         }
     }
@@ -425,7 +431,14 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
                 Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
                 sendIntent.setData(Uri.parse("mailto:andrei@hr24.org"));
                 sendIntent.putExtra(Intent.EXTRA_SUBJECT, StartActivity.getRes().getString(R.string.professional_resume));
-                startActivity(sendIntent);
+
+                try {
+                    startActivity(sendIntent);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(getContext(),
+                            R.string.apps_are_not_installed_to_send_mail,
+                            Toast.LENGTH_SHORT).show();
+                }
 
                 break;
 
@@ -538,7 +551,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
 
     public void printHashKey() {
         try {
-            PackageInfo info = getActivity().getPackageManager().getPackageInfo("org.hr24.almel.ResumeBuilder",
+            PackageInfo info = getActivity().getPackageManager().getPackageInfo("org.hr24.almel.ResumeDesigner",
                     GET_SIGNATURES);
             for (Signature signature : info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");

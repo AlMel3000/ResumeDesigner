@@ -6,7 +6,7 @@
     <string name="facebook">Fb</string>
 
 
-    <string name="app_name">Resume Builder</string>
+    <string name="app_name">Resume Designer</string>
     <string name="auth_enter_tv">Send a post to wall</string>
     <string name="auth_fill_tv">Fill a resume</string>
     <string name="fill_tv">Start</string>
@@ -33,10 +33,10 @@
     <string name="study_description_hint">Description</string>
     <string name="study_description">For example: Bachelor. Sociology</string>
     <string name="rating_hint">Average score</string>
-    <string name="rating_value">For example: 4,67 of 5</string>
+    <string name="rating_value">For example: 8.67 of 10</string>
     <string name="achievements_hint">Achievements "\n" enter your achievements separated by commas</string>
     <string name="achievements">For example: Contest winner, publication of scientific articles</string>
-    <string name="unblock">Unblock"\n"pdf</string>
+    <string name="unblock">Unlock"\n"pdf</string>
     <string name="create_pdf">Create"\n"pdf</string>
     <string name="study_add">+ Place of study</string>
     <string name="view">Review"\n"pdf</string>
@@ -57,7 +57,7 @@
     <string name="jobs2">Place of work 2</string>
     <string name="jobs3">Place of work 3</string>
     <string name="study2">Place of study 2</string>
-    <string name="auth_full_func_tv">Unblock pdf</string>
+    <string name="auth_full_func_tv">Unlock pdf</string>
     <string name="auth_premium_tv">Get a premium</string>
     <string name="or_tv">OR</string>
     <string name="premium">Premium</string>
@@ -66,8 +66,8 @@
     <string name="hr">Order resume from"\n" HR-experts</string>
     <string name="reedem_consultation">Get a recruiter consultation</string>
     <string name="thanks_for_premium">Thank you for getting premium status!</string>
-    <string name="best_service">Best employment service!</string>
-    <string name="thanks">Thank you! PDF is unblocked!</string>
+    <string name="best_service">Together with HR24 experts  @hr24family I create  an amazing resume. Visit hr24.org and download app for Android</string>
+    <string name="thanks">Thank you! PDF is unlocked!</string>
     <string name="cancelled">You cancelled post publication</string>
     <string name="posting_error">Post publication failed</string>
     <string name="loading_social">Loading social network</string>
@@ -75,7 +75,7 @@
     <string name="network_unreachable">The network is not available, try again later</string>
     <string name="professional_resume">Professional resumer order</string>
     <string name="error">"Error: "</string>
-    <string name="unblock_functionality">Unblock functionality</string>
+    <string name="unblock_functionality">Unlock functionality</string>
     <string name="create_pdf_first">Firstly create pdf</string>
     <string name="apps_are_not_installed">No application installed to view pdf</string>
     <string name="share_dialogue">Choose where to send resume file:</string>
@@ -103,18 +103,19 @@
     <string name="error_launching">Error launching purchase flow. Another async operation in progress.</string>
     <string name="error_purchasing">"Error purchasing: "</string>
     <string name="authentity_failed">Error purchasing. Authenticity verification failed.</string>
-    <string name="chose_an_app_to_call">Выберите приложение для звонка:</string>
+    <string name="chose_an_app_to_call">Choose an app for call:</string>
 
 
-    <string name="google_play_purchasing">При первой покупке в Google Play происходит списание контрольной суммы, которая потом возвращается на Ваш счет."\n" Поэтому если Вы покупаете впервые - сумма может быть несколько больше. "\n"Это политика Google, которая не зависит от нас</string>
-    <string name="read_carefully">Прочтите внимательно</string>
+    <string name="google_play_purchasing">Purchasing on Google Play for the first time includes checksum cancellation, returned to Your account afterwards."\n" Thus if You purchase for the first time - the sum may be slightly more. "\n"It is the Google policy, which does not depend on us.</string>
+    <string name="read_carefully">Read attentively</string>
     <string name="thank_yuo">Thank you!</string>
-    <string name="pdf_unblocked">Мы благодарим Вас за получение премиум статуса! "\n" PDF разблокирован</string>
-    <string name="return_back">Вернуться</string>
+    <string name="pdf_unblocked">We thank You for getting the premium status! "\n" PDF is unblocked</string>
+    <string name="return_back">Return</string>
     <string name="setting_up_problem">"Problem setting up in-app billing: "</string>
     <string name="skills_hint">Skills  "\n" Note: Photoshop/3, Another skill "\n" \"Photoshop\" - Name of skill "\n" Number after is\"/\" - rating from 1 to 5 "\n"enter your sills separated by commas</string>
     <string name="or_lowercase_tv">or</string>
     <string name="russian_cv">Ваше резюме будет создано на русском языке</string>
-    <string name="english_cv">Ваше резюме будет на английском</string>
-    <string name="more_text">Но Вам надо уменьшить количество текста</string>
+    <string name="english_cv">Your resume will be created in English</string>
+    <string name="more_text">But You need to reduce the text amount</string>
+    <string name="apps_are_not_installed_to_send_mail">No application installed to send e-mail</string>
 </resources>

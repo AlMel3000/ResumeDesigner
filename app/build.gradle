@@ -20,11 +20,11 @@ android {
     buildToolsVersion "24.0.0"
 
     defaultConfig {
-        applicationId "org.hr24.almel.ResumeBuilder"
+        applicationId "org.hr24.almel.ResumeDesigner"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 15
-        versionName "0.970"
+        versionCode 18
+        versionName "1.02"
     }
 
     lintOptions {

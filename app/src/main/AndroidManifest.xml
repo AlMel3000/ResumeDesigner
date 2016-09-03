@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.hr24.almel.ResumeBuilder">
+    package="org.hr24.almel.ResumeDesigner">
 
     <uses-permission android:name="android.permission.CAMERA" />
 
@@ -23,7 +23,7 @@
         android:supportsRtl="false"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Activities.StartActivity"
+            android:name="org.hr24.almel.ResumeDesigner.Activities.StartActivity"
             android:screenOrientation="portrait"/>
 
 
@@ -34,10 +34,10 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <activity android:name=".Activities.BillingActivity"
+        <activity android:name="org.hr24.almel.ResumeDesigner.Activities.BillingActivity"
                   android:screenOrientation="portrait"/>
 
-        <activity android:name=".Activities.SplashActivity"
+        <activity android:name="org.hr24.almel.ResumeDesigner.Activities.SplashActivity"
                   android:screenOrientation="portrait"
                   android:noHistory="true">
             <intent-filter>

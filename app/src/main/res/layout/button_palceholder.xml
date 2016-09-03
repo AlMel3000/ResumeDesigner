@@ -1,37 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/button_placeholder"
     android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="invisible"
-            xmlns:android="http://schemas.android.com/apk/res/android">
-        <Button
-            android:text="@string/create_pdf"
-            android:fontFamily="sans-serif-condensed"
-            android:layout_marginRight="1dp"
-            style="@style/profile_button"
-            android:drawableLeft="@drawable/ic_insert_drive_file_black_24dp"
-            android:visibility="invisible"/>
-        <Button
-            android:text="@string/view"
-            android:fontFamily="sans-serif-condensed"
-            style="@style/profile_button"
-            android:layout_marginRight="1dp"
-            android:visibility="invisible"
-            android:drawableLeft="@drawable/ic_visibility_black_24dp"/>
-        <Button
-            android:text="@string/unblock"
-            android:fontFamily="sans-serif-condensed"
-            style="@style/profile_button"
-            android:visibility="invisible"
-            android:drawableLeft="@drawable/ic_shopping_basket_white_24dp"/>
-        <Button
-            android:text="@string/sharePdf"
-            android:fontFamily="sans-serif-condensed"
-            style="@style/profile_button"
-            android:drawableLeft="@drawable/ic_share_black_24dp"
-            android:visibility="invisible"/>
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:visibility="invisible">
 
-    </LinearLayout>
+    <Button
+        style="@style/profile_button"
+        android:layout_marginRight="1dp"
+        android:drawableLeft="@drawable/ic_insert_drive_file_black_24dp"
+        android:fontFamily="sans-serif-condensed"
+        android:text="@string/create_pdf"
+        android:visibility="invisible" />
+
+    <Button
+        style="@style/profile_button"
+        android:layout_marginRight="1dp"
+        android:drawableLeft="@drawable/ic_visibility_black_24dp"
+        android:fontFamily="sans-serif-condensed"
+        android:text="@string/view"
+        android:visibility="invisible" />
+
+    <Button
+        style="@style/profile_button"
+        android:drawableLeft="@drawable/ic_shopping_basket_white_24dp"
+        android:fontFamily="sans-serif-condensed"
+        android:text="@string/unblock"
+        android:visibility="invisible" />
+
+    <Button
+        style="@style/profile_button"
+        android:drawableLeft="@drawable/ic_share_black_24dp"
+        android:fontFamily="sans-serif-condensed"
+        android:text="@string/sharePdf"
+        android:visibility="invisible" />
+
+</LinearLayout>

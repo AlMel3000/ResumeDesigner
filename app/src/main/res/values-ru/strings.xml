@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Resume Builder</string>
+    <string name="app_name">Конструктор резюме</string>
     <string name="vkontakte">Vk</string>
     <string name="facebook">Fb</string>
 
@@ -65,7 +65,7 @@
     <string name="hr">Заказать резюме у"\n" HR-экспертов</string>
     <string name="reedem_consultation">Получить консультацию рекрутера</string>
     <string name="thanks_for_premium">Спасибо за получение премиум-статуса!</string>
-    <string name="best_service">Лучший сервис трудоустройства!</string>
+    <string name="best_service">Вместе с экспертами HR24 @hr24family я делаю потрясающее резюме. Заходи на hr24.org и скачивай приложение для Android</string>
     <string name="thanks">Спасибо! PDF разблокирован!</string>
     <string name="cancelled">Вы отменили публикацию записи</string>
     <string name="posting_error">Не удалось опубликовать запись</string>
@@ -104,14 +104,15 @@
     <string name="chose_an_app_to_call">Выберите приложение для звонка:</string>
 
 
-    <string name="google_play_purchasing">При первой покупке в Google Play происходит списание контрольной суммы, которая потом возвращается на Ваш счет."\n" Поэтому если Вы покупаете впервые - сумма может быть несколько больше. "\n"Это политика Google, которая не зависит от нас</string>
+    <string name="google_play_purchasing">При первой покупке в Google Play происходит списание контрольной суммы, которая потом возвращается на Ваш счет."\n" Поэтому если Вы покупаете впервые - сумма может быть несколько больше. "\n"Это политика Google, которая не зависит от нас.</string>
     <string name="read_carefully">Прочтите внимательно</string>
     <string name="thank_yuo">Спасибо!</string>
     <string name="pdf_unblocked">Мы благодарим Вас за получение премиум статуса! "\n" PDF разблокирован</string>
     <string name="return_back">Вернуться</string>
-    <string name="setting_up_problem">"Problem setting up in-app billing: "</string>
+    <string name="setting_up_problem">"Проблема настройки встроенных покупок: "</string>
     <string name="wrong_id">Неправильный ID сети</string>
     <string name="russian_cv">Ваше резюме будет создано на русском языке</string>
-    <string name="english_cv">Ваше резюме будет на английском</string>
+    <string name="english_cv">Your resume will be created in English</string>
     <string name="more_text">Но Вам надо уменьшить количество текста</string>
+    <string name="apps_are_not_installed_to_send_mail">Не установлено приложений для отправки e-mail</string>
 </resources>

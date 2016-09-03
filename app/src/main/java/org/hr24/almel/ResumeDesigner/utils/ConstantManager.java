@@ -1,4 +1,4 @@
-package org.hr24.almel.ResumeBuilder.utils;
+package org.hr24.almel.ResumeDesigner.utils;
 
 /**
  * Created by Alexey on 02.08.16.

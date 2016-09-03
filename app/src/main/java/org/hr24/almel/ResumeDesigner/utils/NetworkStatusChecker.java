@@ -1,4 +1,4 @@
-package org.hr24.almel.ResumeBuilder.utils;
+package org.hr24.almel.ResumeDesigner.utils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

@@ -1,4 +1,4 @@
-package org.hr24.almel.ResumeBuilder.ui.fragments;
+package org.hr24.almel.ResumeDesigner.ui.fragments;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -59,9 +59,9 @@ import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.squareup.picasso.Picasso;
-import org.hr24.almel.ResumeBuilder.R;
-import org.hr24.almel.ResumeBuilder.Activities.StartActivity;
-import org.hr24.almel.ResumeBuilder.utils.ConstantManager;
+import org.hr24.almel.ResumeDesigner.R;
+import org.hr24.almel.ResumeDesigner.Activities.StartActivity;
+import org.hr24.almel.ResumeDesigner.utils.ConstantManager;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -1015,6 +1015,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
 
                     jobDutyParagraph.setAlignment(Paragraph.ALIGN_LEFT);
                     jobDutyParagraph.setFont(textLeftFont);
+                    jobDutyParagraph.setSpacingAfter(8f);
                     columnLeft.addElement(jobDutyParagraph);
 
                     if (mJobCount == 2) {
@@ -1053,6 +1054,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
 
                         jobDutyParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
                         jobDutyParagraph1.setFont(textLeftFont);
+                        jobDutyParagraph1.setSpacingAfter(8f);
                         columnLeft.addElement(jobDutyParagraph1);
                     }
 
@@ -1091,6 +1093,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
 
                         jobDutyParagraph1.setAlignment(Paragraph.ALIGN_LEFT);
                         jobDutyParagraph1.setFont(textLeftFont);
+                        jobDutyParagraph1.setSpacingAfter(8f);
                         columnLeft.addElement(jobDutyParagraph1);
 
 
@@ -1128,6 +1131,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
 
                         jobDutyParagraph2.setAlignment(Paragraph.ALIGN_LEFT);
                         jobDutyParagraph2.setFont(textLeftFont);
+                        jobDutyParagraph2.setSpacingAfter(8f);
                         columnLeft.addElement(jobDutyParagraph2);
                     }
                 }
@@ -1414,8 +1418,12 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
     public File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
+        String path = Environment.getExternalStorageDirectory() + "/cv";
+
+        File dir = new File(path);
+        if (!dir.exists())
+            dir.mkdirs();
+        File image = File.createTempFile(imageFileName, ".jpg", dir);
 
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());
@@ -1555,7 +1563,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, C
     }
 
     public Uri loadUserPhoto(){
-        return Uri.parse(StartActivity.getSharedPref().getString(ConstantManager.USER_PHOTO_KEY, "android.resource://org.hr24.almel.ResumeBuilder/drawable/ic_add_a_photo_black_24dp.xml"));
+        return Uri.parse(StartActivity.getSharedPref().getString(ConstantManager.USER_PHOTO_KEY, "android.resource://org.hr24.almel.ResumeDesigner/drawable/ic_add_a_photo_black_24dp.xml"));
     }
 
     public void saveUserPhoto(Uri uri){
