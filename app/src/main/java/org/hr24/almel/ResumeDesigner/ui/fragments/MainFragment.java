@@ -1,6 +1,5 @@
 package org.hr24.almel.ResumeDesigner.ui.fragments;
 
-import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -8,11 +7,13 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.CardView;
 import android.util.Base64;
 import android.util.Log;
@@ -26,14 +27,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
-import com.github.gorbin.asne.core.SocialNetwork;
-import com.github.gorbin.asne.core.SocialNetworkManager;
-import com.github.gorbin.asne.core.listener.OnLoginCompleteListener;
-import com.github.gorbin.asne.core.listener.OnPostingCompleteListener;
-import com.github.gorbin.asne.facebook.FacebookSocialNetwork;
-import com.github.gorbin.asne.vk.VkSocialNetwork;
-import com.vk.sdk.VKScope;
-import com.vk.sdk.util.VKUtil;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.share.Sharer;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
+import com.vk.sdk.VKAccessToken;
+import com.vk.sdk.VKCallback;
+import com.vk.sdk.VKSdk;
+
+import com.vk.sdk.api.VKError;
+
+import com.vk.sdk.dialogs.VKShareDialog;
+import com.vk.sdk.dialogs.VKShareDialogBuilder;
+
 import org.hr24.almel.ResumeDesigner.R;
 import org.hr24.almel.ResumeDesigner.Activities.BillingActivity;
 import org.hr24.almel.ResumeDesigner.Activities.StartActivity;
@@ -42,12 +51,9 @@ import org.hr24.almel.ResumeDesigner.utils.NetworkStatusChecker;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Locale;
-
 import static android.content.pm.PackageManager.GET_SIGNATURES;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -57,7 +63,7 @@ import static android.content.pm.PackageManager.GET_SIGNATURES;
  * Use the {@link MainFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MainFragment extends Fragment implements SocialNetworkManager.OnInitializationCompleteListener, OnLoginCompleteListener, View.OnClickListener {
+public class MainFragment extends Fragment implements  View.OnClickListener {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -73,17 +79,17 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
     LinearLayout authLinLayout;
     CardView fillView;
     ImageView logoImageView, ukImageView, ruImageView;
-    public static SocialNetworkManager mSocialNetworkManager;
     int networkId = 0;
     public static boolean AUTHORIZATION_STATUS = false;
     public static boolean PREMIUM_STATUS = false;
     public static boolean POST_STATUS = false;
     StartActivity startActivity =(StartActivity) getActivity();
+    CallbackManager callbackManager;
+    ShareDialog shareDialog;
 
     public static String APP_LOCALE;
     private Locale mNewLocale;
 
-    private SocialNetwork currentSocialNetwork;
 
 
 
@@ -118,6 +124,10 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!POST_STATUS && !PREMIUM_STATUS) {
+
+            VKSdk.initialize(getContext());
+        }
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -128,6 +138,17 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        initStatus();
+
+
+        if (!POST_STATUS && !PREMIUM_STATUS) {
+            FacebookSdk.sdkInitialize(getContext());
+            callbackManager = CallbackManager.Factory.create();
+        }
+
+
+
+
         View rootView = inflater.inflate(R.layout.main_fragment, container, false);
 
 
@@ -166,59 +187,11 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
         ruImageView.setOnClickListener(this);
         ukImageView.setOnClickListener(this);
 
-        String VK_KEY = getActivity().getString(R.string.vk_app_id);
 
 
 
-        getVkFingerprint();
+        //getVkFingerprint();
         //printHashKey();
-
-
-
-
-        initStatus();
-
-
-        if (!POST_STATUS && !PREMIUM_STATUS) {
-            mSocialNetworkManager = (SocialNetworkManager) getFragmentManager().findFragmentByTag(StartActivity.SOCIAL_NETWORK_TAG);
-
-            String[] vkScope = new String[]{
-                    VKScope.WALL,
-                    VKScope.NOHTTPS
-            };
-
-
-            ArrayList<String> fbScope = new ArrayList<String>();
-            fbScope.addAll(Arrays.asList("public_profile, email, user_friends"));
-
-
-            if (mSocialNetworkManager == null) {
-                mSocialNetworkManager = new SocialNetworkManager();
-
-                //Init and add to manager VkSocialNetwork
-                VkSocialNetwork vkNetwork = new VkSocialNetwork(this, VK_KEY, vkScope);
-                mSocialNetworkManager.addSocialNetwork(vkNetwork);
-
-
-                FacebookSocialNetwork fbNetwork = new FacebookSocialNetwork(this, fbScope);
-                mSocialNetworkManager.addSocialNetwork(fbNetwork);
-
-
-                //Initiate every network from mSocialNetworkManager
-                getFragmentManager().beginTransaction().add(mSocialNetworkManager, StartActivity.SOCIAL_NETWORK_TAG).commit();
-                mSocialNetworkManager.setOnInitializationCompleteListener(this);
-            } else {
-                //if manager exist - get and setup login only for initialized SocialNetworks
-                if (!mSocialNetworkManager.getInitializedSocialNetworks().isEmpty()) {
-                    List<SocialNetwork> socialNetworks = mSocialNetworkManager.getInitializedSocialNetworks();
-                    for (SocialNetwork socialNetwork : socialNetworks) {
-                        socialNetwork.setOnLoginCompleteListener(this);
-                        initSocialNetwork(socialNetwork);
-                    }
-                }
-            }
-        }
-
 
 
         if (POST_STATUS||PREMIUM_STATUS){
@@ -229,10 +202,54 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
         return rootView;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
+            @Override
+            public void onResult(VKAccessToken res) {
+// Пользователь успешно авторизовался
+                shareWithDialog(getFragmentManager());
+            }
+            @Override
+            public void onError(VKError error) {
+// Произошла ошибка авторизации (например, пользователь запретил авторизацию)
+                showSnackbar("no");
+            }
+        })) {
+            super.onActivityResult(requestCode, resultCode, data);
+            callbackManager.onActivityResult(requestCode, resultCode, data);
+        }
+    }
 
 
+    void shareWithDialog(FragmentManager fragmentManager) {
+        VKShareDialogBuilder builder = new VKShareDialogBuilder();
+        builder.setText(StartActivity.getRes().getString(R.string.best_service));
+        builder.setAttachmentLink(StartActivity.getRes().getString(R.string.best_service),
+                "http://hr24.org");
+        builder.setShareDialogListener(new VKShareDialog.VKShareDialogListener() {
+            @Override
+            public void onVkShareComplete(int postId) {
+                // recycle bitmap if needupdateUi();
+                POST_STATUS = true;
+                saveStatus();
+                showSnackbar(StartActivity.getRes().getString(R.string.thanks));
 
+            }
+            @Override
+            public void onVkShareCancel() {
+                // recycle bitmap if need
+                showSnackbar(StartActivity.getRes().getString(R.string.cancelled));
+            }
+            @Override
+            public void onVkShareError(VKError error) {
+                // recycle bitmap if need
 
+                showSnackbar(StartActivity.getRes().getString(R.string.posting_error));
+            }
+        });
+        builder.show(fragmentManager, "VK_SHARE_DIALOG");
+    }
 
 
 
@@ -258,44 +275,62 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
         }
     }
 
-    private void getVkFingerprint() {
+    /*private void getVkFingerprint() {
         String[] fingerprints = VKUtil.getCertificateFingerprint(getContext(), getActivity().getPackageName());
         for (String fingerprint : fingerprints) {
             Log.d("Fingerprint", fingerprint);
 
-           /* AlertDialog.Builder bld = new AlertDialog.Builder(getContext());
+           *//* AlertDialog.Builder bld = new AlertDialog.Builder(getContext());
             bld.setMessage(fingerprint);
             bld.setNeutralButton("OK", null);
-            bld.create().show();*/
+            bld.create().show();*//*
 
         }
-    }
-
-    private void initSocialNetwork(SocialNetwork socialNetwork){
-        if(socialNetwork.isConnected()){
-            switch (socialNetwork.getID()){
-                case VkSocialNetwork.ID:
-                    networkId = VkSocialNetwork.ID;
-
-                    break;
-
-                case FacebookSocialNetwork.ID:
-                    networkId = FacebookSocialNetwork.ID;
-                    break;
-            }
+    }*/
 
 
-        }
-    }
 
     public  void sharePost() {
         try {
-            currentSocialNetwork = MainFragment.mSocialNetworkManager.getSocialNetwork(networkId);
-            Bundle postParams = new Bundle();
-            String link = "http://hr24.org";
-            postParams.putString(SocialNetwork.BUNDLE_LINK, link);
-            String message = StartActivity.getRes().getString(R.string.best_service);
-            currentSocialNetwork.requestPostLink(postParams, message, postingComplete);
+            shareDialog = new ShareDialog(this);
+            // this part is optional
+            shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
+                @Override
+                public void onSuccess(Sharer.Result result) {
+                    updateUi();
+                    POST_STATUS = true;
+                    saveStatus();
+                    showSnackbar(StartActivity.getRes().getString(R.string.thanks));
+
+                }
+
+                @Override
+                public void onCancel() {
+
+
+                    showSnackbar(StartActivity.getRes().getString(R.string.cancelled));
+
+
+
+
+                }
+
+                @Override
+                public void onError(FacebookException error) {
+                    showSnackbar(StartActivity.getRes().getString(R.string.posting_error));
+
+                }
+
+            });
+
+            if (ShareDialog.canShow(ShareLinkContent.class)) {
+                ShareLinkContent linkContent = new ShareLinkContent.Builder()
+                        .setContentTitle(StartActivity.getRes().getString(R.string.best_service))
+                        .setContentUrl(Uri.parse("http://hr24.org"))
+                        .build();
+
+                shareDialog.show(linkContent);
+            }
         } catch (Exception e) {
 
             Crashlytics.logException(e);
@@ -303,26 +338,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
 
     }
 
-    private OnPostingCompleteListener postingComplete = new OnPostingCompleteListener() {
-        @Override
-        public void onPostSuccessfully(int socialNetworkID) {
-            updateUi();
-            POST_STATUS = true;
-            saveStatus();
-            showSnackbar(StartActivity.getRes().getString(R.string.thanks));
-        }
 
-        @Override
-        public void onError(int socialNetworkID, String requestID, String errorMessage, Object data) {
-            Log.d("PostError", "Error while sending: " + errorMessage);
-            if (errorMessage.trim().equals("ShareDialog canceled")){
-                showSnackbar(StartActivity.getRes().getString(R.string.cancelled));
-            } else {
-                showSnackbar(StartActivity.getRes().getString(R.string.posting_error));
-            }
-
-        }
-    };
 
     private void updateUi() {
         authLinLayout.setVisibility(View.GONE);
@@ -354,18 +370,8 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
             case R.id.vk_btn:
                 if(NetworkStatusChecker.isNetworkAvailable(getContext())){
 
-                   try{ networkId = VkSocialNetwork.ID;
-                    SocialNetwork socialNetwork = mSocialNetworkManager.getSocialNetwork(networkId);
-
-                    if(networkId != 0) {
-                        socialNetwork.requestLogin();
-                        StartActivity.showProgress(StartActivity.getRes().getString(R.string.loading_social));
-                    } else {
-                        showSnackbar(StartActivity.getRes().getString(R.string.wrong_id));
-                    }
-                   } catch (Exception e){
-                       Crashlytics.logException(e);
-                   }
+                    String [] scope = {"offline", "wall"};
+                    VKSdk.login(this, scope);
 
                 } else {
                     showSnackbar(StartActivity.getRes().getString(R.string.network_unreachable));
@@ -375,23 +381,7 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
 
             case R.id.fb_btn:
                 if(NetworkStatusChecker.isNetworkAvailable(getContext())){
-                networkId = FacebookSocialNetwork.ID;
-                    SocialNetwork socialNetwork = mSocialNetworkManager.getSocialNetwork(networkId);
-
-                    if (AUTHORIZATION_STATUS){
-                        sharePost();
-                    } else {
-                    if(networkId != 0) {
-                        try {
-                            socialNetwork.requestLogin();
-                        } catch (Exception e){
-                            Crashlytics.logException(e);
-                        }
-
-                        StartActivity.showProgress(StartActivity.getRes().getString(R.string.loading_social));
-                    } else {
-                        showSnackbar(StartActivity.getRes().getString(R.string.wrong_id));
-                    }}
+                sharePost();
                 } else {
                     showSnackbar(StartActivity.getRes().getString(R.string.network_unreachable));
                 }
@@ -474,37 +464,6 @@ public class MainFragment extends Fragment implements SocialNetworkManager.OnIni
 
     }
 
-
-
-    @Override
-    public void onSocialNetworkManagerInitialized() {
-        for (SocialNetwork socialNetwork : mSocialNetworkManager.getInitializedSocialNetworks()) {
-            socialNetwork.setOnLoginCompleteListener(this);
-            initSocialNetwork(socialNetwork);
-
-        }
-
-    }
-
-    @Override
-    public void onLoginSuccess(int socialNetworkID) {
-        StartActivity.hideProgress();
-
-
-        AUTHORIZATION_STATUS = true;
-        saveStatus();
-        sharePost();
-
-
-
-
-    }
-
-    @Override
-    public void onError(int socialNetworkID, String requestID, String errorMessage, Object data) {
-        StartActivity.hideProgress();
-
-    }
 
     private void startProfile(int networkId){
         ProfileFragment profile = ProfileFragment.newInstannce(networkId);

@@ -22,7 +22,6 @@ import org.hr24.almel.ResumeDesigner.utils.NetworkStatusChecker;
 import android.app.AlertDialog;
 import android.widget.TextView;
 
-import com.vk.sdk.util.VKUtil;
 
 public class BillingActivity extends AppCompatActivity implements View.OnClickListener, IabBroadcastReceiver.IabBroadcastListener {
 

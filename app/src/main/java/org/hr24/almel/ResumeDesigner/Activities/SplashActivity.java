@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
-import com.vk.sdk.util.VKUtil;
 
 import io.fabric.sdk.android.Fabric;
 import org.hr24.almel.ResumeDesigner.R;

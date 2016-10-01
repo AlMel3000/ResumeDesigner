@@ -1,9 +1,7 @@
 package org.hr24.almel.ResumeDesigner.Activities;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -11,10 +9,8 @@ import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
-import com.vk.sdk.util.VKUtil;
 
 import io.fabric.sdk.android.Fabric;
 import org.hr24.almel.ResumeDesigner.R;

@@ -2,6 +2,7 @@
 
     <string name="vkontakte">Vk</string>
     <string name="vk_app_id" translatable="false">5568724</string>
+    <integer name="com_vk_sdk_AppId">5568724</integer>
     <string name="facebook_app_id" translatable="false">1234795546584699</string>
     <string name="facebook">Fb</string>
 
@@ -63,7 +64,7 @@
     <string name="premium">Premium</string>
     <string name="first_work">I am looking for the first job</string>
     <string name="jobs1">Place of work 1</string>
-    <string name="hr">Order resume from"\n" HR-experts</string>
+    <string name="hr">Order resume from"\n" HR experts</string>
     <string name="reedem_consultation">Get a recruiter consultation</string>
     <string name="thanks_for_premium">Thank you for getting premium status!</string>
     <string name="best_service">Together with HR24 experts  @hr24family I create  an amazing resume. Visit hr24.org and download app for Android</string>

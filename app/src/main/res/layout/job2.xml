@@ -58,7 +58,7 @@
                     style="@style/profile_edittext"
                     android:fontFamily="sans-serif-condensed"
                     android:hint="@string/company_title"
-                    android:maxLength="30"
+                    android:maxLength="100"
                     android:textColor="@color/gray_light"
                     android:textColorHint="@color/gray" />
 
@@ -78,7 +78,7 @@
                     style="@style/profile_edittext"
                     android:fontFamily="sans-serif-condensed"
                     android:hint="@string/job_title"
-                    android:maxLength="50"
+                    android:maxLength="100"
                     android:textColor="@color/gray_light"
                     android:textColorHint="@color/gray" />
 
