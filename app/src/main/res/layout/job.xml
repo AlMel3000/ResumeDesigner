@@ -30,8 +30,6 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
-
                 <EditText
                     android:id="@+id/job_period"
                     style="@style/profile_edittext"
@@ -39,7 +37,9 @@
                     android:hint="@string/job_period"
                     android:maxLength="25"
                     android:textColor="@color/gray_light"
-                    android:textColorHint="@color/gray" />
+                    android:textColorHint="@color/gray"
+                    android:layout_width="match_parent" />
+
 
             </android.support.design.widget.TextInputLayout>
 
@@ -88,6 +88,8 @@
                 style="@style/profile_edittext"
                 android:layout_marginTop="@dimen/spacing_normal_16"
                 android:text="@string/jb_duty_hint" />
+
+
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"

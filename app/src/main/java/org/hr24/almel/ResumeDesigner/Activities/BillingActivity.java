@@ -22,6 +22,10 @@ import org.hr24.almel.ResumeDesigner.utils.NetworkStatusChecker;
 import android.app.AlertDialog;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
+
+import io.fabric.sdk.android.Fabric;
+
 
 public class BillingActivity extends AppCompatActivity implements View.OnClickListener, IabBroadcastReceiver.IabBroadcastListener {
 
@@ -45,6 +49,7 @@ public class BillingActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_billing);
 
         context = this;
@@ -109,6 +114,7 @@ public class BillingActivity extends AppCompatActivity implements View.OnClickLi
                 try {
                     mHelper.queryInventoryAsync(mGotInventoryListener);
                 } catch (IabHelper.IabAsyncInProgressException e) {
+                    Crashlytics.logException(e);
                 }
             }
         });
@@ -157,6 +163,7 @@ public class BillingActivity extends AppCompatActivity implements View.OnClickLi
             mHelper.queryInventoryAsync(mGotInventoryListener);
         } catch (IabHelper.IabAsyncInProgressException e) {
             complain(getString(R.string.another_async_task));
+            Crashlytics.logException(e);
         }
     }
 
@@ -174,6 +181,7 @@ public class BillingActivity extends AppCompatActivity implements View.OnClickLi
                     mPurchaseFinishedListener, payload);
         } catch (IabHelper.IabAsyncInProgressException e) {
             complain(getString(R.string.error_launching));
+            Crashlytics.logException(e);
         }
     }
 
@@ -265,6 +273,7 @@ public class BillingActivity extends AppCompatActivity implements View.OnClickLi
                 unregisterReceiver(mBroadcastReceiver);
             } catch (Exception e){
                 Log.d(TAG, e.getMessage());
+                Crashlytics.logException(e);
             }
 
         }
@@ -277,6 +286,7 @@ public class BillingActivity extends AppCompatActivity implements View.OnClickLi
                 mHelper = null;
             } catch (Exception e){
                 Log.d(TAG, e.getMessage());
+                Crashlytics.logException(e);
             }
 
         }
@@ -303,7 +313,7 @@ public class BillingActivity extends AppCompatActivity implements View.OnClickLi
                 onUpgradeAppButtonClicked();
 
             } else {
-                complain(StartActivity.getRes().getString(R.string.network_unreachable));
+                complain(getString(R.string.network_unreachable));
             }
         } else {
             Intent startIntent = new Intent(context, StartActivity.class);
