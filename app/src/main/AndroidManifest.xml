@@ -23,9 +23,8 @@
         android:supportsRtl="false"
         android:theme="@style/AppTheme">
         <activity
-            android:name="org.hr24.almel.ResumeDesigner.Activities.StartActivity"
-            android:screenOrientation="portrait"/>
-
+            android:name=".Activities.StartActivity"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="io.fabric.ApiKey"
@@ -34,22 +33,30 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <activity android:name="org.hr24.almel.ResumeDesigner.Activities.BillingActivity"
-                  android:screenOrientation="portrait"/>
-
-        <activity android:name="org.hr24.almel.ResumeDesigner.Activities.SplashActivity"
-                  android:screenOrientation="portrait"
-                  android:noHistory="true">
+        <activity
+            android:name=".Activities.BillingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.SplashActivity"
+            android:noHistory="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <provider android:authorities="com.facebook.app.FacebookContentProvider1234795546584699"
+
+        <provider
             android:name="com.facebook.FacebookContentProvider"
+            android:authorities="com.facebook.app.FacebookContentProvider1234795546584699"
             android:exported="true" />
-        <activity android:name="com.vk.sdk.VKServiceActivity" android:label="ServiceActivity" android:theme="@style/VK.Transparent" />
+
+        <activity
+            android:name="com.vk.sdk.VKServiceActivity"
+            android:label="ServiceActivity"
+            android:theme="@style/VK.Transparent" />
+        <activity android:name=".Activities.ProfileActivity" />
     </application>
 
 </manifest>

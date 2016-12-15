@@ -17,7 +17,6 @@ import org.hr24.almel.ResumeDesigner.billing.IabHelper;
 import org.hr24.almel.ResumeDesigner.billing.IabResult;
 import org.hr24.almel.ResumeDesigner.billing.Inventory;
 import org.hr24.almel.ResumeDesigner.billing.Purchase;
-import org.hr24.almel.ResumeDesigner.ui.fragments.MainFragment;
 import org.hr24.almel.ResumeDesigner.utils.ConstantManager;
 import org.hr24.almel.ResumeDesigner.utils.NetworkStatusChecker;
 
@@ -106,6 +105,7 @@ public class SplashActivity extends AppCompatActivity implements IabBroadcastRec
                 } catch (IabHelper.IabAsyncInProgressException e) {
                     Log.d(TAG, e.getMessage());
                     timer();
+                    Crashlytics.logException(e);
 
 
                 }
@@ -137,6 +137,7 @@ public class SplashActivity extends AppCompatActivity implements IabBroadcastRec
                 catch (InterruptedException e){
                     Log.d("MyLog", e.toString());
                     e.printStackTrace();
+                    Crashlytics.logException(e);
                 }
                 finally {
                     finish();
@@ -175,7 +176,7 @@ public class SplashActivity extends AppCompatActivity implements IabBroadcastRec
             // Do we have the premium upgrade?
             Purchase premiumPurchase = inventory.getPurchase(SKU_PREMIUM);
             PREMIUM_STATUS = (premiumPurchase != null && verifyDeveloperPayload(premiumPurchase));
-            Log.d(TAG, "User is " + (MainFragment.PREMIUM_STATUS ? "PREMIUM" : "NOT PREMIUM"));
+            Log.d(TAG, "User is " + (StartActivity.PREMIUM_STATUS ? "PREMIUM" : "NOT PREMIUM"));
 
             saveStatus();
 
@@ -194,6 +195,7 @@ public class SplashActivity extends AppCompatActivity implements IabBroadcastRec
             mHelper.queryInventoryAsync(mGotInventoryListener);
         } catch (IabHelper.IabAsyncInProgressException e) {
             Log.d(TAG, e.getMessage());
+            Crashlytics.logException(e);
             timer();
         }
     }
@@ -260,6 +262,7 @@ public class SplashActivity extends AppCompatActivity implements IabBroadcastRec
                 unregisterReceiver(mBroadcastReceiver);
             } catch (Exception e){
                 Log.d(TAG, e.getMessage());
+                Crashlytics.logException(e);
             }
 
         }
@@ -272,6 +275,7 @@ public class SplashActivity extends AppCompatActivity implements IabBroadcastRec
                 mHelper = null;
             } catch (Exception e){
                 Log.d(TAG, e.getMessage());
+                Crashlytics.logException(e);
             }
 
         }
